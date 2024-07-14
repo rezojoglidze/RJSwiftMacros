@@ -5,10 +5,11 @@
 //  Created by Rezo Joglidze on 14.07.24.
 //
 
-import SwiftDiagnostics
+import SwiftCompilerPlugin
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
+import SwiftDiagnostics
 
 public struct CodingKeysMacro: MemberMacro {
     public static func expansion(
@@ -81,4 +82,11 @@ extension String {
     fileprivate func snakeCased() -> String {
         reduce(into: "") { $0.append(contentsOf: $1.isUppercase ? "_\($1.lowercased())" : "\($1)") }
     }
+}
+
+@main
+struct CodingKeysGenerationPlugin: CompilerPlugin {
+    let providingMacros: [Macro.Type] = [
+        CodingKeysMacro.self,
+    ]
 }
