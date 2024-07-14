@@ -5,7 +5,10 @@
 //  Created by Rezo Joglidze on 14.07.24.
 //
 
+import SwiftDiagnostics
 import SwiftSyntax
+import SwiftSyntaxBuilder
+import SwiftSyntaxMacros
 
 public struct CodingKeysMacro: MemberMacro {
     public static func expansion(
@@ -61,5 +64,21 @@ enum CodingKeys: String, CodingKey {
             .as(LabeledExprListSyntax.self)?
             .first?
             .expression
+    }
+}
+
+struct CodingKeysDiagnostic: DiagnosticMessage {
+    let message: String = "Empty argument"
+    let diagnosticID: SwiftDiagnostics.MessageID = .init(domain: "CodingKeysGeneration", id: "emptyArgument")
+    let severity: SwiftDiagnostics.DiagnosticSeverity = .error
+}
+
+extension String {
+    fileprivate func dropBackticks() -> String {
+        count > 1 && first == "`" && last == "`" ? String(dropLast().dropFirst()) : self
+    }
+
+    fileprivate func snakeCased() -> String {
+        reduce(into: "") { $0.append(contentsOf: $1.isUppercase ? "_\($1.lowercased())" : "\($1)") }
     }
 }
