@@ -5,12 +5,12 @@
 //  Created by Rezo Joglidze on 14.07.24.
 //
 
-import SwiftCompilerPlugin
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 import SwiftDiagnostics
 
+// MARK: Coding Keys Macro
 public struct CodingKeysMacro: MemberMacro {
     public static func expansion(
         of node: AttributeSyntax,
@@ -25,7 +25,7 @@ public struct CodingKeysMacro: MemberMacro {
             }
             if attributesElement(withIdentifier: "CodingKeyIgnored", in: variableDecl.attributes) != nil {
                 return nil
-            } else if let element = attributesElement(withIdentifier: "CodingKey", in: variableDecl.attributes) {
+            } else if let element = attributesElement(withIdentifier: "CodingKeyProperty", in: variableDecl.attributes) {
                 guard let customKeyName = customKey(in: element) else {
                     let diagnostic = Diagnostic(node: Syntax(node), message: CodingKeysDiagnostic())
                     throw DiagnosticsError(diagnostics: [diagnostic])
@@ -45,48 +45,4 @@ enum CodingKeys: String, CodingKey {
 """
         return [casesDecl]
     }
-    
-    private static func attributesElement(
-        withIdentifier macroName: String,
-        in attributes: AttributeListSyntax?
-    ) -> AttributeListSyntax.Element? {
-        attributes?.first {
-            $0.as(AttributeSyntax.self)?
-                .attributeName
-                .as(IdentifierTypeSyntax.self)?
-                .description == macroName
-        }
-    }
-    
-    private static func customKey(in attributesElement: AttributeListSyntax.Element) -> ExprSyntax? {
-        attributesElement
-            .as(AttributeSyntax.self)?
-            .arguments?
-            .as(LabeledExprListSyntax.self)?
-            .first?
-            .expression
-    }
-}
-
-struct CodingKeysDiagnostic: DiagnosticMessage {
-    let message: String = "Empty argument"
-    let diagnosticID: SwiftDiagnostics.MessageID = .init(domain: "CodingKeysGeneration", id: "emptyArgument")
-    let severity: SwiftDiagnostics.DiagnosticSeverity = .error
-}
-
-extension String {
-    fileprivate func dropBackticks() -> String {
-        count > 1 && first == "`" && last == "`" ? String(dropLast().dropFirst()) : self
-    }
-
-    fileprivate func snakeCased() -> String {
-        reduce(into: "") { $0.append(contentsOf: $1.isUppercase ? "_\($1.lowercased())" : "\($1)") }
-    }
-}
-
-@main
-struct CodingKeysGenerationPlugin: CompilerPlugin {
-    let providingMacros: [Macro.Type] = [
-        CodingKeysMacro.self,
-    ]
 }
