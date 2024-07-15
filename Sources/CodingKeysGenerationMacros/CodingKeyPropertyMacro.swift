@@ -9,7 +9,7 @@ import SwiftSyntax
 import SwiftSyntaxMacros
 
 // MARK: Coding Key Property Macro
-public struct CodingKeyPropertyMacro: PeerMacro {
+struct CodingKeyPropertyMacro: PeerMacro {
     public static func expansion(
         of node: AttributeSyntax,
         providingPeersOf declaration: some DeclSyntaxProtocol,
