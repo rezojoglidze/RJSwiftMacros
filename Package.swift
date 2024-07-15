@@ -11,6 +11,10 @@ let package = Package(
         .library(
             name: "CodingKeysGeneration",
             targets: ["CodingKeysGeneration"]
+        ),
+        .executable(
+            name: "Example",
+            targets: ["Example"]
         )
     ],
     dependencies: [
@@ -24,5 +28,6 @@ let package = Package(
                ]
               ),
         .target(name: "CodingKeysGeneration", dependencies: ["CodingKeysGenerationMacros"]),
+        .executableTarget(name: "Example", dependencies: ["CodingKeysGeneration"])
     ]
 )
