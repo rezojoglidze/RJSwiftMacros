@@ -6,28 +6,29 @@ import CompilerPluginSupport
 
 let package = Package(
     name: "RJSwiftMacros",
-    platforms: [.macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6), .macCatalyst(.v13)],
-    products: [
-        .library(
-            name: "CodingKeysGeneration",
-            targets: ["CodingKeysGeneration"]
-        ),
-        .executable(
-            name: "Example",
-            targets: ["Example"]
+    platforms: [
+        .macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6), .macCatalyst(.v13)
+    ],
+
+    
+    dependencies: [
+        .package(
+            url: "https://github.com/apple/swift-syntax.git",
+            from: "509.0.0"
         )
     ],
-    dependencies: [
-        .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0")
-    ],
+    
     targets: [
-        .macro(name: "CodingKeysGenerationMacros",
-               dependencies: [
+        .macro(
+            name: "Macro",
+            dependencies: [
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
-               ]
-              ),
-        .target(name: "CodingKeysGeneration", dependencies: ["CodingKeysGenerationMacros"]),
-        .executableTarget(name: "Example", dependencies: ["CodingKeysGeneration"])
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+            ]
+        ),
+        .executableTarget(
+            name: "Example",
+            dependencies: ["Macro"]
+        )
     ]
 )

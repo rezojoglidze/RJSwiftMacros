@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CodingKeysGeneration
+import Macro
 
 @CodingKeys
 struct Car {

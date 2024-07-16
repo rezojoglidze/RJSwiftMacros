@@ -10,17 +10,6 @@ import SwiftSyntax
 import SwiftSyntaxMacros
 import SwiftDiagnostics
 
-
-// MARK: - Coding Keys Generation Plugin
-@main
-struct CodingKeysGenerationPlugin: CompilerPlugin {
-    let providingMacros: [Macro.Type] = [
-        CodingKeysMacro.self,
-        CodingKeyPropertyMacro.self,
-        CodingKeyIgnoredMacro.self
-    ]
-}
-
 // MARK: - Common Elements
 func attributesElement(
     withIdentifier macroName: String,
