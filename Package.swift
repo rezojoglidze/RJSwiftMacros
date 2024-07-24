@@ -32,14 +32,14 @@ let package = Package(
             name: "RJSwiftMacros",
             dependencies: [
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+                "CodingKeysGeneration"
             ],
             exclude: ["CodingKeysGeneration"]
         ),
         
             .target(
                 name: "CodingKeysGeneration",
-                dependencies: ["RJSwiftMacros"],
                 path: "Sources/RJSwiftMacros/CodingKeysGeneration"
             ),
         
