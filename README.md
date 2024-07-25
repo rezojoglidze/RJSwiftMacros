@@ -1,6 +1,6 @@
 # RJSwiftMacros
 
-RJSwiftMacros is a Swift package that provides macros for generating coding keys and handling coding key properties and ignored keys. These macros help simplify the process of creating and managing `CodingKeys` in your Swift structs.
+RJSwiftMacros is a Swift package that provides macros. Such as generating coding keys and handling coding key properties and ignored keys.
 
 ## Features
 
