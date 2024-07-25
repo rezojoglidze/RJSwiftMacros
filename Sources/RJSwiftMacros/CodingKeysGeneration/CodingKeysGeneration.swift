@@ -9,7 +9,7 @@ import Foundation
 
 /// - Generate `CodingKeys`  with ``CodingKeys()`` Macro
 /// - Adjust coding key with ``CodingKeyProperty(_:)``
-/// - To ignore coding key generation at the specific property use ``CodingKeyIgnored()``
+/// - To Ignore specific properties from the coding process``CodingKeyIgnored()``
 ///
 /// ```
 /// @CodingKeys
