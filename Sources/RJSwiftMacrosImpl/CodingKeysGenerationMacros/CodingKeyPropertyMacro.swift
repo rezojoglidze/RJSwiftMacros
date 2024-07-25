@@ -1,5 +1,5 @@
 //
-//  CodingKeyIgnoredMacro.swift
+//  CodingKeyPropertyMacro.swift
 //
 //
 //  Created by Rezo Joglidze on 15.07.24.
@@ -8,8 +8,8 @@
 import SwiftSyntax
 import SwiftSyntaxMacros
 
-// MARK: Coding Key Ignored Macro
-struct CodingKeyIgnoredMacro: PeerMacro {
+// MARK: Coding Key Property Macro
+public struct CodingKeyPropertyMacro: PeerMacro {
     public static func expansion(
         of node: AttributeSyntax,
         providingPeersOf declaration: some DeclSyntaxProtocol,

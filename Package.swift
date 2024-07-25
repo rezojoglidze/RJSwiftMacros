@@ -11,10 +11,10 @@ let package = Package(
     ],
     
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "RJSwiftMacros",
-            targets: ["RJSwiftMacros"])
+            targets: ["RJSwiftMacros"]
+        )
     ],
     
     dependencies: [
@@ -26,26 +26,19 @@ let package = Package(
     ],
     
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .macro(
-            name: "RJSwiftMacros",
+            name: "RJSwiftMacrosImpl",
             dependencies: [
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
-                "CodingKeysGeneration"
-            ],
-            exclude: ["CodingKeysGeneration"]
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+            ]
         ),
         
             .target(
-                name: "CodingKeysGeneration",
-                path: "Sources/RJSwiftMacros/CodingKeysGeneration"
+                name: "RJSwiftMacros",
+                dependencies: ["RJSwiftMacrosImpl"]
             ),
         
-            .executableTarget(
-                name: "Example",
-                dependencies: ["RJSwiftMacros", "CodingKeysGeneration"]
-            )
+            .executableTarget(name: "Example", dependencies: ["RJSwiftMacrosImpl", "RJSwiftMacros"])
     ]
 )

@@ -11,7 +11,7 @@ import SwiftSyntaxMacros
 import SwiftDiagnostics
 
 // MARK: Coding Keys Macro
-struct CodingKeysMacro: MemberMacro {
+public struct CodingKeysMacro: MemberMacro {
     public static func expansion(
         of node: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,

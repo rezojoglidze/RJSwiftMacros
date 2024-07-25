@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CodingKeysGeneration
+import RJSwiftMacros
 
 @CodingKeys
 struct Car {

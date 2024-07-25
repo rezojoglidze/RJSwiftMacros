@@ -8,10 +8,10 @@
 import Foundation
 
 @attached(member, names: named(CodingKeys))
-public macro CodingKeys() = #externalMacro(module: "RJSwiftMacros", type: "CodingKeysMacro")
+public macro CodingKeys() = #externalMacro(module: "RJSwiftMacrosImpl", type: "CodingKeysMacro")
 
 @attached(peer)
-public macro CodingKeyProperty(_ value: String) = #externalMacro(module: "RJSwiftMacros", type: "CodingKeyPropertyMacro")
+public macro CodingKeyProperty(_ value: String) = #externalMacro(module: "RJSwiftMacrosImpl", type: "CodingKeyPropertyMacro")
 
 @attached(peer, names: named(CodingKeyIgnored))
-public macro CodingKeyIgnored() = #externalMacro(module: "RJSwiftMacros", type: "CodingKeyIgnoredMacro")
+public macro CodingKeyIgnored() = #externalMacro(module: "RJSwiftMacrosImpl", type: "CodingKeyIgnoredMacro")
