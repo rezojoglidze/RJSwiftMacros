@@ -6,7 +6,7 @@ RJSwiftMacros is a Swift package that provides macros. Such as generating coding
 
 - ``CodingKeys()``: Automatically generates `CodingKeys` for your structs.
 - ``CodingKeyProperty(:_)``: Allows custom coding keys for specific properties.
-- ``CodingKeyIgnored()``: Ignores specific properties from the coding process
+- ``CodingKeyIgnored()``: Ignores specific properties from the coding process.
 
 ## Requirements
 
