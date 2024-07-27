@@ -1,5 +1,5 @@
 //
-//  RJSwiftMacrosTests.swift
+//  CodingKeysGenerationTests.swift
 //
 //
 //  Created by Rezo Joglidze on 27.07.24.
@@ -16,11 +16,11 @@ let testMacros: [String : Macro.Type] = [
     "CodingKeys" : CodingKeysMacro.self
 ]
 
-// MARK: - Swift Macros Tests
-final class RJSwiftMacrosTests: XCTestCase {
+// MARK: - Coding Keys Generation Tests
+final class CodingKeysGenerationTests: XCTestCase {
     
-    // test CodingKeys Macro
-    func testCodingKeysMacro() throws {
+    // test CodingKeys, CodingKeyProperty and CodingKeyIgnored macros test
+    func testCodingKeysMacros() throws {
         assertMacroExpansion(
             #"""
             @CodingKeys
