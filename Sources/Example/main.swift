@@ -7,6 +7,7 @@
 
 import Foundation
 import RJSwiftMacros
+//import RJSwiftMacrosImpl
 
 @CodingKeys
 struct Car {
@@ -14,3 +15,10 @@ struct Car {
     @CodingKeyProperty("second_name") let surname: String
     @CodingKeyIgnored() let color: String
 }
+
+
+//@MockBuilder(numberOfItems: 12, dataGeneratorType: .random)
+//struct Person {
+//    let name: String
+//    let surname: String = DataGenerator.random.string()
+//}
