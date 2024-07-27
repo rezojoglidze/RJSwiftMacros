@@ -9,7 +9,7 @@
     import SwiftCompilerPlugin
     import SwiftSyntaxMacros
     
-    /// **Plugin**
+    // MARK: - Plugin
     @main
     struct Plugin: CompilerPlugin {
         let providingMacros: [Macro.Type] = [
