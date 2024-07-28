@@ -10,16 +10,19 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
-import RJSwiftMacrosImpl
 
-let testMacros: [String : Macro.Type] = [
-    "CodingKeys" : CodingKeysMacro.self
-]
+// Macro implementations build for the host, so the corresponding module is not available when cross-compiling. Cross-compiled tests may still make use of the macro itself in end-to-end tests.
+#if canImport(RJSwiftMacrosImpl)
+@testable import RJSwiftMacrosImpl
 
 // MARK: - Coding Keys Generation Tests
 final class CodingKeysGenerationTests: XCTestCase {
+    // MARK: Test Properties
+    let testMacros: [String : Macro.Type] = [
+        "CodingKeys" : CodingKeysMacro.self
+    ]
     
-    // test CodingKeys, CodingKeyProperty and CodingKeyIgnored macros test
+    // MARK: Tests
     func testCodingKeysMacros() throws {
         assertMacroExpansion(
             #"""
@@ -46,3 +49,6 @@ final class CodingKeysGenerationTests: XCTestCase {
         )
     }
 }
+#else
+   #warning("macros are only supported when running tests for the host platform")
+#endif
