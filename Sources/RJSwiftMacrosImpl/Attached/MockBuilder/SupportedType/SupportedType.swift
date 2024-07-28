@@ -25,6 +25,7 @@ enum SupportedType: String {
     case data = "Data"
     case date = "Date"
     case uuid = "UUID"
+    case objectIdentifier = "ObjectIdentifier"
     case cgPoint = "CGPoint"
     case cgRect = "CGRect"
     case cgSize = "CGSize"

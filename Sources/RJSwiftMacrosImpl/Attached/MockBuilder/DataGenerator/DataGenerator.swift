@@ -60,7 +60,7 @@ public extension DataGenerator {
         data: { Data() },
         date: { Date(timeIntervalSinceReferenceDate: 0) },
         uuid: { UUID.increasingUUID },
-        objectIdentifier: { UUID.increasingUUID }
+        objectIdentifier: { ObjectIdentifier(DummyClass()) },
         cgpoint: { CGPoint() },
         cgrect: { CGRect() },
         cgsize: { CGSize() },
@@ -68,6 +68,7 @@ public extension DataGenerator {
         cgfloat: { CGFloat() },
         url: { URL(string: "https://www.apple.com")! }
     )
+    
     static func random() -> Self {
         Self(
             int: { Provider().randomInt(min: 0, max: 1000) },
@@ -89,7 +90,7 @@ public extension DataGenerator {
             data: { Data() },
             date: { Provider().date() },
             uuid: { UUID() },
-            objectIdentifier: { UUID() }
+            objectIdentifier: { ObjectIdentifier(DummyClass()) },
             cgpoint: { CGPoint() },
             cgrect: { CGRect() },
             cgsize: { CGSize() },
@@ -110,3 +111,5 @@ public extension UUID {
         return UUID(uuidString: "00000000-0000-0000-0000-\(String(format: "%012x", uuIdCounter))")!
     }
 }
+
+public class DummyClass {}
