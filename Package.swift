@@ -42,9 +42,20 @@ let package = Package(
         
             .target(
                 name: "RJSwiftCommon",
-                dependencies: [.product(name: "SwiftSyntaxMacros", package: "swift-syntax")]
+                dependencies: [
+                    .product(name: "SwiftSyntaxMacros", package: "swift-syntax")
+                ]
             ),
-                
+        
+            .executableTarget(
+                name: "Example",
+                dependencies: [
+                    "RJSwiftMacrosImpl",
+                    "RJSwiftMacros",
+                    "RJSwiftCommon"
+                ]
+            ),
+        
             .testTarget(
                 name: "RJSwiftMacrosTests",
                 dependencies: [
