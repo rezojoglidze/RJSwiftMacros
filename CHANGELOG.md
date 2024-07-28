@@ -1,7 +1,11 @@
 # Change Log
 
-### [0.1.13(13)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.1.13) — *26 07 2024*
+### [0.2.0(15)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.0) — *29 07 2024*
+Macros
+- `MockBuilder(numberOfItems: Int, dataGeneratorType: .random)`: Generates an array of mock data from our models.
+  
+### [0.1.13(14)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.1.13) — *26 07 2024*
 Macros
 - `CodingKeys()`: Automatically generates CodingKeys for your structs.
 - `CodingKeyProperty(:_)`: Allows custom coding keys for specific properties.
-- `CodingKeyIgnored()`: Ignores specific properties from the coding process
+- `CodingKeyIgnored()`: Ignores specific properties from the coding process.
