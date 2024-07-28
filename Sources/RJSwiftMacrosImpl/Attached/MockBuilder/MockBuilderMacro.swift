@@ -30,8 +30,6 @@ public struct MockBuilderMacro: MemberMacro {
             return []
         }
         
-        
-        
         let generatorType = getDataGeneratorType(from: node)
         
         if let enumDecl = declaration.as(EnumDeclSyntax.self) {
@@ -85,8 +83,7 @@ extension MockBuilderMacro {
             bindingSpecifier: .keyword(.var),
             bindings: PatternBindingListSyntax {
                 PatternBindingSyntax(
-                    pattern: IdentifierPatternSyntax(identifier: .identifier("mock")
-                                                    ),
+                    pattern: IdentifierPatternSyntax(identifier: .identifier("mock")),
                     typeAnnotation: TypeAnnotationSyntax(
                         colon: .colonToken(),
                         type: returnType

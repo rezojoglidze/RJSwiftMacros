@@ -107,8 +107,3 @@ public extension UUID {
         return UUID(uuidString: "00000000-0000-0000-0000-\(String(format: "%012x", uuIdCounter))")!
     }
 }
-
-public enum DataGeneratorType: String {
-    case `default`
-    case random
-}
