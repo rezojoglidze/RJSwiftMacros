@@ -13,11 +13,15 @@
     @main
     struct Plugin: CompilerPlugin {
         let providingMacros: [Macro.Type] = [
+            // MARK: Attached Macros
             
             // CodingKeys Macros
             CodingKeysMacro.self,
             CodingKeyPropertyMacro.self,
-            CodingKeyIgnoredMacro.self
+            CodingKeyIgnoredMacro.self,
+            
+            // Mock Builder Macro
+            MockBuilderMacro.self
         ]
     }
 #endif
