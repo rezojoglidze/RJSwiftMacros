@@ -5,7 +5,7 @@
 //  Created by Rezo Joglidze on 16.07.24.
 //
 
-//#if canImport(SwiftCompilerPlugin)
+#if canImport(SwiftCompilerPlugin)
     import SwiftCompilerPlugin
     import SwiftSyntaxMacros
     
@@ -24,4 +24,4 @@
             MockBuilderMacro.self
         ]
     }
-//#endif
+#endif

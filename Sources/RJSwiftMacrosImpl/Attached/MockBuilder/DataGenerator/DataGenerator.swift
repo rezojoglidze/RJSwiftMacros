@@ -30,6 +30,7 @@ public struct DataGenerator {
     public var data: () -> Data
     public var date: () -> Date
     public var uuid: () -> UUID
+    public var objectIdentifier: () -> ObjectIdentifier
     public var cgpoint: () -> CGPoint
     public var cgrect: () -> CGRect
     public var cgsize: () -> CGSize
@@ -59,6 +60,7 @@ public extension DataGenerator {
         data: { Data() },
         date: { Date(timeIntervalSinceReferenceDate: 0) },
         uuid: { UUID.increasingUUID },
+        objectIdentifier: { UUID.increasingUUID }
         cgpoint: { CGPoint() },
         cgrect: { CGRect() },
         cgsize: { CGSize() },
@@ -87,6 +89,7 @@ public extension DataGenerator {
             data: { Data() },
             date: { Provider().date() },
             uuid: { UUID() },
+            objectIdentifier: { UUID() }
             cgpoint: { CGPoint() },
             cgrect: { CGRect() },
             cgsize: { CGSize() },
