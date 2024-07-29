@@ -32,8 +32,4 @@ extension FixItMessage where Self == MockBuilderFixIt {
     static var addNewEnumCase: Self {
       .init("add a new enum case")
     }
-    
-    static var removeMockBuilderItem: Self {
-      .init("remove @MockBuilderItem")
-    }
 }

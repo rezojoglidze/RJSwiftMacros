@@ -17,7 +17,7 @@ import SwiftSyntaxMacrosTestSupport
 
 // MARK: - Coding Keys Generation Tests
 final class CodingKeysGenerationTests: XCTestCase {
-    // MARK: Test Properties
+    // MARK: Properties
     let testMacros: [String : Macro.Type] = [
         "CodingKeys" : CodingKeysMacro.self
     ]
