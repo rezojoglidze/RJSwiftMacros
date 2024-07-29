@@ -23,7 +23,7 @@ final class MockBuilderTests: XCTestCase {
     ]
     
     // MARK: Tests
-    func stestMockBuilderMacro() throws {
+    func testMockBuilderMacro() throws {
         assertMacroExpansion(
         #"""
         @MockBuilder(numberOfItems: 3, dataGeneratorType: .random)
