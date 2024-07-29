@@ -27,22 +27,22 @@ final class MockBuilderTests: XCTestCase {
         assertMacroExpansion(
         #"""
         @MockBuilder(numberOfItems: 3, dataGeneratorType: .random)
-        struct Product {
-            var price: Int?
-            var description: String
+        struct Person {
+            let name: String
+            let surname: String
         }
         """#,
         expandedSource: """
-        struct Product {
-            var price: Int
-            var description: String
+        struct Person {
+            let name: String
+            let surname: String
         
             #if DEBUG
             static var mock: [Self] {
                 [
-                    .init(price: DataGenerator.random().int(), description: DataGenerator.random().string()),
-                    .init(price: DataGenerator.random().int(), description: DataGenerator.random().string()),
-                    .init(price: DataGenerator.random().int(), description: DataGenerator.random().string()),
+                    .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
+                    .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
+                    .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
                 ]
             }
             #endif
