@@ -13,7 +13,6 @@ enum MockBuilderDiagnostic: String, DiagnosticMessage {
     case notAnStructOrEnum
     case argumentNotGreaterThanZero
     case enumWithEmptyCases
-    case mockBuilderItemRedundant
     
     var severity: DiagnosticSeverity {
         switch self {
@@ -23,8 +22,6 @@ enum MockBuilderDiagnostic: String, DiagnosticMessage {
             return .error
         case .enumWithEmptyCases:
             return .error
-        case .mockBuilderItemRedundant:
-            return .warning
         }
     }
     
@@ -36,8 +33,6 @@ enum MockBuilderDiagnostic: String, DiagnosticMessage {
             return "'numberOfitems' argument must be greater than zero"
         case .enumWithEmptyCases:
             return "Enum must contain at least one case"
-        case .mockBuilderItemRedundant:
-            return "@MockBuilderItem attribute has no effect when generator type is 'default'"
         }
     }
     
@@ -95,20 +90,6 @@ enum MockBuilderDiagnostic: String, DiagnosticMessage {
                                     rightBrace: .rightBraceToken()
                                 )
                             )
-                        )
-                    ]
-                )
-            ]
-        case .mockBuilderItemRedundant:
-            return [
-                .init(
-                    message: MockBuilderFixIt.removeMockBuilderItem,
-                    changes: [
-                        .replace(
-                            oldNode: Syntax(
-                                fromProtocol: node.as(AttributeSyntax.self) ?? node
-                            ),
-                            newNode: Syntax(AttributeSyntax(stringLiteral: ""))
                         )
                     ]
                 )

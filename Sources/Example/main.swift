@@ -17,8 +17,10 @@ struct Car {
     @CodingKeyIgnored() let color: String
 }
 
-@MockBuilder(numberOfItems: 12, dataGeneratorType: .random)
+@MockBuilder(numberOfItems: 3, dataGeneratorType: .random)
 struct Person {
     let name: String
     let surname: String
 }
+
+Person.mock.forEach({ print("name: ", $0.name, "surname: ", $0.surname)})

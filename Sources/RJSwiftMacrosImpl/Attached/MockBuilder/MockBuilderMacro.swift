@@ -65,9 +65,7 @@ public struct MockBuilderMacro: MemberMacro {
 
 extension MockBuilderMacro {
     
-    static func generateMockCodeSyntax(
-        mockData: ArrayElementListSyntax
-    ) -> IfConfigDeclSyntax {
+    static func generateMockCodeSyntax(mockData: ArrayElementListSyntax) -> IfConfigDeclSyntax {
         let returnType = ArrayTypeSyntax(
             leftSquare: .leftSquareToken(),
             element: IdentifierTypeSyntax(
@@ -130,37 +128,30 @@ extension MockBuilderMacro {
         )
     }
     
-    static func getDataGeneratorType(
-        from node: SwiftSyntax.AttributeSyntax
-    ) -> DataGeneratorType {
+    static func getDataGeneratorType(from node: SwiftSyntax.AttributeSyntax) -> DataGeneratorType {
         guard let argumentTuple = node.arguments?.as(LabeledExprListSyntax.self) else {
             fatalError("Compiler bug: Argument must exist")
         }
 
-        guard let generatorArgument = argumentTuple.first(
-            where: { $0.label?.text == "dataGeneratorType" }
-        ),
+        guard let generatorArgument = argumentTuple.first(where: { $0.label?.text == Constants.dataGeneratorTypeLabelIdentifier.rawValue }),
               let argumentValue = generatorArgument.expression.as(MemberAccessExprSyntax.self)?.declName.baseName,
               let generatorType = DataGeneratorType(rawValue: argumentValue.text) else {
-            // return default generator type
+            // return random generator type
             return .random
         }
         
         return generatorType
     }
     
-    static func getNumberOfItems(
-        from node: SwiftSyntax.AttributeSyntax
-    ) throws -> Int {
-        guard let argumentTuple = node.arguments?.as(LabeledExprListSyntax.self)?.first
-        else {
+    static func getNumberOfItems(from node: SwiftSyntax.AttributeSyntax) throws -> Int {
+        guard let arguments = node.arguments?.as(LabeledExprListSyntax.self),
+              let argumentTuple = arguments.first(where: { $0.label?.text == Constants.numberOfItemsLabelIdentifier.rawValue }) else {
             fatalError("Compiler bug: Argument must exist")
         }
         
         if let prefixExpression = argumentTuple
             .expression
             .as(PrefixOperatorExprSyntax.self) {
-            
             return negativeNumberOfItems(expression: prefixExpression)
         } else if let integerExpression = argumentTuple
                 .expression
@@ -172,18 +163,13 @@ extension MockBuilderMacro {
         return 0 // Will throw .argumentNotGreaterThanZero in Xcode
     }
     
-    static func negativeNumberOfItems(
-        expression: PrefixOperatorExprSyntax
-    ) -> Int {
-        let operatorToken = expression
-            .operator
-            .text
+    static func negativeNumberOfItems(expression: PrefixOperatorExprSyntax) -> Int {
+        let prefixOperator = expression.operator.text
         
-        guard
-            let integerExpression = expression
+        guard let integerExpression = expression
                 .expression
                 .as(IntegerLiteralExprSyntax.self),
-            let numberOfItems = Int(operatorToken + integerExpression.literal.text)
+            let numberOfItems = Int(prefixOperator + integerExpression.literal.text)
         else {
             return 0 // Will throw .argumentNotGreaterThanZero in Xcode
         }
@@ -219,4 +205,9 @@ extension MockBuilderMacro {
         
         return parameterList
     }
+}
+
+fileprivate enum Constants: String {
+    case numberOfItemsLabelIdentifier = "numberOfItems"
+    case dataGeneratorTypeLabelIdentifier = "dataGeneratorType"
 }

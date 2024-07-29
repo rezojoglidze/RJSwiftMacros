@@ -41,28 +41,21 @@ extension MockBuilderMacro {
         let storedPropertyMembers = structDecl.memberBlock.members
             .compactMap {
                 $0.decl.as(VariableDeclSyntax.self)
-            }
-            .filter {
+            }.filter {
                 $0.isStoredProperty
             }
         
-        let initMembers = structDecl.memberBlock.members
-            .compactMap {
-                $0.decl.as(InitializerDeclSyntax.self)
-            }
+        let initMembers = structDecl.memberBlock.members.compactMap {
+            $0.decl.as(InitializerDeclSyntax.self)
+        }
         
         if initMembers.isEmpty {
             // No custom init around. We use the memberwise initializer's properties:
             return storedPropertyMembers.compactMap {
-                if let identifier = $0.bindings.first?
-                    .pattern
-                    .as(IdentifierPatternSyntax.self)?
-                    .identifier.text,
-                   let type = $0.bindings.first?
-                    .typeAnnotation?
-                    .type {
+                if let propertyName = $0.bindings.first?.pattern.as(IdentifierPatternSyntax.self)?.identifier.text,
+                   let propertyType = $0.bindings.first?.typeAnnotation?.type {
                     
-                    return (identifier, type)
+                    return (propertyName, propertyType)
                 }
                 
                 return nil
@@ -74,8 +67,7 @@ extension MockBuilderMacro {
             }
         }
         
-        let largestParameterList = initMembers
-            .map {
+        let largestParameterList = initMembers.map {
                 getParametersFromInit(initSyntax: $0)
             }.max {
                 $0.count < $1.count
