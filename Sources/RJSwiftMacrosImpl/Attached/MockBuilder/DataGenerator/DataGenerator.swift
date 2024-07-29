@@ -59,7 +59,7 @@ public extension DataGenerator {
         bool: { true },
         data: { Data() },
         date: { Date(timeIntervalSinceReferenceDate: 0) },
-        uuid: { UUID.increasingUUID },
+        uuid: { UUID() },
         objectIdentifier: { ObjectIdentifier(DummyClass()) },
         cgpoint: { CGPoint() },
         cgrect: { CGRect() },
@@ -98,17 +98,6 @@ public extension DataGenerator {
             cgfloat: { CGFloat() },
             url: { Provider().url() }
         )
-    }
-}
-
-public extension UUID {
-    static var uuIdCounter: UInt = 0
-
-    static var increasingUUID: UUID {
-        defer {
-            uuIdCounter += 1
-        }
-        return UUID(uuidString: "00000000-0000-0000-0000-\(String(format: "%012x", uuIdCounter))")!
     }
 }
 

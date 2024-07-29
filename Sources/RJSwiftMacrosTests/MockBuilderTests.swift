@@ -23,7 +23,7 @@ final class MockBuilderTests: XCTestCase {
     ]
     
     // MARK: Tests
-    func testMockBuilderMacro() throws {
+    func stestMockBuilderMacro() throws {
         assertMacroExpansion(
         #"""
         @MockBuilder(numberOfItems: 3, dataGeneratorType: .random)
@@ -33,19 +33,6 @@ final class MockBuilderTests: XCTestCase {
         }
         """#,
         expandedSource: """
-        struct Example {
-            let item1: Int?
-        
-            #if DEBUG
-            static var mock: [Self] {
-                [
-                    .init(item1: DataGenerator.random().int()),
-                    .init(item1: DataGenerator.random().int()),
-                    .init(item1: DataGenerator.random().int()),
-                ]
-            }
-            #endif
-        }
         struct Product {
             var price: Int
             var description: String

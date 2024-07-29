@@ -17,7 +17,7 @@ struct Car {
     @CodingKeyIgnored() let color: String
 }
 
-@MockBuilder(numberOfItems: 12, dataGeneratorType: .random)
+@MockBuilder(numberOfItems: 12, dataGeneratorType: .default)
 struct Person {
     let name: String
     let surname: String

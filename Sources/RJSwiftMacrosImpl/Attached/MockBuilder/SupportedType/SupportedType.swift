@@ -33,14 +33,12 @@ enum SupportedType: String {
     case cgFloat = "CGFloat"
     case url = "URL"
 
-    func exprSyntax(
-        dataGeneratorType: DataGeneratorType
-    ) -> ExprSyntax {
+    func exprSyntax(dataGeneratorType: DataGeneratorType) -> ExprSyntax {
         switch dataGeneratorType {
         case .default:
             return ExprSyntax(stringLiteral: "DataGenerator.\(dataGeneratorType).\(self.rawValue.lowercased())()")
         case .random:
-            return ExprSyntax(stringLiteral: "DataGenerator.\(dataGeneratorType).\(self.rawValue.lowercased())()")
+            return ExprSyntax(stringLiteral: "DataGenerator.\(dataGeneratorType)().\(self.rawValue.lowercased())()")
         }
     }
 }
