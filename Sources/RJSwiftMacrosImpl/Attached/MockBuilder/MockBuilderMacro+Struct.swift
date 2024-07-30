@@ -7,7 +7,7 @@
 
 import SwiftSyntax
 import SwiftSyntaxMacros
-import RJSwiftCommon
+import RJSwiftMacrosImplDependencies
 
 extension MockBuilderMacro {
     static func MockBuilderMacroForStruct(

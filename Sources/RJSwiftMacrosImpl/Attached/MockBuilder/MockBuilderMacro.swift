@@ -10,7 +10,7 @@ import SwiftCompilerPlugin
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 import SwiftDiagnostics
-import RJSwiftCommon
+import RJSwiftMacrosImplDependencies
 
 public struct MockBuilderMacro: MemberMacro {
     public static func expansion(

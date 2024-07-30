@@ -7,7 +7,7 @@
 
 import SwiftDiagnostics
 
-struct MockBuilderFixIt: FixItMessage {
+public struct MockBuilderFixIt: FixItMessage {
     public let message: String
     private let messageID: String
 
@@ -28,7 +28,7 @@ struct MockBuilderFixIt: FixItMessage {
 }
 
 
-extension FixItMessage where Self == MockBuilderFixIt {
+public extension FixItMessage where Self == MockBuilderFixIt {
     static var addNewEnumCase: Self {
       .init("add a new enum case")
     }

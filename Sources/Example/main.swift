@@ -7,8 +7,7 @@
 
 import Foundation
 import RJSwiftMacros
-import RJSwiftCommon
-import RJSwiftMacrosImpl
+import RJSwiftMacrosImplDependencies
 
 @CodingKeys
 @MockBuilder(numberOfItems: 3, dataGeneratorType: .random)
