@@ -23,7 +23,47 @@ final class MockBuilderTests: XCTestCase {
     ]
     
     // MARK: Tests
-    func testMockBuilderMacro() throws {
+    func testMockBuilderMacro_for_class() throws {
+        assertMacroExpansion(
+            #"""
+            @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+            class Car {
+                let color: String
+                let model: String
+                
+                init(color: String, model: String) {
+                    self.color = color
+                    self.model = model
+                }
+            }
+            """#,
+            expandedSource:
+            #"""
+            class Car {
+                let color: String
+                let model: String
+                
+                init(color: String, model: String) {
+                    self.color = color
+                    self.model = model
+                }
+
+                #if DEBUG
+                static var mock: [Car ] {
+                    [
+                        .init(color: DataGenerator.random().string(), model: DataGenerator.random().string()),
+                        .init(color: DataGenerator.random().string(), model: DataGenerator.random().string()),
+                    ]
+                }
+                #endif
+            }
+            """#,
+            macros: testMacros
+        )
+    }
+    
+    
+    func testMockBuilderMacro_for_struct() throws {
         assertMacroExpansion(
         #"""
         @MockBuilder(numberOfItems: 3, dataGeneratorType: .random)
@@ -38,7 +78,7 @@ final class MockBuilderTests: XCTestCase {
             let surname: String
         
             #if DEBUG
-            static var mock: [Self] {
+            static var mock: [Person ] {
                 [
                     .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
                     .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
@@ -50,6 +90,36 @@ final class MockBuilderTests: XCTestCase {
         """,
         macros: testMacros
         )
+    }
+    
+    func testMockBuilderMacro_for_enum() throws {
+        assertMacroExpansion(
+            #"""
+            @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+            enum VehicleType {
+               case car
+               case bus
+               case motorcycle
+            }
+            """#,
+            expandedSource: """
+            enum VehicleType {
+               case car
+               case bus
+               case motorcycle
+            
+                #if DEBUG
+                static var mock: [Self] {
+                    [
+                        .car,
+                        .bus,
+                    ]
+                }
+                #endif
+            }
+            """,
+            macros: testMacros
+            )
     }
 }
 #else

@@ -42,8 +42,9 @@ public struct MockBuilderMacro: MemberMacro {
         }
         
         if let structDecl = declaration.as(StructDeclSyntax.self) {
-            return MockBuilderMacroForStruct(
-                structDecl: structDecl,
+            return MockBuilderMacroForClassOrSturct(
+                decl: structDecl,
+                identifierToken: structDecl.name,
                 numberOfItems: numberOfItems,
                 generatorType: generatorType,
                 context: context
@@ -51,7 +52,13 @@ public struct MockBuilderMacro: MemberMacro {
         }
         
         if let classDecl = declaration.as(ClassDeclSyntax.self) {
-            return []
+            return MockBuilderMacroForClassOrSturct(
+                decl: classDecl,
+                identifierToken: classDecl.name,
+                numberOfItems: numberOfItems,
+                generatorType: generatorType,
+                context: context
+            )
         }
         
         MockBuilderDiagnostic.report(
@@ -65,11 +72,14 @@ public struct MockBuilderMacro: MemberMacro {
 
 extension MockBuilderMacro {
     
-    static func generateMockCodeSyntax(mockData: ArrayElementListSyntax) -> IfConfigDeclSyntax {
+    static func generateMockCodeSyntax(
+        identifierToken: TokenSyntax? = nil,
+        mockData: ArrayElementListSyntax
+    ) -> IfConfigDeclSyntax {
         let returnType = ArrayTypeSyntax(
             leftSquare: .leftSquareToken(),
             element: IdentifierTypeSyntax(
-                name: .keyword(.Self)
+                name: identifierToken ?? .keyword(.Self)
             ),
             rightSquare: .rightSquareToken()
         )
