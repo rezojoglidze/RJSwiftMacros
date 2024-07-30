@@ -9,12 +9,12 @@ import SwiftSyntax
 import SwiftDiagnostics
 import SwiftSyntaxMacros
 
-enum MockBuilderDiagnostic: String, DiagnosticMessage {
+public enum MockBuilderDiagnostic: String, DiagnosticMessage {
     case notAnStructOrEnum
     case argumentNotGreaterThanZero
     case enumWithEmptyCases
     
-    var severity: DiagnosticSeverity {
+    public var severity: DiagnosticSeverity {
         switch self {
         case .notAnStructOrEnum:
             return .error
@@ -25,7 +25,7 @@ enum MockBuilderDiagnostic: String, DiagnosticMessage {
         }
     }
     
-    var message: String {
+    public var message: String {
         switch self {
         case .notAnStructOrEnum:
             return "@MockBuilder can only be applied to Structs and Enums"
@@ -36,11 +36,11 @@ enum MockBuilderDiagnostic: String, DiagnosticMessage {
         }
     }
     
-    var diagnosticID: MessageID {
+    public var diagnosticID: MessageID {
         return MessageID(domain: "RJSwiftMacros", id: rawValue)
     }
     
-    static func report(
+    public static func report(
         diagnostic: Self,
         node: Syntax,
         context: some SwiftSyntaxMacros.MacroExpansionContext
@@ -55,7 +55,7 @@ enum MockBuilderDiagnostic: String, DiagnosticMessage {
         context.diagnose(diagnostic)
     }
     
-    static func getFixIts(
+    public static func getFixIts(
         for diagnostic: Self,
         node: Syntax
     ) -> [FixIt] {

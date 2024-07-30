@@ -6,9 +6,8 @@
 //
 
 import SwiftSyntax
-import RJSwiftCommon
 
-enum SupportedType: String {
+public enum SupportedType: String {
     case int = "Int"
     case int8 = "Int8"
     case int16 = "Int16"
@@ -33,7 +32,7 @@ enum SupportedType: String {
     case cgFloat = "CGFloat"
     case url = "URL"
 
-    func exprSyntax(dataGeneratorType: DataGeneratorType) -> ExprSyntax {
+    public func exprSyntax(dataGeneratorType: DataGeneratorType) -> ExprSyntax {
         switch dataGeneratorType {
         case .default:
             return ExprSyntax(stringLiteral: "DataGenerator.\(dataGeneratorType).\(self.rawValue.lowercased())()")

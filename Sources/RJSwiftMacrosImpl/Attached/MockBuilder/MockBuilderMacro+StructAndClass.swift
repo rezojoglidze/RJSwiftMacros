@@ -1,28 +1,31 @@
 //
-//  MockBuilderMacro+Struct.swift
-//  
+//  MockBuilderMacro+StructAndClass.swift
+//
 //
 //  Created by Rezo Joglidze on 28.07.24.
 //
 
 import SwiftSyntax
 import SwiftSyntaxMacros
+import RJSwiftMacrosImplDependencies
 import RJSwiftCommon
 
 extension MockBuilderMacro {
-    static func MockBuilderMacroForStruct(
-        structDecl: StructDeclSyntax,
+    static func MockBuilderMacroForClassOrSturct<T: DeclSyntaxProtocol>(
+        decl: T,
+        identifierToken: TokenSyntax, //Class or Struct name
         numberOfItems: Int,
         generatorType: DataGeneratorType,
         context: MacroExpansionContext
     ) -> [SwiftSyntax.DeclSyntax] {
         let validParameters = getValidParameterList(
-            from: structDecl,
+            from: decl,
             generatorType: generatorType,
             context: context
         )
         
         let mockCode = generateMockCodeSyntax(
+            identifierToken: identifierToken,
             mockData: generateMockData(
                 parameters: validParameters,
                 numberOfItems: numberOfItems,
@@ -33,20 +36,21 @@ extension MockBuilderMacro {
         return [DeclSyntax(mockCode)]
     }
     
-    static func getValidParameterList(
-        from structDecl: StructDeclSyntax,
+    static func getValidParameterList<T: DeclSyntaxProtocol>(
+        from decl: T,
         generatorType: DataGeneratorType,
         context: MacroExpansionContext
     ) -> [ParameterItem] {
-        let storedPropertyMembers = structDecl.memberBlock.members
-            .compactMap {
-                $0.decl.as(VariableDeclSyntax.self)
-            }.filter {
-                $0.isStoredProperty
-            }
+        var storedPropertyMembers: [VariableDeclSyntax] = []
+        var initMembers: [InitializerDeclSyntax] = []
         
-        let initMembers = structDecl.memberBlock.members.compactMap {
-            $0.decl.as(InitializerDeclSyntax.self)
+        if let structDecl = decl as? StructDeclSyntax {
+            storedPropertyMembers = decl.getStoredProperties(with: structDecl.memberBlock)
+            initMembers = decl.getInitMembers(with: structDecl.memberBlock)
+            
+        } else if let classDecl = decl as? ClassDeclSyntax {
+            storedPropertyMembers = decl.getStoredProperties(with: classDecl.memberBlock)
+            initMembers = decl.getInitMembers(with: classDecl.memberBlock)
         }
         
         if initMembers.isEmpty {

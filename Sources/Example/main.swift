@@ -7,8 +7,7 @@
 
 import Foundation
 import RJSwiftMacros
-import RJSwiftCommon
-import RJSwiftMacrosImpl
+import RJSwiftMacrosImplDependencies
 
 @CodingKeys
 @MockBuilder(numberOfItems: 3, dataGeneratorType: .random)
@@ -17,4 +16,24 @@ struct Person {
     @CodingKeyProperty("second_name") let surname: String
 }
 
-Person.mock.forEach({ print("name: ", $0.name, "surname: ", $0.surname)})
+@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+enum VehicleType {
+    case car
+    case bus
+    case motorcycle
+}
+
+
+@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+class Car {
+    let color: String
+    let model: String
+    
+    init(color: String, model: String) {
+        self.color = color
+        self.model = model
+    }
+}
+
+
+//Car.mock.forEach({ print("color: ", $0.color, "model: ", $0.model)})

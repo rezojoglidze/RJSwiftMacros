@@ -7,6 +7,7 @@
 
 import SwiftSyntax
 import RJSwiftCommon
+import RJSwiftMacrosImplDependencies
 
 extension MockBuilderMacro {
     static func getExpressionSyntax(
