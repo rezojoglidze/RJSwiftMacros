@@ -1,5 +1,8 @@
 # Change Log
 
+### [0.2.3(18)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.3) — *30 07 2024*
+Bug fixing
+
 ### [0.2.2(17)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.2) — *30 07 2024*
 Add definition to the macros
 
