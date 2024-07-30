@@ -1,5 +1,9 @@
 # Change Log
 
+### [0.2.2(17)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.2) — *30 07 2024*
+Macros
+Add definition to the macros
+
 ### [0.2.1(16)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.1) — *30 07 2024*
 Macros
 - `MockBuilder` macro Bug fixing
