@@ -38,7 +38,7 @@ let package = Package(
         
             .target(
                 name: "RJSwiftMacros",
-                dependencies: ["RJSwiftMacrosImpl", "RJSwiftCommon"]
+                dependencies: ["RJSwiftMacrosImpl", "RJSwiftCommon", "RJSwiftMacrosImplDependencies"]
             ),
         
             .target(
