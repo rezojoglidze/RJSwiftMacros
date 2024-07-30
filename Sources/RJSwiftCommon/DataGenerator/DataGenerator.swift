@@ -9,7 +9,7 @@ import Foundation
 
 fileprivate typealias Provider = FakeDataProvider
 
-// Keep all method names in lowercase.
+// MARK: ⚠️❗❗warning Keep all method names in lowercase.❗❗⚠️
 public struct DataGenerator {
     public var int: () -> Int
     public var int8: () -> Int8
@@ -30,7 +30,7 @@ public struct DataGenerator {
     public var data: () -> Data
     public var date: () -> Date
     public var uuid: () -> UUID
-    public var objectIdentifier: () -> ObjectIdentifier
+    public var objectidentifier: () -> ObjectIdentifier
     public var cgpoint: () -> CGPoint
     public var cgrect: () -> CGRect
     public var cgsize: () -> CGSize
@@ -60,7 +60,7 @@ public extension DataGenerator {
         data: { Data() },
         date: { Date(timeIntervalSinceReferenceDate: 0) },
         uuid: { UUID() },
-        objectIdentifier: { ObjectIdentifier(DummyClass()) },
+        objectidentifier: { ObjectIdentifier(DummyClass()) },
         cgpoint: { CGPoint() },
         cgrect: { CGRect() },
         cgsize: { CGSize() },
@@ -90,7 +90,7 @@ public extension DataGenerator {
             data: { Data() },
             date: { Provider().date() },
             uuid: { UUID() },
-            objectIdentifier: { ObjectIdentifier(DummyClass()) },
+            objectidentifier: { ObjectIdentifier(DummyClass()) },
             cgpoint: { CGPoint() },
             cgrect: { CGRect() },
             cgsize: { CGSize() },
