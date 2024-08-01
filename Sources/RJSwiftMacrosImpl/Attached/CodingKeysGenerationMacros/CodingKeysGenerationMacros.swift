@@ -50,8 +50,7 @@ public struct CodingKeysMacro: MemberMacro {
         in context: some MacroExpansionContext
     ) throws -> [DeclSyntax] {
         let cases: [String] = try declaration.memberBlock.members.compactMap { member in
-            guard let codingKeyType = getCodingKeyType(from: node),
-                  let variableDecl = member.decl.as(VariableDeclSyntax.self),
+            guard let variableDecl = member.decl.as(VariableDeclSyntax.self),
                   let property = variableDecl.bindings.first?.pattern.as(IdentifierPatternSyntax.self)?.identifier.text else { return nil }
             
             if let element = attributesElement(withIdentifier: Constants.codingKeyPropertyIdentifier.rawValue, in: variableDecl.attributes) {
@@ -66,7 +65,7 @@ public struct CodingKeysMacro: MemberMacro {
                 let raw = property.dropBackticks()
                 let snakeCase = raw.snakeCased()
                 
-                switch codingKeyType {
+                switch getCodingKeyType(from: node) {
                 case .camelCase:
                     return "case \(property)"
                 case .snakeCase:
@@ -94,11 +93,11 @@ enum CodingKeys: String, CodingKey {
         return true
     }
     
-    static func getCodingKeyType(from node: SwiftSyntax.AttributeSyntax) -> CodingKeyType? {
+    static func getCodingKeyType(from node: SwiftSyntax.AttributeSyntax) -> CodingKeyType {
         guard let argumentTuple = node.arguments?.as(LabeledExprListSyntax.self),
               let generatorArgument = argumentTuple.first(where: { $0.label?.text == Constants.codingKeyTypeIdentifier.rawValue }),
               let argumentValue = generatorArgument.expression.as(MemberAccessExprSyntax.self)?.declName.baseName,
-              let generatorType = CodingKeyType(rawValue: argumentValue.text) else { return nil }
+              let generatorType = CodingKeyType(rawValue: argumentValue.text) else { return .camelCase }
         
         return generatorType
     }

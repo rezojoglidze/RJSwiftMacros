@@ -8,22 +8,37 @@
 import Foundation
 import RJSwiftMacrosImplDependencies
 
-/// - Generate `CodingKeys`  with ``CodingKeys()`` Macro
-///
+/// - Generate `CodingKeys`  with ``CodingKeys(codingKeyType: CodingKeyType)`` Macro.
+/// - `CodingKeyType` has two case `camelCase` and  `snakeCase`.
+/// - Passing `codingKeyType` param with `nil` caused coding keys generation with camel cased.
 /// ```
-/// @CodingKeys
+/// @CodingKeys()
 /// struct Person {
-///     let name: String
+///     let firstName: String
 ///     let surname: String
 ///
 ///     enum CodingKeys: String, CodingKey {
-///        case name
+///        case firstName = "firstName"
+///        case surname
+///     }
+/// }
+/// ```
+///
+/// - CodingKeys generation by `snakeCase`.
+/// ```
+/// @CodingKeys(codingKeyType: .snakeCase)
+/// struct Person {
+///     let firstName: String
+///     let surname: String
+///
+///     enum CodingKeys: String, CodingKey {
+///        case firstName = "first_name"
 ///        case surname
 ///     }
 /// }
 /// ```
 @attached(member, names: named(CodingKeys))
-public macro CodingKeys(codingKeyType: CodingKeyType) = #externalMacro(module: "RJSwiftMacrosImpl", type: "CodingKeysMacro")
+public macro CodingKeys(codingKeyType: CodingKeyType? = nil) = #externalMacro(module: "RJSwiftMacrosImpl", type: "CodingKeysMacro")
 
 
 /// - Adjust coding key with ``CodingKeyProperty(_:)``

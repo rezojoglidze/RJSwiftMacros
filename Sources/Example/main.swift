@@ -9,7 +9,7 @@ import Foundation
 import RJSwiftMacros
 import RJSwiftMacrosImplDependencies
 
-@CodingKeys(codingKeyType: .camelCase)
+@CodingKeys(codingKeyType: .snakeCase)
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct Person {
     @CodingKeyIgnored() let name: String
