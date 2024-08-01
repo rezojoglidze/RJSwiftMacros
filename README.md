@@ -4,7 +4,7 @@ RJSwiftMacros is a Swift package that provides macros. Such as generating coding
 
 ## Features
 - ``MockBuilder(numberOfItems: Int, dataGeneratorType: .random)``: Generates an array of mock data from our models.
-- ``CodingKeys()``: Automatically generates `CodingKeys` for your structs.
+- ``CodingKeys(codingKeyType: CodingKeyType)``: Automatically generates camelCased or snakeCased CodingKeys.
 - ``CodingKeyProperty(:_)``: Allows custom coding keys for specific properties.
 - ``CodingKeyIgnored()``: Ignores specific properties from the coding process.
 
@@ -53,21 +53,42 @@ struct Person {
 
 Usage of `CodingKeys`:
 ```swift
-@CodingKeys
+@CodingKeys()
 class Car {
-    let color: String
+    let modelColor: String
     @CodingKeyProperty("car_model") let model: String
     @CodingKeyIgnored() let speed: Int
 
-    init(color: String, model: String, speed: Int) {
-        self.color = color
+    init(modelColor: String, model: String, speed: Int) {
+        self.modelColor = modelColor
         self.model = model
         self.speed = speed
     }
 
     enum CodingKeys: String, CodingKey {
-       case color
+       case modelColor
        case model = "car_model"
+    }
+}
+```
+
+CodingKeys generation with `snakeCase`.
+```swift
+@CodingKeys(codingKeyType: .snakeCase)
+class Car {
+    let modelColor: String
+    @CodingKeyProperty("carModel") let model: String
+    @CodingKeyIgnored() let speed: Int
+
+    init(modelColor: String, model: String, speed: Int) {
+        self.modelColor = modelColor
+        self.model = model
+        self.speed = speed
+    }
+
+    enum CodingKeys: String, CodingKey {
+       case modelColor = "model_color
+       case model = "carModel"
     }
 }
 ```
