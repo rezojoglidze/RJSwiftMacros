@@ -1,6 +1,6 @@
 # RJSwiftMacros
 
-RJSwiftMacros is a Swift package that provides macros. Such as generating coding keys and handling coding key properties and ignored keys.
+RJSwiftMacros is a Swift package that provides macros.
 
 ## Features
 - ``MockBuilder(numberOfItems: Int, dataGeneratorType: .random)``: Generates an array of mock data from our models.
