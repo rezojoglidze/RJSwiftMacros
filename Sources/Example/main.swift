@@ -12,8 +12,8 @@ import RJSwiftMacrosImplDependencies
 @CodingKeys(codingKeyType: .camelCase)
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct Person {
-    let nameGric: String
-    @CodingKeyProperty("second_name") let surname: String
+    @CodingKeyIgnored() let name: String
+    let surname: String
 }
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
