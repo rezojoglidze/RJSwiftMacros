@@ -92,10 +92,8 @@ extension MockBuilderMacro {
         )
                 
         let singleMockItemCode = VariableDeclSyntax(
-            leadingTrivia: .newline,
             modifiers: DeclModifierListSyntax {
                 DeclModifierSyntax(
-                    leadingTrivia: .newline,
                     name: .keyword(.static)
                 )
             },
@@ -122,6 +120,7 @@ extension MockBuilderMacro {
         )
         
         let mockArrayCode = VariableDeclSyntax(
+            leadingTrivia: .newline,
             modifiers: DeclModifierListSyntax {
                 DeclModifierSyntax(
                     leadingTrivia: .newline,
@@ -167,8 +166,8 @@ extension MockBuilderMacro {
                     ),
                     elements: .decls(
                         MemberBlockItemListSyntax {
-                            MemberBlockItemSyntax(decl: mockArrayCode);
                             MemberBlockItemSyntax(decl: singleMockItemCode)
+                            MemberBlockItemSyntax(decl: mockArrayCode);
                         }
                     )
                 )
