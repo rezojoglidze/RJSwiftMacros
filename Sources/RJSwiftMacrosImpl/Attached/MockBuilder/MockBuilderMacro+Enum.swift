@@ -13,6 +13,7 @@ import RJSwiftMacrosImplDependencies
 extension MockBuilderMacro {
     static func MockBuilderMacroForEnum(
         enumDecl: EnumDeclSyntax,
+        identifierToken: TokenSyntax, //enum name
         numberOfItems: Int,
         generatorType: DataGeneratorType,
         context: some SwiftSyntaxMacros.MacroExpansionContext
@@ -30,16 +31,65 @@ extension MockBuilderMacro {
             )
             return []
         }
+        
+        let mockArrayData = generateMockArrayCases(
+            cases: cases,
+            numberOfItems: numberOfItems,
+            generatorType: generatorType
+        )
+        
+        let singleMockEnumCase = generateSingleMockEnumCase(cases: cases, generatorType: generatorType)
 
         let mockCode = generateMockCodeSyntax(
-            mockData: generateMockArrayCases(
-                cases: cases,
-                numberOfItems: numberOfItems,
-                generatorType: generatorType
-            )
+            identifierToken: identifierToken,
+            mockArrayData: mockArrayData,
+            singleMockItemData: singleMockEnumCase
         )
         
         return [DeclSyntax(mockCode)]
+    }
+    
+    static func generateSingleMockEnumCase(
+        cases: [EnumCaseDeclSyntax],
+        generatorType: DataGeneratorType
+    ) -> ExprSyntax {
+        guard let caseItem = cases.randomElement() else {
+            fatalError("Cases array must not be empty")
+        }
+        
+        let parameters = caseItem.parameters.map {
+            ParameterItem(
+                identifierName: $0.0?.text,
+                identifierType: $0.1
+            )
+        }
+        
+        let caseExpression =
+        if caseItem.hasAssociatedValues {
+            ExprSyntax(
+                FunctionCallExprSyntax(
+                    calledExpression: MemberAccessExprSyntax(
+                        period: .periodToken(),
+                        name: .identifier(caseItem.name)
+                    ),
+                    leftParen: .leftParenToken(),
+                    arguments: getParameterListForMockElement(
+                        parameters: parameters,
+                        generatorType: generatorType
+                    ),
+                    rightParen: .rightParenToken()
+                )
+            )
+        } else {
+            ExprSyntax(
+                MemberAccessExprSyntax(
+                    period: .periodToken(),
+                    name: .identifier(caseItem.name)
+                )
+            )
+        }
+        
+        return caseExpression
     }
     
     static func generateMockArrayCases(

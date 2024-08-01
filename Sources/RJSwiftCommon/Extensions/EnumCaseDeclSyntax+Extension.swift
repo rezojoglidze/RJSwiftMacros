@@ -13,8 +13,7 @@ public extension EnumCaseDeclSyntax {
     }
     
     var name: String {
-        guard let caseName = self.elements.first?.name.text
-        else {
+        guard let caseName = self.elements.first?.name.text else {
             fatalError("Compiler Bug: Case name not found")
         }
         

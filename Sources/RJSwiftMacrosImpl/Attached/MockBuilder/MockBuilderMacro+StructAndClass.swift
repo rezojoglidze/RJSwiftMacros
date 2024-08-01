@@ -24,13 +24,13 @@ extension MockBuilderMacro {
             context: context
         )
         
+        let singleMockItemData = generateSingleMockItemData(parameters: validParameters, generatorType: generatorType)
+        let mockArrayData = generateMockArrayData(parameters: validParameters, numberOfItems: numberOfItems, generatorType: generatorType)
+        
         let mockCode = generateMockCodeSyntax(
             identifierToken: identifierToken,
-            mockData: generateMockData(
-                parameters: validParameters,
-                numberOfItems: numberOfItems,
-                generatorType: generatorType
-            )
+            mockArrayData: mockArrayData,
+            singleMockItemData: singleMockItemData
         )
         
         return [DeclSyntax(mockCode)]
@@ -93,7 +93,29 @@ extension MockBuilderMacro {
         }
     }
     
-    static func generateMockData(
+    static func generateSingleMockItemData(
+        parameters: [ParameterItem],
+        generatorType: DataGeneratorType
+    ) -> ExprSyntax {
+        let parameterList = getParameterListForMockElement(
+            parameters: parameters,
+            generatorType: generatorType
+        )
+        
+        let singleItem = FunctionCallExprSyntax(
+            calledExpression: MemberAccessExprSyntax(
+                period: .periodToken(),
+                name: .keyword(.`init`)
+            ),
+            leftParen: .leftParenToken(),
+            arguments: parameterList,
+            rightParen: .rightParenToken()
+        )
+        
+        return ExprSyntax(singleItem)
+    }
+    
+    static func generateMockArrayData(
         parameters: [ParameterItem],
         numberOfItems: Int,
         generatorType: DataGeneratorType

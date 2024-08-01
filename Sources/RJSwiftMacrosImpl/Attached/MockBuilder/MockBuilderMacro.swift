@@ -35,6 +35,7 @@ public struct MockBuilderMacro: MemberMacro {
         if let enumDecl = declaration.as(EnumDeclSyntax.self) {
             return MockBuilderMacroForEnum(
                 enumDecl: enumDecl,
+                identifierToken: enumDecl.name,
                 numberOfItems: numberOfItems,
                 generatorType: generatorType,
                 context: context
@@ -73,29 +74,65 @@ public struct MockBuilderMacro: MemberMacro {
 extension MockBuilderMacro {
     
     static func generateMockCodeSyntax(
-        identifierToken: TokenSyntax? = nil,
-        mockData: ArrayElementListSyntax
+        identifierToken: TokenSyntax,
+        mockArrayData: ArrayElementListSyntax,
+        singleMockItemData: ExprSyntax
     ) -> IfConfigDeclSyntax {
-        let returnType = ArrayTypeSyntax(
+        
+        let singleMockItemCodeReturnType = IdentifierTypeSyntax(
+            name: identifierToken
+        )
+        
+        let mockArrayCodeReturnType = ArrayTypeSyntax(
             leftSquare: .leftSquareToken(),
             element: IdentifierTypeSyntax(
-                name: identifierToken ?? .keyword(.Self)
+                name: identifierToken
             ),
             rightSquare: .rightSquareToken()
         )
-        
-        let mockCode = VariableDeclSyntax(
+                
+        let singleMockItemCode = VariableDeclSyntax(
+            leadingTrivia: .newline,
             modifiers: DeclModifierListSyntax {
-                DeclModifierSyntax(name: .keyword(.static))
+                DeclModifierSyntax(
+                    leadingTrivia: .newline,
+                    name: .keyword(.static)
+                )
             },
             bindingSpecifier: .keyword(.var),
             bindings: PatternBindingListSyntax {
                 PatternBindingSyntax(
-                    pattern: IdentifierPatternSyntax(identifier: .identifier("mock")),
-                    typeAnnotation: TypeAnnotationSyntax(
-                        colon: .colonToken(),
-                        type: returnType
-                    ),
+                    pattern: IdentifierPatternSyntax(identifier: .identifier(Constants.mockIdentifier.rawValue)),
+                    typeAnnotation: TypeAnnotationSyntax(colon: .colonToken(), type: singleMockItemCodeReturnType),
+                    accessorBlock: AccessorBlockSyntax(
+                        leftBrace: .leftBraceToken(),
+                        accessors: .getter(
+                            CodeBlockItemListSyntax {
+                                CodeBlockItemSyntax(
+                                    item: .expr(
+                                        ExprSyntax(singleMockItemData)
+                                    )
+                                )
+                            }
+                        ),
+                        rightBrace: .rightBraceToken()
+                    )
+                )
+            }
+        )
+        
+        let mockArrayCode = VariableDeclSyntax(
+            modifiers: DeclModifierListSyntax {
+                DeclModifierSyntax(
+                    leadingTrivia: .newline,
+                    name: .keyword(.static)
+                )
+            },
+            bindingSpecifier: .keyword(.var),
+            bindings: PatternBindingListSyntax {
+                PatternBindingSyntax(
+                    pattern: IdentifierPatternSyntax(identifier: .identifier(Constants.mockArrayIdentifier.rawValue)),
+                    typeAnnotation: TypeAnnotationSyntax(colon: .colonToken(),type: mockArrayCodeReturnType),
                     accessorBlock: AccessorBlockSyntax(
                         leftBrace: .leftBraceToken(),
                         accessors: .getter(
@@ -105,7 +142,7 @@ extension MockBuilderMacro {
                                         ExprSyntax(
                                             ArrayExprSyntax(
                                                 leftSquare: .leftSquareToken(),
-                                                elements: mockData,
+                                                elements: mockArrayData,
                                                 rightSquare: .rightSquareToken(leadingTrivia: .newline)
                                             )
                                         )
@@ -130,7 +167,8 @@ extension MockBuilderMacro {
                     ),
                     elements: .decls(
                         MemberBlockItemListSyntax {
-                            MemberBlockItemSyntax(decl: mockCode)
+                            MemberBlockItemSyntax(decl: mockArrayCode);
+                            MemberBlockItemSyntax(decl: singleMockItemCode)
                         }
                     )
                 )
@@ -218,6 +256,8 @@ extension MockBuilderMacro {
 }
 
 fileprivate enum Constants: String {
+    case mockArrayIdentifier = "mockArray"
+    case mockIdentifier = "mock"
     case numberOfItemsLabelIdentifier = "numberOfItems"
     case dataGeneratorTypeLabelIdentifier = "dataGeneratorType"
 }

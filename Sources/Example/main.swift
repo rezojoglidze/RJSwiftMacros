@@ -10,19 +10,18 @@ import RJSwiftMacros
 import RJSwiftMacrosImplDependencies
 
 @CodingKeys
-@MockBuilder(numberOfItems: 3, dataGeneratorType: .random)
+@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct Person {
     let name: String
     @CodingKeyProperty("second_name") let surname: String
 }
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
-enum VehicleType {
+enum VehicleType: String {
     case car
     case bus
     case motorcycle
 }
-
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 class Car {

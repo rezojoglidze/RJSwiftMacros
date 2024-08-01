@@ -28,7 +28,7 @@ import RJSwiftMacrosImplDependencies
 ///}
 ///```
 
-@attached(member, names: named(mock))
+@attached(member, names: named(mock), named(mockArray))
 public macro MockBuilder(
     numberOfItems: Int,
     dataGeneratorType: DataGeneratorType
