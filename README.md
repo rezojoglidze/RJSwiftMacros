@@ -27,28 +27,50 @@ You can add `RJSwiftMacros` as a dependency in your Project file
 
 Import the RJSwiftMacros module and apply the macros to your structs and properties:
 
+Usage of `MockBuilder`: 
 ```swift
 import RJSwiftMacros
 
-@CodingKeys
 @MockBuilder(numberOfItems: 3, dataGeneratorType: .random)
 struct Person {
     let name: String
-    @CodingKeyProperty("second_name") let surname: String
-    @CodingKeyIgnored() let color: String
+    let surname: String
 
     #if DEBUG
-    static var mock: [Self] {
+    static var mock: Person {
+        .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string())
+    }
+
+    static var mockArray: [Person ] {
         [
-            .init(name: DataGenerator.random().string(), model: DataGenerator.random().string(), color: DataGenerator.random().string()),
-            .init(name: DataGenerator.random().string(), model: DataGenerator.random().string(), color: DataGenerator.random().string()),
-            .init(name: DataGenerator.random().string(), model: DataGenerator.random().string(), color: DataGenerator.random().string()),
+            .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
+            .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
         ]
     }
     #endif
 }
 ```
 
+Usage of `CodingKeys`:
+```swift
+@CodingKeys
+class Car {
+    let color: String
+    @CodingKeyProperty("car_model") let model: String
+    @CodingKeyIgnored() let speed: Int
+
+    init(color: String, model: String, speed: Int) {
+        self.color = color
+        self.model = model
+        self.speed = speed
+    }
+
+    enum CodingKeys: String, CodingKey {
+       case color
+       case model = "car_model"
+    }
+}
+```
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request on GitHub.
