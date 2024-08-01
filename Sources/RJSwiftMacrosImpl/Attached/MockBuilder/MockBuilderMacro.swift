@@ -10,6 +10,7 @@ import SwiftCompilerPlugin
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 import SwiftDiagnostics
+import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
 // MARK: - Mock Builder Macro
@@ -255,12 +256,4 @@ extension MockBuilderMacro {
         
         return parameterList
     }
-}
-
-// MARK: - Constants
-fileprivate enum Constants: String {
-    case mockArrayIdentifier = "mockArray"
-    case mockIdentifier = "mock"
-    case numberOfItemsLabelIdentifier = "numberOfItems"
-    case dataGeneratorTypeLabelIdentifier = "dataGeneratorType"
 }

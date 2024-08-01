@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RJSwiftMacrosImplDependencies
 
 /// - Generate `CodingKeys`  with ``CodingKeys()`` Macro
 ///
@@ -22,7 +23,7 @@ import Foundation
 /// }
 /// ```
 @attached(member, names: named(CodingKeys))
-public macro CodingKeys() = #externalMacro(module: "RJSwiftMacrosImpl", type: "CodingKeysMacro")
+public macro CodingKeys(codingKeyType: CodingKeyType) = #externalMacro(module: "RJSwiftMacrosImpl", type: "CodingKeysMacro")
 
 
 /// - Adjust coding key with ``CodingKeyProperty(_:)``

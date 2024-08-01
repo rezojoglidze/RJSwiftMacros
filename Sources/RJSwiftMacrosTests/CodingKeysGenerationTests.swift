@@ -24,13 +24,34 @@ final class CodingKeysGenerationTests: XCTestCase {
     
     // MARK: Tests
     func testCodingKeysMacros() throws {
-        assertMacroExpansion(
-            #"""
-            @CodingKeys
+        assertMacroExpansion(#"""
+            @CodingKeys(type: .snakeCase)
             struct Car {
-                let name: String
-                @CodingKeyProperty("second_name") let surname: String
-                @CodingKeyIgnored() let color: String
+                let color: String
+                var model: String
+                
+                var calculatedName: String {
+                    "Doodge"
+                }
+                static var allAccounts: [String] = []
+                
+                var friendlyName: String {
+                    get {
+                        return ""
+                    }
+                    set {
+                        self.model = newValue
+                    }
+                }
+                
+                func getModel() {
+                    
+                }
+                
+                init(color: String, model: String) {
+                    self.color = color
+                    self.model = model
+                }
             }
             """#,
             expandedSource: #"""

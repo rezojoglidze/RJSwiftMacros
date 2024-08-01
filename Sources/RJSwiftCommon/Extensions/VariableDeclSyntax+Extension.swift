@@ -50,6 +50,12 @@ public extension VariableDeclSyntax {
         }
     }
     
+    var isStatic: Bool {
+        modifiers.contains {
+            $0.name.tokenKind == .keyword(.static)
+        }
+    }
+    
     var typeName: String {
         self.bindings.first?.typeAnnotation?.type.as(IdentifierTypeSyntax.self)?.name.text ?? ""
     }

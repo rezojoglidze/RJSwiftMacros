@@ -9,10 +9,10 @@ import Foundation
 import RJSwiftMacros
 import RJSwiftMacrosImplDependencies
 
-@CodingKeys
+@CodingKeys(codingKeyType: .camelCase)
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct Person {
-    let name: String
+    let nameGric: String
     @CodingKeyProperty("second_name") let surname: String
 }
 
@@ -23,15 +23,19 @@ enum VehicleType: String {
     case motorcycle
 }
 
-@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
-class Car {
-    let color: String
-    let model: String
+@CodingKeys(codingKeyType: .snakeCase)
+struct University {
+    let name: String
+    let studentCapacity: Int
     
-    init(color: String, model: String) {
-        self.color = color
-        self.model = model
+    static var students: [String] = []
+    
+    var oldName: String {
+        "Tbilisi"
+    }
+    
+    init(name: String, studentCapacity: Int) {
+        self.name = name
+        self.studentCapacity = studentCapacity
     }
 }
-
-//Car.mock.forEach({ print("color: ", $0.color, "model: ", $0.model)})
