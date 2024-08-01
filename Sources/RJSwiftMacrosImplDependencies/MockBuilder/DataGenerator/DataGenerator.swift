@@ -9,7 +9,7 @@ import Foundation
 
 fileprivate typealias Provider = FakeDataProvider
 
-// MARK: ⚠️❗❗warning Keep all method names in lowercase.❗❗⚠️
+// MARK: ❗⚠️❗warning Keep all method names in lowercase.❗⚠️❗
 public struct DataGenerator {
     public var int: () -> Int
     public var int8: () -> Int8
@@ -39,7 +39,9 @@ public struct DataGenerator {
     public var url: () -> URL
 }
 
+// MARK: - Extension
 public extension DataGenerator {
+    //MARK: Properties
     static let `default` = Self(
         int: { 0 },
         int8: { 0 },
@@ -101,4 +103,5 @@ public extension DataGenerator {
     }
 }
 
+// MARK: - Dummy Class
 public class DummyClass {}

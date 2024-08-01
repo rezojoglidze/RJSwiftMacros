@@ -7,16 +7,14 @@
 
 import SwiftSyntax
 
+// MARK: - Variable Decl Syntax Extension
 public extension VariableDeclSyntax {
+    // MARK: Properties
     var isStoredProperty: Bool {
         // Stored properties cannot have more than 1 binding in its declaration.
-        guard bindings.count == 1
-        else {
-            return false
-        }
+        guard bindings.count == 1 else { return false }
         
-        guard let accesor = bindings.first?.accessorBlock
-        else {
+        guard let accesor = bindings.first?.accessorBlock else {
             // Nothing to review. It's a valid stored property
             return true
         }

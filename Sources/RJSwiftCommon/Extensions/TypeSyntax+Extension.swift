@@ -7,7 +7,9 @@
 
 import SwiftSyntax
 
+// MARK: - Type Syntax Extension
 public extension TypeSyntax {
+    // MARK: Properties
     var isArray: Bool {
         self.as(ArrayTypeSyntax.self) != nil
     }

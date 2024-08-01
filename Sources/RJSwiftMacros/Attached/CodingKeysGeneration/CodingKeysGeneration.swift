@@ -21,7 +21,6 @@ import Foundation
 ///     }
 /// }
 /// ```
-
 @attached(member, names: named(CodingKeys))
 public macro CodingKeys() = #externalMacro(module: "RJSwiftMacrosImpl", type: "CodingKeysMacro")
 

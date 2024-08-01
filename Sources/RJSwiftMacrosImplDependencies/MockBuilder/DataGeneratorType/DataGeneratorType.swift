@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - Data Generator Type
 public enum DataGeneratorType: String {
     case `default`
     case random

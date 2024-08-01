@@ -7,7 +7,9 @@
 
 import SwiftSyntax
 
-public extension DeclSyntaxProtocol {    
+// MARK: - Decl Syntax Protocol Extension
+public extension DeclSyntaxProtocol {
+    // MARK: Properties
     func getStoredProperties(with memberBlock: MemberBlockSyntax) -> [VariableDeclSyntax] {
         memberBlock.members
             .compactMap { $0.decl.as(VariableDeclSyntax.self) }

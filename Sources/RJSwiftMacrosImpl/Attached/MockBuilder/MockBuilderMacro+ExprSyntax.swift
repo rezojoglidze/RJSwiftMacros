@@ -9,7 +9,9 @@ import SwiftSyntax
 import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
+// MARK: - Mock Builder Macro Expr Syntax
 extension MockBuilderMacro {
+    // MARK: Methods
     static func getExpressionSyntax(
         from type: TypeSyntax,
         generatorType: DataGeneratorType

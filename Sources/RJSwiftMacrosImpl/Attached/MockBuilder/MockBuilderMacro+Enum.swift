@@ -9,8 +9,9 @@ import SwiftSyntax
 import SwiftSyntaxMacros
 import RJSwiftMacrosImplDependencies
 
-// Enums
+// MARK: - Mock Builder Macro Enum
 extension MockBuilderMacro {
+    // MARK: Methods
     static func MockBuilderMacroForEnum(
         enumDecl: EnumDeclSyntax,
         identifierToken: TokenSyntax, //enum name

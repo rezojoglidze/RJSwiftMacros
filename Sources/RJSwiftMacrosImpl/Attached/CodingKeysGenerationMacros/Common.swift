@@ -9,6 +9,7 @@ import SwiftCompilerPlugin
 import SwiftSyntax
 import SwiftSyntaxMacros
 import SwiftDiagnostics
+import RJSwiftCommon
 
 // MARK: - Common Elements
 func attributesElement(
@@ -32,18 +33,9 @@ func customKey(in attributesElement: AttributeListSyntax.Element) -> ExprSyntax?
         .expression
 }
 
+// MARK: - Coding Keys Diagnostic
 struct CodingKeysDiagnostic: DiagnosticMessage {
     let message: String = "Empty argument"
     let diagnosticID: SwiftDiagnostics.MessageID = .init(domain: "CodingKeysGeneration", id: "emptyArgument")
     let severity: SwiftDiagnostics.DiagnosticSeverity = .error
-}
-
-extension String {
-    func dropBackticks() -> String {
-        count > 1 && first == "`" && last == "`" ? String(dropLast().dropFirst()) : self
-    }
-    
-    func snakeCased() -> String {
-        reduce(into: "") { $0.append(contentsOf: $1.isUppercase ? "_\($1.lowercased())" : "\($1)") }
-    }
 }

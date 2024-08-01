@@ -7,6 +7,7 @@
 
 import SwiftSyntax
 
+// MARK: Supported Type
 public enum SupportedType: String {
     case int = "Int"
     case int8 = "Int8"
@@ -32,6 +33,7 @@ public enum SupportedType: String {
     case cgFloat = "CGFloat"
     case url = "URL"
 
+    // MARK: Methods
     public func exprSyntax(dataGeneratorType: DataGeneratorType) -> ExprSyntax {
         switch dataGeneratorType {
         case .default:

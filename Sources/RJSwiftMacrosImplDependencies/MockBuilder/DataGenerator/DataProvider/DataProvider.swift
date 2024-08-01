@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - Protocols For Fake Data
 protocol StringDataProvider {
     func randomString() -> String
 }
@@ -27,10 +28,10 @@ protocol NumericDataProvider {
     func randomInt(min: Int, max: Int) -> Int
     func randomFloat(min: Float, max: Float) -> Float
     func randomDouble(min: Double, max: Double) -> Double
-    func price() -> Double
 }
 
 
+// MARK: - Fake Data Provider
 struct FakeDataProvider: StringDataProvider {
     func randomString() -> String {
         return [
@@ -202,110 +203,5 @@ extension FakeDataProvider: NumericDataProvider {
     
     func randomDouble(min: Double, max: Double) -> Double {
         Double.random(in: min...max)
-    }
-    
-    func price() -> Double {
-        [
-            84.96,
-            72.04,
-            63.48,
-            80.62,
-            45.55,
-            46.4,
-            40.7,
-            21.23,
-            20.15,
-            28.01,
-            19.49,
-            86.12,
-            40.12,
-            19.98,
-            41.68,
-            46.8,
-            35.82,
-            58.51,
-            98.82,
-            71.84,
-            22.39,
-            45.62,
-            76.35,
-            26.21,
-            35.85,
-            91.68,
-            53.73,
-            24.21,
-            35.21,
-            36.59,
-            16.54,
-            4.75,
-            20.16,
-            18.45,
-            34.12,
-            52.56,
-            31.26,
-            93.89,
-            87.46,
-            89.04,
-            97.78,
-            3.41,
-            28.47,
-            17.54,
-            10.71,
-            82.31,
-            5.48,
-            4.87,
-            19.73,
-            60.29,
-            96.39,
-            81.48,
-            95.49,
-            44.81,
-            97.65,
-            55.3,
-            22.56,
-            30.64,
-            60.26,
-            44.66,
-            4.59,
-            86.96,
-            89.16,
-            85.95,
-            6.67,
-            26.79,
-            64.61,
-            35.11,
-            98.29,
-            60.99,
-            94.85,
-            87.54,
-            67.08,
-            34.62,
-            69.71,
-            54.9,
-            58.52,
-            95.12,
-            78.12,
-            0.88,
-            6.94,
-            98.21,
-            40.37,
-            60.3,
-            69.56,
-            16.81,
-            57.56,
-            29.51,
-            16.67,
-            11.87,
-            57.2,
-            86.24,
-            71.05,
-            12.04,
-            61.44,
-            61.72,
-            34.68,
-            57.51,
-            69.06,
-            3.45,
-        ].randomElement()!
     }
 }

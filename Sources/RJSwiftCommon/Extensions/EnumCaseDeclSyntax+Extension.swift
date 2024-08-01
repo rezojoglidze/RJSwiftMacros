@@ -7,7 +7,9 @@
 
 import SwiftSyntax
 
+// MARK: - Enum Case Decl Syntax Extension
 public extension EnumCaseDeclSyntax {
+    // MARK: Properties
     var hasAssociatedValues: Bool {
         self.elements.first?.parameterClause != nil
     }

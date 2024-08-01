@@ -9,11 +9,13 @@ import SwiftSyntax
 import SwiftDiagnostics
 import SwiftSyntaxMacros
 
+// MARK: - Mock Builder Diagnostic
 public enum MockBuilderDiagnostic: String, DiagnosticMessage {
     case notAnStructOrEnum
     case argumentNotGreaterThanZero
     case enumWithEmptyCases
     
+    // MARK: Properties
     public var severity: DiagnosticSeverity {
         switch self {
         case .notAnStructOrEnum:
@@ -40,6 +42,7 @@ public enum MockBuilderDiagnostic: String, DiagnosticMessage {
         return MessageID(domain: "RJSwiftMacros", id: rawValue)
     }
     
+    // MARK: Methods
     public static func report(
         diagnostic: Self,
         node: Syntax,

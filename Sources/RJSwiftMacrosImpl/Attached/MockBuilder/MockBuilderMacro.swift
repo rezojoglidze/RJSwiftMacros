@@ -12,7 +12,9 @@ import SwiftSyntaxMacros
 import SwiftDiagnostics
 import RJSwiftMacrosImplDependencies
 
+// MARK: - Mock Builder Macro
 public struct MockBuilderMacro: MemberMacro {
+    // MARK: Methods
     public static func expansion(
         of node: SwiftSyntax.AttributeSyntax,
         providingMembersOf declaration: some SwiftSyntax.DeclGroupSyntax,
@@ -71,8 +73,9 @@ public struct MockBuilderMacro: MemberMacro {
     }
 }
 
+// MARK: Extension
 extension MockBuilderMacro {
-    
+    // MARK: Methods
     static func generateMockCodeSyntax(
         identifierToken: TokenSyntax,
         mockArrayData: ArrayElementListSyntax,
@@ -254,6 +257,7 @@ extension MockBuilderMacro {
     }
 }
 
+// MARK: - Constants
 fileprivate enum Constants: String {
     case mockArrayIdentifier = "mockArray"
     case mockIdentifier = "mock"

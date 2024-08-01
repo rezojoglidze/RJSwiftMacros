@@ -10,7 +10,9 @@ import SwiftSyntaxMacros
 import RJSwiftMacrosImplDependencies
 import RJSwiftCommon
 
+// MARK: - Mock Builder Macro Struct And Class
 extension MockBuilderMacro {
+    //MARK: Methods
     static func MockBuilderMacroForClassOrSturct<T: DeclSyntaxProtocol>(
         decl: T,
         identifierToken: TokenSyntax, //Class or Struct name

@@ -34,5 +34,4 @@ class Car {
     }
 }
 
-
 //Car.mock.forEach({ print("color: ", $0.color, "model: ", $0.model)})
