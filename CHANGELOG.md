@@ -1,5 +1,8 @@
 # Change Log
 
+### [0.2.4(19)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.4) — *02 08 2024*
+Add `codingKeyType` param to `CodingKeys` Macro. It has two case `camelCase` and  `snakeCase`.
+
 ### [0.2.3(18)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.3) — *01 08 2024*
 Add `mock` variable generation to the `MockBuilder` Macro.
 
