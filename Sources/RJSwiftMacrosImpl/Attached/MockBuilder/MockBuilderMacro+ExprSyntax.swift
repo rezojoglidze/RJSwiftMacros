@@ -53,7 +53,7 @@ extension MockBuilderMacro {
                         baseName: simpleType.name
                     ),
                     period: .periodToken(),
-                    name: .identifier("mock")
+                    name: .identifier(Constants.mockArrayIdentifier.rawValue)
                 )
             )
         }
@@ -119,19 +119,12 @@ extension MockBuilderMacro {
         
         // Custom type that attaches MockBuilder in its declaration:
         return ExprSyntax(
-            ForceUnwrapExprSyntax(
-                expression: MemberAccessExprSyntax(
-                    base: MemberAccessExprSyntax(
-                        base: DeclReferenceExprSyntax(
-                            baseName: simpleType.name
-                        ),
-                        period: .periodToken(),
-                        name: .identifier("mock")
-                    ),
-                    period: .periodToken(),
-                    name: .identifier("first")
+            MemberAccessExprSyntax(
+                base: DeclReferenceExprSyntax(
+                    baseName: simpleType.name
                 ),
-                exclamationMark: .exclamationMarkToken()
+                period: .periodToken(),
+                name: .identifier(Constants.mockIdentifier.rawValue)
             )
         )
     }

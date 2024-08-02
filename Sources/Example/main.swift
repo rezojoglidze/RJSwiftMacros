@@ -23,19 +23,26 @@ enum VehicleType: String {
     case motorcycle
 }
 
-@CodingKeys(codingKeyType: .snakeCase)
+@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct University {
     let name: String
-    let studentCapacity: Int
-    
-    static var students: [String] = []
-    
+    let president: Person
+    let students: [Person]
+    let privateVehicles: [VehicleType]
+        
     var oldName: String {
         "Tbilisi"
     }
     
-    init(name: String, studentCapacity: Int) {
+    init(
+        name: String,
+        president: Person,
+        students: [Person],
+        privateVehicles: [VehicleType]
+    ) {
         self.name = name
-        self.studentCapacity = studentCapacity
+        self.president = president
+        self.students = students
+        self.privateVehicles = privateVehicles
     }
 }
