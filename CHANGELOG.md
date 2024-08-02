@@ -1,7 +1,11 @@
 # Change Log
 
+### [0.2.9(24)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.9) — *03 08 2024*
+Fix bug
+Mock Builder macro description issue from "show quick help".
+
 ### [0.2.8(23)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.8) — *03 08 2024*
-Fix bug.
+Fix bug
 - `MockBuilder` macros generated properties didn't work when properties types were: enum, struct or class.
 
 ### [0.2.7(22)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.7) — *02 08 2024*
