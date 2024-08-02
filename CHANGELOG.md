@@ -1,5 +1,9 @@
 # Change Log
 
+### [0.2.8(23)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.8) — *03 08 2024*
+Fix bug.
+- `MockBuilder` macros generated properties didn't work when properties types were: enum, struct or class.
+
 ### [0.2.7(22)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.7) — *02 08 2024*
 Add `codingKeyType` param to `CodingKeys` Macro. It has two case `camelCase` and  `snakeCase`.
 
