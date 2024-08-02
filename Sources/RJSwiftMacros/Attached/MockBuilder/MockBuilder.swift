@@ -9,7 +9,6 @@ import Foundation
 import RJSwiftMacrosImplDependencies
 
 /// - `MockBuilder(numberOfItems: Int, dataGeneratorType: .random)`: Generates an mock item and array of mock data from our models.
-///
 /// ```
 ///  import RJSwiftMacros
 ///
