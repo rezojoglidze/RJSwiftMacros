@@ -242,13 +242,16 @@ extension MockBuilderMacro {
                 from: parameter.identifierType,
                 generatorType: generatorType
             )
+            let isFirst = parameter.identifierName == parameters.first?.identifierName
+            let isLast = parameter.identifierName == parameters.last?.identifierName
             
-            let isNotLast = parameter.identifierType != parameters.last?.identifierType
             let parameterElement = LabeledExprSyntax(
+                leadingTrivia: isFirst ? .newline : nil,
                 label: parameter.hasName ? .identifier(parameter.identifierName!) : nil,
                 colon: parameter.hasName ? .colonToken() : nil,
                 expression: expressionSyntax,
-                trailingComma: isNotLast ? .commaToken() : nil
+                trailingComma: isLast ? nil : .commaToken(),
+                trailingTrivia: .newline
             )
             
             parameterList.append(parameterElement)

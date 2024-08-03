@@ -1,111 +1,88 @@
 //
 //  DataGenerator.swift
-//  
+//
 //
 //  Created by Rezo Joglidze on 28.07.24.
 //
 
 import Foundation
+import SwiftSyntax
+import SwiftSyntaxBuilder
 
 fileprivate typealias Provider = FakeDataProvider
 
-// MARK: ❗⚠️❗warning Keep all method names in lowercase.❗⚠️❗
-public struct DataGenerator {
-    public var int: () -> Int
-    public var int8: () -> Int8
-    public var int16: () -> Int16
-    public var int32: () -> Int32
-    public var int64: () -> Int64
-    public var uint: () -> UInt
-    public var uint8: () -> UInt8
-    public var uint16: () -> UInt16
-    public var uint32: () -> UInt32
-    public var uint64: () -> UInt64
-    public var float: () -> Float
-    public var float32: () -> Float32
-    public var float64: () -> Float64
-    public var double: () -> Double
-    public var string: () -> String
-    public var bool: () -> Bool
-    public var data: () -> Data
-    public var date: () -> Date
-    public var uuid: () -> UUID
-    public var objectidentifier: () -> ObjectIdentifier
-    public var cgpoint: () -> CGPoint
-    public var cgrect: () -> CGRect
-    public var cgsize: () -> CGSize
-    public var cgvector: () -> CGVector
-    public var cgfloat: () -> CGFloat
-    public var url: () -> URL
-}
-
-// MARK: - Extension
-public extension DataGenerator {
-    //MARK: Properties
-    static var name: String {
-        return String(describing: self)
+// MARK: ❗⚠️❗Keep all cases names in lowercase.❗⚠️❗
+public enum MockBuilderSupportedType: String {
+    case int = "Int"
+    case int8 = "Int8"
+    case int16 = "Int16"
+    case int32 = "Int32"
+    case int64 = "Int64"
+    case uint = "UInt"
+    case uint8 = "UInt8"
+    case uint16 = "UInt16"
+    case uint32 = "UInt32"
+    case uint64 = "UInt64"
+    case float = "Float"
+    case float32 = "Float32"
+    case float64 = "Float64"
+    case double = "Double"
+    case string = "String"
+    case bool = "Bool"
+    case data = "Data"
+    case date = "Date"
+    case uuid = "UUID"
+    case objectidentifier = "ObjectIdentifier"
+    case cgpoint = "CGPoint"
+    case cgrect = "CGRect"
+    case cgsize = "CGSize"
+    case cgvector = "CGVector"
+    case cgfloat = "CGFloat"
+    case url = "URL"
+    
+    //MARK: Methods
+    public static func generate(
+        elementType: MockBuilderSupportedType,
+        generatorType: DataGeneratorType
+    ) -> Any {
+        switch elementType {
+        case .int: generatorType == .`default` ? 0 : Provider().randomInt(min: 0, max: 1000)
+        case .int8: generatorType == .`default` ? 0 : Int8(Provider().randomInt(min: 0, max: 1000))
+        case .int16: generatorType == .`default` ? 0 : Int16(Provider().randomInt(min: 0, max: 1000))
+        case .int32: generatorType == .`default` ? 0 : Int32(Provider().randomInt(min: 0, max: 1000))
+        case .int64: generatorType == .`default` ? 0 : Int64(Provider().randomInt(min: 0, max: 1000))
+        case .uint: generatorType == .`default` ? 0 : UInt(Provider().randomInt(min: 0, max: 1000))
+        case .uint8: generatorType == .`default` ? 0 : UInt8(Provider().randomInt(min: 0, max: 1000))
+        case .uint16: generatorType == .`default` ? 0 : UInt(Provider().randomInt(min: 0, max: 1000))
+        case .uint32: generatorType == .`default` ? 0 : UInt32(Provider().randomInt(min: 0, max: 1000))
+        case .uint64: generatorType == .`default` ? 0 : UInt64(Provider().randomInt(min: 0, max: 1000))
+        case .float: generatorType == .`default` ? 0 : Float(Provider().randomFloat(min: 0, max: 1000))
+        case .float32: generatorType == .`default` ? 0 : Float32(Provider().randomFloat(min: 0, max: 1000))
+        case .float64: generatorType == .`default` ? 0 : Float64(Provider().randomFloat(min: 0, max: 1000))
+        case .double: generatorType == .`default` ? 0 : Provider().randomDouble(min: 0, max: 1000)
+        case .string: generatorType == .`default` ? "Hello World" : Provider().randomString()
+        case .bool: generatorType == .`default` ? true : Provider().randomBool()
+        case .data: Data()
+        case .date: generatorType == .`default` ? Date(timeIntervalSinceReferenceDate: 0) : Provider().date()
+        case .uuid: UUID()
+        case .objectidentifier: ObjectIdentifier(DummyClass())
+        case .cgpoint: CGPoint()
+        case .cgrect: CGRect()
+        case .cgsize: CGSize()
+        case .cgvector: CGVector()
+        case .cgfloat: CGFloat()
+        case .url: generatorType == .`default` ? URL(string: "https://www.apple.com")! : Provider().url()
+        }
     }
     
-    static let `default` = Self(
-        int: { 0 },
-        int8: { 0 },
-        int16: { 0 },
-        int32: { 0 },
-        int64: { 0 },
-        uint: { 0 },
-        uint8: { 0 },
-        uint16: { 0 },
-        uint32: { 0 },
-        uint64: { 0 },
-        float: { 0 },
-        float32: { 0 },
-        float64: { 0 },
-        double: { 0 },
-        string: { "Hello World" },
-        bool: { true },
-        data: { Data() },
-        date: { Date(timeIntervalSinceReferenceDate: 0) },
-        uuid: { UUID() },
-        objectidentifier: { ObjectIdentifier(DummyClass()) },
-        cgpoint: { CGPoint() },
-        cgrect: { CGRect() },
-        cgsize: { CGSize() },
-        cgvector: { CGVector() },
-        cgfloat: { CGFloat() },
-        url: { URL(string: "https://www.apple.com")! }
-    )
-    
-    static func random() -> Self {
-        Self(
-            int: { Provider().randomInt(min: 0, max: 1000) },
-            int8: { Int8(Provider().randomInt(min: 0, max: 1000)) },
-            int16: { Int16(Provider().randomInt(min: 0, max: 1000)) },
-            int32: { Int32(Provider().randomInt(min: 0, max: 1000)) },
-            int64: { Int64(Provider().randomInt(min: 0, max: 1000)) },
-            uint: { UInt(Provider().randomInt(min: 0, max: 1000) ) },
-            uint8: { UInt8(Provider().randomInt(min: 0, max: 1000)) },
-            uint16: { UInt16(Provider().randomInt(min: 0, max: 1000)) },
-            uint32: { UInt32(Provider().randomInt(min: 0, max: 1000)) },
-            uint64: { UInt64(Provider().randomInt(min: 0, max: 1000)) },
-            float: { Provider().randomFloat(min: 0, max: 1000) },
-            float32: { Float32(Provider().randomFloat(min: 0, max: 1000)) },
-            float64: { Float64(Provider().randomFloat(min: 0, max: 1000)) },
-            double: { Provider().randomDouble(min: 0, max: 1000) },
-            string: { Provider().randomString() },
-            bool: { Provider().randomBool() },
-            data: { Data() },
-            date: { Provider().date() },
-            uuid: { UUID() },
-            objectidentifier: { ObjectIdentifier(DummyClass()) },
-            cgpoint: { CGPoint() },
-            cgrect: { CGRect() },
-            cgsize: { CGSize() },
-            cgvector: { CGVector() },
-            cgfloat: { CGFloat() },
-            url: { Provider().url() }
-        )
+    // MARK: Methods
+    public func exprSyntax(
+        elementType: MockBuilderSupportedType,
+        generatorType: DataGeneratorType
+    ) -> ExprSyntax {
+        ExprSyntax(stringLiteral: "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased()), generatorType: .\(generatorType.rawValue)) as! \(elementType.rawValue)")
     }
 }
 
 // MARK: - Dummy Class
-public class DummyClass {}
+fileprivate class DummyClass {}

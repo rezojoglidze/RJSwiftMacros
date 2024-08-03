@@ -9,6 +9,8 @@ import SwiftSyntax
 import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
+fileprivate typealias SupportedType = MockBuilderSupportedType
+
 // MARK: - Mock Builder Macro Expr Syntax
 extension MockBuilderMacro {
     // MARK: Methods
@@ -113,7 +115,8 @@ extension MockBuilderMacro {
         
         if let supportedType = SupportedType(rawValue: simpleType.name.text) {
             return supportedType.exprSyntax(
-                dataGeneratorType: generatorType
+                elementType: supportedType,
+                generatorType: generatorType
             )
         }
         
