@@ -29,6 +29,7 @@ struct University {
     let president: Person
     let students: [Person]
     let privateVehicles: [VehicleType]
+    let isFree: Bool = false
         
     var oldName: String {
         "Tbilisi"

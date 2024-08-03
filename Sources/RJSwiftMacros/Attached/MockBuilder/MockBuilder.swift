@@ -37,3 +37,7 @@ public macro MockBuilder(
     numberOfItems: Int,
     dataGeneratorType: DataGeneratorType
 ) = #externalMacro(module: "RJSwiftMacrosImpl", type: "MockBuilderMacro")
+
+
+@attached(peer)
+public macro MockBuilderItem() = #externalMacro(module: "DataGeneratorType", type: "MockBuilderItemMacro")

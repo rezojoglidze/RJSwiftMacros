@@ -38,59 +38,34 @@ extension MockBuilderMacro {
         return [DeclSyntax(mockCode)]
     }
     
+    // MARK: Return the array of mock item each valid parameters
     static func getValidParameterList<T: DeclSyntaxProtocol>(
         from decl: T,
         generatorType: DataGeneratorType,
         context: MacroExpansionContext
     ) -> [ParameterItem] {
         var storedPropertyMembers: [VariableDeclSyntax] = []
-        var initMembers: [InitializerDeclSyntax] = []
         
         if let structDecl = decl as? StructDeclSyntax {
             storedPropertyMembers = decl.getStoredProperties(with: structDecl.memberBlock)
-            initMembers = decl.getInitMembers(with: structDecl.memberBlock)
             
         } else if let classDecl = decl as? ClassDeclSyntax {
             storedPropertyMembers = decl.getStoredProperties(with: classDecl.memberBlock)
-            initMembers = decl.getInitMembers(with: classDecl.memberBlock)
         }
         
-        if initMembers.isEmpty {
-            // No custom init around. We use the memberwise initializer's properties:
-            return storedPropertyMembers.compactMap {
-                if let propertyName = $0.bindings.first?.pattern.as(IdentifierPatternSyntax.self)?.identifier.text,
-                   let propertyType = $0.bindings.first?.typeAnnotation?.type {
-                    
-                    return (propertyName, propertyType)
-                }
+        // return all memberwise initializer's properties
+        return storedPropertyMembers.compactMap {
+            if let propertyName = $0.bindings.first?.pattern.as(IdentifierPatternSyntax.self)?.identifier.text,
+               let propertyType = $0.bindings.first?.typeAnnotation?.type {
                 
-                return nil
-            }.map {
-                ParameterItem(
-                    identifierName: $0.0,
-                    identifierType: $0.1
-                )
+                return (propertyName, propertyType)
             }
-        }
-        
-        let largestParameterList = initMembers.map {
-                getParametersFromInit(initSyntax: $0)
-            }.max {
-                $0.count < $1.count
-            } ?? []
-        
-        return largestParameterList
-    }
-    
-    static func getParametersFromInit(
-        initSyntax: InitializerDeclSyntax
-    ) -> [ParameterItem] {
-        let parameters = initSyntax.signature.parameterClause.parameters
-        
-        return parameters.map {
+            
+            return nil
+        }.map {
             ParameterItem(
-                identifierName: $0.firstName.text,
-                identifierType: $0.type
+                identifierName: $0.0,
+                identifierType: $0.1
             )
         }
     }

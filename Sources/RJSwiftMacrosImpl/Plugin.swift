@@ -20,8 +20,9 @@
             CodingKeyPropertyMacro.self,
             CodingKeyIgnoredMacro.self,
             
-            // Mock Builder Macro
-            MockBuilderMacro.self
+            // Mock Builder Macros
+            MockBuilderMacro.self,
+            MockBuilderItemMacro.self
         ]
     }
 #endif
