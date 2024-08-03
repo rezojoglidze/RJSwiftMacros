@@ -39,7 +39,7 @@ extension MockBuilderMacro {
         }
     }
     
-    static func getArrayExprSyntax(
+    private static func getArrayExprSyntax(
         arrayType: ArrayTypeSyntax,
         generatorType: DataGeneratorType
     ) -> ExprSyntax {
@@ -74,7 +74,7 @@ extension MockBuilderMacro {
         )
     }
     
-    static func getDictionaryExprSyntax(
+    private static func getDictionaryExprSyntax(
         dictionaryType: DictionaryTypeSyntax,
         generatorType: DataGeneratorType
     ) -> ExprSyntax {
@@ -96,7 +96,7 @@ extension MockBuilderMacro {
         )
     }
     
-    static func getOptionalExprSyntax(
+    private static func getOptionalExprSyntax(
         optionalType: OptionalTypeSyntax,
         generatorType: DataGeneratorType
     ) -> ExprSyntax {
@@ -106,7 +106,7 @@ extension MockBuilderMacro {
         )
     }
     
-    static func getSimpleExprSyntax(
+    private static func getSimpleExprSyntax(
         simpleType: IdentifierTypeSyntax,
         generatorType: DataGeneratorType
     ) -> ExprSyntax {

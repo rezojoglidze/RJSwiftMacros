@@ -179,7 +179,7 @@ extension MockBuilderMacro {
         )
     }
     
-    static func getDataGeneratorType(from node: SwiftSyntax.AttributeSyntax) -> DataGeneratorType {
+    private static func getDataGeneratorType(from node: SwiftSyntax.AttributeSyntax) -> DataGeneratorType {
         guard let argumentTuple = node.arguments?.as(LabeledExprListSyntax.self) else {
             fatalError("Compiler bug: Argument must exist")
         }
@@ -194,7 +194,7 @@ extension MockBuilderMacro {
         return generatorType
     }
     
-    static func getNumberOfItems(from node: SwiftSyntax.AttributeSyntax) throws -> Int {
+    private static func getNumberOfItems(from node: SwiftSyntax.AttributeSyntax) throws -> Int {
         guard let arguments = node.arguments?.as(LabeledExprListSyntax.self),
               let argumentTuple = arguments.first(where: { $0.label?.text == Constants.numberOfItemsLabelIdentifier.rawValue }) else {
             fatalError("Compiler bug: Argument must exist")
@@ -214,7 +214,7 @@ extension MockBuilderMacro {
         return 0 // Will throw .argumentNotGreaterThanZero in Xcode
     }
     
-    static func negativeNumberOfItems(expression: PrefixOperatorExprSyntax) -> Int {
+    private static func negativeNumberOfItems(expression: PrefixOperatorExprSyntax) -> Int {
         let prefixOperator = expression.operator.text
         
         guard let integerExpression = expression

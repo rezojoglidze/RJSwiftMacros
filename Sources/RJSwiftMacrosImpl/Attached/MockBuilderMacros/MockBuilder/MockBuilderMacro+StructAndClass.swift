@@ -39,7 +39,7 @@ extension MockBuilderMacro {
     }
     
     // MARK: Return the array of mock item each valid parameters
-    static func getValidParameterList<T: DeclSyntaxProtocol>(
+    private static func getValidParameterList<T: DeclSyntaxProtocol>(
         from decl: T,
         generatorType: DataGeneratorType,
         context: MacroExpansionContext
@@ -83,7 +83,7 @@ extension MockBuilderMacro {
         return largestParameterList
     }
     
-    static func getParametersFromInit(
+    private static func getParametersFromInit(
         initSyntax: InitializerDeclSyntax
     ) -> [ParameterItem] {
         let parameters = initSyntax.signature.parameterClause.parameters
@@ -96,7 +96,7 @@ extension MockBuilderMacro {
         }
     }
     
-    static func generateSingleMockItemData(
+    private static func generateSingleMockItemData(
         parameters: [ParameterItem],
         generatorType: DataGeneratorType
     ) -> ExprSyntax {
@@ -118,7 +118,7 @@ extension MockBuilderMacro {
         return ExprSyntax(singleItem)
     }
     
-    static func generateMockArrayData(
+    private static func generateMockArrayData(
         parameters: [ParameterItem],
         numberOfItems: Int,
         generatorType: DataGeneratorType

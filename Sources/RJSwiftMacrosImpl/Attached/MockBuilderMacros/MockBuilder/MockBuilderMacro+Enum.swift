@@ -51,7 +51,7 @@ extension MockBuilderMacro {
         return [DeclSyntax(mockCode)]
     }
     
-    static func generateSingleMockEnumCase(
+    private static func generateSingleMockEnumCase(
         cases: [EnumCaseDeclSyntax],
         generatorType: DataGeneratorType
     ) -> ExprSyntax {
@@ -94,7 +94,7 @@ extension MockBuilderMacro {
         return caseExpression
     }
     
-    static func generateMockArrayCases(
+    private static func generateMockArrayCases(
         cases: [EnumCaseDeclSyntax],
         numberOfItems: Int,
         generatorType: DataGeneratorType
@@ -151,7 +151,7 @@ extension MockBuilderMacro {
         return arrayElementListSyntax
     }
     
-    static func replicateCases(
+    private static func replicateCases(
         cases: [EnumCaseDeclSyntax],
         numberOfItems: Int
     ) -> [EnumCaseDeclSyntax] {
