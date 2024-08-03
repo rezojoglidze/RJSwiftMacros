@@ -15,7 +15,7 @@ public struct MockBuilderFixIt: FixItMessage {
 
     public var fixItID: MessageID {
       MessageID(
-        domain: "RJSwiftMacros",
+        domain: "RJSwiftMacros", //TODO: Check it
         id: "\(type(of: self)).\(messageID)"
       )
     }
@@ -32,6 +32,6 @@ public struct MockBuilderFixIt: FixItMessage {
 // MARK: - Extension
 public extension FixItMessage where Self == MockBuilderFixIt {
     static var addNewEnumCase: Self {
-      .init("add a new enum case")
+      .init("add a new enum case") //TODO: Check it
     }
 }

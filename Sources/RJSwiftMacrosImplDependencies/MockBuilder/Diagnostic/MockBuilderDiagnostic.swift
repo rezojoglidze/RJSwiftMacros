@@ -39,7 +39,7 @@ public enum MockBuilderDiagnostic: String, DiagnosticMessage {
     }
     
     public var diagnosticID: MessageID {
-        return MessageID(domain: "RJSwiftMacros", id: rawValue)
+        return MessageID(domain: "RJSwiftMacros", id: rawValue) //TODO: Check this hard coded
     }
     
     // MARK: Methods
