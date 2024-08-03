@@ -7,7 +7,11 @@ import CompilerPluginSupport
 let package = Package(
     name: "RJSwiftMacros",
     platforms: [
-        .macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6), .macCatalyst(.v13)
+        .macOS(.v10_15),
+        .iOS(.v13),
+        .tvOS(.v13),
+        .watchOS(.v6),
+        .macCatalyst(.v13)
     ],
     
     products: [
@@ -38,7 +42,11 @@ let package = Package(
         
             .target(
                 name: "RJSwiftMacros",
-                dependencies: ["RJSwiftMacrosImpl", "RJSwiftCommon", "RJSwiftMacrosImplDependencies"]
+                dependencies: [
+                    "RJSwiftMacrosImpl",
+                    "RJSwiftMacrosImplDependencies",
+                    "RJSwiftCommon"
+                ]
             ),
         
             .target(
@@ -51,7 +59,8 @@ let package = Package(
             .target(
                 name: "RJSwiftMacrosImplDependencies",
                 dependencies: [
-                    .product(name: "SwiftSyntaxMacros", package: "swift-syntax")
+                    .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+                    "RJSwiftCommon",
                 ]
             ),
         
@@ -59,6 +68,8 @@ let package = Package(
                 name: "Example",
                 dependencies: [
                     "RJSwiftMacros",
+                    "RJSwiftMacrosImpl",
+                    "RJSwiftCommon",
                     "RJSwiftMacrosImplDependencies"
                 ]
             ),

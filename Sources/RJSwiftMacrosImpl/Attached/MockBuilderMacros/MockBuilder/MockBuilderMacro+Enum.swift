@@ -7,6 +7,7 @@
 
 import SwiftSyntax
 import SwiftSyntaxMacros
+import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
 // MARK: - Mock Builder Macro Enum

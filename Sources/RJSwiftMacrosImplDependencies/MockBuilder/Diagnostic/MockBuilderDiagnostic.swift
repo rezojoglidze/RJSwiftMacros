@@ -29,7 +29,7 @@ public enum MockBuilderDiagnostic: String, DiagnosticMessage {
     
     public var message: String {
         switch self {
-        case .notAnStructOrEnum:
+        case .notAnStructOrEnum: // TODO: fix it
             return "@MockBuilder can only be applied to Structs and Enums"
         case .argumentNotGreaterThanZero:
             return "'numberOfitems' argument must be greater than zero"

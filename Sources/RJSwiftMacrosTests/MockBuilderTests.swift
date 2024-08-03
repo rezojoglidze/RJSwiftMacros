@@ -30,7 +30,6 @@ final class MockBuilderTests: XCTestCase {
             class Car {
                 let color: String
                 let model: String
-                let isFree: Bool = false
                 
                 init(color: String, model: String) {
                     self.color = color

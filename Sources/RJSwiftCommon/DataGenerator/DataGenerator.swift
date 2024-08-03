@@ -42,6 +42,10 @@ public struct DataGenerator {
 // MARK: - Extension
 public extension DataGenerator {
     //MARK: Properties
+    static var name: String {
+        return String(describing: self)
+    }
+    
     static let `default` = Self(
         int: { 0 },
         int8: { 0 },

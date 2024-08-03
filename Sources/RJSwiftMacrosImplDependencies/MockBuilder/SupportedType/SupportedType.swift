@@ -6,6 +6,7 @@
 //
 
 import SwiftSyntax
+import RJSwiftCommon
 
 // MARK: Supported Type
 public enum SupportedType: String {
@@ -36,10 +37,10 @@ public enum SupportedType: String {
     // MARK: Methods
     public func exprSyntax(dataGeneratorType: DataGeneratorType) -> ExprSyntax {
         switch dataGeneratorType {
-        case .default:
-            return ExprSyntax(stringLiteral: "DataGenerator.\(dataGeneratorType).\(self.rawValue.lowercased())()")
+        case .default: // TODO: fix it
+            return ExprSyntax(stringLiteral: "\(DataGenerator.name).\(dataGeneratorType).\(self.rawValue.lowercased())()")
         case .random:
-            return ExprSyntax(stringLiteral: "DataGenerator.\(dataGeneratorType)().\(self.rawValue.lowercased())()")
+            return ExprSyntax(stringLiteral: "\(DataGenerator.name).\(dataGeneratorType)().\(self.rawValue.lowercased())()")
         }
     }
 }
