@@ -46,16 +46,25 @@ final class MockBuilderTests: XCTestCase {
                     self.color = color
                     self.model = model
                 }
-            
+
                 #if DEBUG
                 static var mock: Car {
-                    .init(color: DataGenerator.random().string(), model: DataGenerator.random().string())
+                    .init(
+                        color: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String,
+                        model: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String
+                        )
                 }
-            
+
                 static var mockArray: [Car ] {
                     [
-                        .init(color: DataGenerator.random().string(), model: DataGenerator.random().string()),
-                        .init(color: DataGenerator.random().string(), model: DataGenerator.random().string()),
+                        .init(
+                            color: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String,
+                            model: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String
+                            ),
+                        .init(
+                            color: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String,
+                            model: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String
+                            ),
                     ]
                 }
                 #endif
@@ -82,14 +91,26 @@ final class MockBuilderTests: XCTestCase {
 
             #if DEBUG
             static var mock: Person {
-                .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string())
+                .init(
+                    name: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String,
+                    surname: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String
+                    )
             }
 
             static var mockArray: [Person ] {
                 [
-                    .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
-                    .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
-                    .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
+                    .init(
+                        name: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String,
+                        surname: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String
+                        ),
+                    .init(
+                        name: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String,
+                        surname: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String
+                        ),
+                    .init(
+                        name: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String,
+                        surname: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String
+                        ),
                 ]
             }
             #endif
@@ -159,13 +180,19 @@ final class MockBuilderTests: XCTestCase {
 
                 #if DEBUG
                 static var mock: Person {
-                    .init(name: DataGenerator.random().string())
+                    .init(
+                        name: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String
+                        )
                 }
 
                 static var mockArray: [Person ] {
                     [
-                        .init(name: DataGenerator.random().string()),
-                        .init(name: DataGenerator.random().string()),
+                        .init(
+                            name: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String
+                            ),
+                        .init(
+                            name: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String
+                            ),
                     ]
                 }
                 #endif
@@ -181,13 +208,22 @@ final class MockBuilderTests: XCTestCase {
 
                 #if DEBUG
                 static var mock: Car {
-                    .init(color: DataGenerator.random().string(), owner: Person.mock)
+                    .init(
+                        color: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String,
+                        owner: Person.mock
+                        )
                 }
 
                 static var mockArray: [Car ] {
                     [
-                        .init(color: DataGenerator.random().string(), owner: Person.mock),
-                        .init(color: DataGenerator.random().string(), owner: Person.mock),
+                        .init(
+                            color: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String,
+                            owner: Person.mock
+                            ),
+                        .init(
+                            color: MockBuilderSupportedType.generate(elementType: .string, generatorType: .random) as! String,
+                            owner: Person.mock
+                            ),
                     ]
                 }
                 #endif
