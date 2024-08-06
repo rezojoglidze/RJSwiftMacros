@@ -115,8 +115,10 @@ extension MockBuilderMacro {
         
         if let supportedType = SupportedType(rawValue: simpleType.name.text) {
             return supportedType.exprSyntax(
-                elementType: supportedType,
-                generatorType: generatorType
+                model: .init(
+                    elementType: supportedType,
+                    generatorType: generatorType
+                )
             )
         }
         
