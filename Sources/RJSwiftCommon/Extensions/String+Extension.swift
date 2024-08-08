@@ -10,6 +10,8 @@ import Foundation
 // MARK: - String Extension
 public extension String {
     // MARK: Properties
+    static var empty: String { String() }
+
     func dropBackticks() -> String {
         count > 1 && first == "`" && last == "`" ? String(dropLast().dropFirst()) : self
     }
