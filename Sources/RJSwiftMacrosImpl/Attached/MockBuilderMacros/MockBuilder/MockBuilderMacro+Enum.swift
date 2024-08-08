@@ -62,7 +62,8 @@ extension MockBuilderMacro {
         let parameters = caseItem.parameters.map {
             ParameterItem(
                 identifierName: $0.0?.text,
-                identifierType: $0.1
+                identifierType: $0.1,
+                initialValue: nil
             )
         }
         
@@ -110,7 +111,8 @@ extension MockBuilderMacro {
             let parameters = caseItem.parameters.map {
                 ParameterItem(
                     identifierName: $0.0?.text,
-                    identifierType: $0.1
+                    identifierType: $0.1,
+                    initialValue: nil
                 )
             }
             

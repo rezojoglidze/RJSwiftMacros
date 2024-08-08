@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
 /// - `MockBuilder(numberOfItems: Int, dataGeneratorType: .random)`: Generates an mock item and array of mock data from our models.
@@ -38,6 +39,5 @@ public macro MockBuilder(
     dataGeneratorType: DataGeneratorType
 ) = #externalMacro(module: "RJSwiftMacrosImpl", type: "MockBuilderMacro")
 
-
-@attached(peer)
-public macro MockBuilderItem() = #externalMacro(module: "DataGeneratorType", type: "MockBuilderItemMacro")
+@attached(peer, names: named(MockBuilderPropertyMacro))
+public macro MockBuilderProperty<T: Any>(value: T) = #externalMacro(module: "RJSwiftMacrosImpl", type: "MockBuilderPropertyMacro")

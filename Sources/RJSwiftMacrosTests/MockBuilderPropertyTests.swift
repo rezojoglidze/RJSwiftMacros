@@ -19,20 +19,23 @@ import SwiftSyntaxMacrosTestSupport
 final class MockBuilderPropertyTests: XCTestCase {
     // MARK: Properties
     let testMacros: [String : Macro.Type] = [
-        "MockBuilderItem": MockBuilderItemMacro.self
+        "MockBuilder" : MockBuilderMacro.self,
+        "MockBuilderProperty": MockBuilderPropertyMacro.self
     ]
     
     // MARK: Tests
     func testMockBuilderMacro_for_class() throws {
         assertMacroExpansion(
             #"""
-            struct Car {
-                let color: String
-                @MockBuilderItem(type: String, value: "დოჯი") let model: String
-                
-                init(color: String, model: String) {
-                    self.color = color
-                    self.model = model
+            @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+            class Person {
+                @MockBuilderProperty(value: "RezoMock") let surname: String
+                let name: String
+
+                init(surname: String,
+                     name: String) {
+                    self.surname = surname
+                   self.name = name
                 }
             }
             """#,
