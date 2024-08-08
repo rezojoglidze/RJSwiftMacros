@@ -34,7 +34,6 @@ public enum MockBuilderSupportedType {
     case double(Double? = nil)
     case string(String? = nil)
     case bool(Bool? = nil)
-    case data(Data? = nil)
     case date
     case uuid(UUID? = nil)
     case objectidentifier
@@ -45,6 +44,16 @@ public enum MockBuilderSupportedType {
     case cgfloat
     case url(URL? = nil)
         
+    private static var typesWithNoAssociatedValue: [Self] = [
+        .date,
+        .objectidentifier,
+        .cgpoint,
+        .cgrect,
+        .cgsize,
+        .cgvector,
+        .cgfloat
+    ]
+    
     public init?(
         rawValue: String,
         initialValue: AnyObject?
@@ -68,7 +77,6 @@ public enum MockBuilderSupportedType {
         case "double": self = .double(Double(unwrappedValue))
         case "string": self = .string(initialValue as? String)
         case "bool": self = .bool(Bool(unwrappedValue))
-        case "data": self = .data(unwrappedValue.data(using: .utf8))
         case "date": self = .date
         case "uuid": self = .uuid(UUID(uuidString: unwrappedValue))
         case "objectidentifier": self = .objectidentifier
@@ -100,7 +108,6 @@ public enum MockBuilderSupportedType {
         case .double: "Double"
         case .string: "String"
         case .bool: "Bool"
-        case .data: "Data"
         case .date: "Date"
         case .uuid: "UUID"
         case .objectidentifier: "ObjectIdentifier"
@@ -135,7 +142,6 @@ public enum MockBuilderSupportedType {
         case .double(let value): value ?? (generatorType == .`default` ? 0.0 : Double(Provider().randomDouble(min: 0, max: 1000)))
         case .string(let value): value ?? (generatorType == .`default` ? "Hello World" : Provider().randomString())
         case .bool(let value): value ?? (generatorType == .`default` ? true : Provider().randomBool())
-        case .data(let value): value ?? Data()
         case .date: generatorType == .`default` ? Date(timeIntervalSinceReferenceDate: 0) : Provider().date()
         case .uuid: UUID()
         case .objectidentifier: ObjectIdentifier(DummyClass())
@@ -156,43 +162,41 @@ public enum MockBuilderSupportedType {
         
         switch elementType {
         case .int(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .int8(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .int16(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .int32(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .int64(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .uint(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .uint8(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .uint16(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .uint32(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .uint64(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .float(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .float32(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .float64(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .double(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .string(let initialValue):
-            associatedValue = initialValue != nil ? "\"\(initialValue!)\"" : "nil"
+            associatedValue = initialValue != nil ? "\"\(initialValue!)\"" : nil
         case .bool(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
-        case .data(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .uuid(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .url(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : "nil"
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat:
             associatedValue = nil
         }
@@ -200,8 +204,10 @@ public enum MockBuilderSupportedType {
         var exprString: String {
             if let associatedValue {
                 return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased())(\(associatedValue)), generatorType: .\(generatorType.rawValue)) as! \(elementType.rawValue)"
-            } else {
+            } else if MockBuilderSupportedType.typesWithNoAssociatedValue.contains(where: { $0.rawValue.lowercased() == elementType.rawValue.lowercased() }) {
                 return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased()), generatorType: .\(generatorType.rawValue)) as! \(elementType.rawValue)"
+            } else {
+                return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased())(), generatorType: .\(generatorType.rawValue)) as! \(elementType.rawValue)"
             }
         }
         

@@ -118,7 +118,6 @@ final class CodingKeysGenerationTests: XCTestCase {
         )
     }
     
-    
     // MARK: Test Coding Key Property Macro
     func testCodingKeyPropertyMacro() throws {
         assertMacroExpansion(
