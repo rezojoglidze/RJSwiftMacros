@@ -56,6 +56,8 @@ struct ExampleAllSupportedTypes {
     let float32Variable: Float32
     let float64Variable: Float64
     let doubleVariable: Double
+    let decimalVariable: Decimal
+    let nsDecimalNumberVariable: NSDecimalNumber
     let stringVariable: String
     let boolVariable: Bool
     let dateVariable: Date
@@ -68,6 +70,8 @@ struct ExampleAllSupportedTypes {
     let cgFloatVariable: CGFloat
     let urlVariable: URL
 }
+
+print("ExampleAllSupportedTypes.mock: ", ExampleAllSupportedTypes.mock)
 
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)

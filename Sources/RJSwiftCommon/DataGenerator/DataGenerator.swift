@@ -32,6 +32,8 @@ public enum MockBuilderSupportedType {
     case float32(Float32? = nil)
     case float64(Float64? = nil)
     case double(Double? = nil)
+    case decimal(Decimal? = nil)
+    case nsdecimalnumber(NSDecimalNumber? = nil)
     case string(String? = nil)
     case bool(Bool? = nil)
     case date
@@ -66,6 +68,13 @@ public enum MockBuilderSupportedType {
         case "float32": self = .float32(Float32(unwrappedValue))
         case "float64": self = .float64(Float64(unwrappedValue))
         case "double": self = .double(Double(unwrappedValue))
+        case "decimal": self = .decimal(Decimal(string: unwrappedValue))
+        case "nsdecimalnumber":
+            if let decimalValue = Decimal(string: unwrappedValue) {
+                self = .nsdecimalnumber(NSDecimalNumber(decimal: decimalValue))
+            } else {
+                self  = .nsdecimalnumber(nil)
+            }
         case "string": self = .string(initialValue as? String)
         case "bool": self = .bool(Bool(unwrappedValue))
         case "date": self = .date
@@ -108,6 +117,8 @@ public enum MockBuilderSupportedType {
         case .float32: "Float32"
         case .float64: "Float64"
         case .double: "Double"
+        case .decimal: "Decimal"
+        case .nsdecimalnumber: "NSDecimalNumber"
         case .string: "String"
         case .bool: "Bool"
         case .date: "Date"
@@ -127,21 +138,24 @@ public enum MockBuilderSupportedType {
         elementType: MockBuilderSupportedType,
         generatorType: DataGeneratorType
     ) -> Any {
-        switch elementType {
-        case .int(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: 0, max: 1000))
-        case .int8(let value): value ?? (generatorType == .`default` ? 0 : Int8(Provider().randomInt(min: 0, max: 1000)))
-        case .int16(let value): value ?? (generatorType == .`default` ? 0 : Int16(Provider().randomInt(min: 0, max: 1000)))
-        case .int32(let value): value ?? (generatorType == .`default` ? 0 : Int32(Provider().randomInt(min: 0, max: 1000)))
-        case .int64(let value): value ?? (generatorType == .`default` ? 0 : Int64(Provider().randomInt(min: 0, max: 1000)))
-        case .uint(let value): value ?? (generatorType == .`default` ? 0 : UInt(Provider().randomInt(min: 0, max: 1000)))
-        case .uint8(let value): value ?? (generatorType == .`default` ? 0 : UInt8(Provider().randomInt(min: 0, max: 1000)))
-        case .uint16(let value): value ?? (generatorType == .`default` ? 0 : UInt16(Provider().randomInt(min: 0, max: 1000)))
-        case .uint32(let value): value ?? (generatorType == .`default` ? 0 : UInt32(Provider().randomInt(min: 0, max: 1000)))
-        case .uint64(let value): value ?? (generatorType == .`default` ? 0 : UInt64(Provider().randomInt(min: 0, max: 1000)))
-        case .float(let value): value ?? (generatorType == .`default` ? 0.0 : Float(Provider().randomFloat(min: 0, max: 1000)))
-        case .float32(let value): value ?? (generatorType == .`default` ? 0.0 : Float32(Provider().randomFloat(min: 0, max: 1000)))
-        case .float64(let value): value ?? (generatorType == .`default` ? 0.0 : Float64(Provider().randomFloat(min: 0, max: 1000)))
-        case .double(let value): value ?? (generatorType == .`default` ? 0.0 : Double(Provider().randomDouble(min: 0, max: 1000)))
+        let defaultMaxValue = 100000
+        return switch elementType {
+        case .int(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int.zero, max: Int(defaultMaxValue)))
+        case .int8(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int8.zero, max: Int8.max))
+        case .int16(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int16.zero, max: Int16.max))
+        case .int32(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int32.zero, max: Int32.max))
+        case .int64(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int64.zero, max: Int64(defaultMaxValue)))
+        case .uint(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt.zero, max: UInt(defaultMaxValue)))
+        case .uint8(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt8.zero, max: UInt8.max))
+        case .uint16(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt16.zero, max: UInt16.max))
+        case .uint32(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt32.zero, max: UInt32(defaultMaxValue)))
+        case .uint64(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt64.zero, max: UInt64(defaultMaxValue)))
+        case .float(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomFloat(min: Float.leastNonzeroMagnitude, max: Float(defaultMaxValue)))
+        case .float32(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomFloat(min: Float32.leastNonzeroMagnitude, max: Float32(defaultMaxValue)))
+        case .float64(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomFloat(min: Float64.leastNonzeroMagnitude, max: Float64(defaultMaxValue)))
+        case .double(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomDouble(min: Double.leastNonzeroMagnitude, max: Double(defaultMaxValue)))
+        case .decimal(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomDecimal(min: Decimal.leastNonzeroMagnitude, max: Decimal(defaultMaxValue)))
+        case .nsdecimalnumber(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomNSDecimalNumber(min: NSDecimalNumber.zero, max: NSDecimalNumber(value: defaultMaxValue)))
         case .string(let value): value ?? (generatorType == .`default` ? "Hello World" : Provider().randomString())
         case .bool(let value): value ?? (generatorType == .`default` ? true : Provider().randomBool())
         case .date: generatorType == .`default` ? Date(timeIntervalSinceReferenceDate: 0) : Provider().date()
@@ -190,6 +204,10 @@ public enum MockBuilderSupportedType {
         case .float64(let initialValue):
             associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .double(let initialValue):
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
+        case .decimal(let initialValue):
+            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
+        case .nsdecimalnumber(let initialValue):
             associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .string(let initialValue):
             associatedValue = initialValue != nil ? "\"\(initialValue!)\"" : nil
