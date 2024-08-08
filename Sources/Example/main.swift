@@ -7,13 +7,14 @@
 
 import Foundation
 import RJSwiftMacros
+import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
 @CodingKeys(codingKeyType: .snakeCase)
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct Person {
-    @CodingKeyIgnored() let name: String
-    let surname: String
+    let name: String
+    @CodingKeyProperty("second_name") let surname: String
 }
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
@@ -25,25 +26,16 @@ enum VehicleType: String {
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct University {
-    let name: String
+    @MockBuilderProperty(value: 45) let price: Int
+    @MockBuilderProperty(value: "Rezzz") let name: String
     let president: Person
     let students: [Person]
     let privateVehicles: [VehicleType]
-    let isFree: Bool = false
-        
+    @MockBuilderProperty(value: true) let isFree: Bool
+    
     var oldName: String {
         "Tbilisi"
     }
-    
-    init(
-        name: String,
-        president: Person,
-        students: [Person],
-        privateVehicles: [VehicleType]
-    ) {
-        self.name = name
-        self.president = president
-        self.students = students
-        self.privateVehicles = privateVehicles
-    }
 }
+
+print("Universicty monthly price: ", University.mock.price)
