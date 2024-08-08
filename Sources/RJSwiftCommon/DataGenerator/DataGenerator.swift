@@ -43,17 +43,8 @@ public enum MockBuilderSupportedType {
     case cgvector
     case cgfloat
     case url(URL? = nil)
-        
-    private static var typesWithNoAssociatedValue: [Self] = [
-        .date,
-        .objectidentifier,
-        .cgpoint,
-        .cgrect,
-        .cgsize,
-        .cgvector,
-        .cgfloat
-    ]
     
+    // MARK: Initialiazer
     public init?(
         rawValue: String,
         initialValue: AnyObject?
@@ -89,6 +80,17 @@ public enum MockBuilderSupportedType {
         default: return nil
         }
     }
+    
+    // MARK: Properties
+    private static var typesWithNoAssociatedValue: [Self] = [
+        .date,
+        .objectidentifier,
+        .cgpoint,
+        .cgrect,
+        .cgsize,
+        .cgvector,
+        .cgfloat
+    ]
     
     public var rawValue: String {
         switch self {
