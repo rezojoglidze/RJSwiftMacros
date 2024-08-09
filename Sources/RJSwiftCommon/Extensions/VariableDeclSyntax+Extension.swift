@@ -56,7 +56,23 @@ public extension VariableDeclSyntax {
         }
     }
     
-    var typeName: String {
-        self.bindings.first?.typeAnnotation?.type.as(IdentifierTypeSyntax.self)?.name.text ?? ""
+    var attributeName: String? {
+        attributes.as(AttributeListSyntax.self)?.first?
+            .as(AttributeSyntax.self)?.attributeName
+            .as(IdentifierTypeSyntax.self)?.name.text
+    }
+    
+    var variableType: TypeSyntax? {
+        bindings.first?.typeAnnotation?.type
+    }
+    
+    var variableName: String? {
+        bindings.first?.pattern.as(IdentifierPatternSyntax.self)?.identifier.text
+    }
+    
+    var variableValue: String? {
+        attributes.as(AttributeListSyntax.self)?.first?
+            .as(AttributeSyntax.self)?.arguments?
+            .as(LabeledExprListSyntax.self)?.first?.expression.description
     }
 }

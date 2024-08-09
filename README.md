@@ -2,11 +2,12 @@
 
 RJSwiftMacros is a Swift package that provides macros.
 
-## Features
-- ``MockBuilder(numberOfItems: Int, dataGeneratorType: .random)``: Generates an array of mock data from our models.
-- ``CodingKeys(codingKeyType: CodingKeyType)``: Automatically generates camelCased or snakeCased CodingKeys.
-- ``CodingKeyProperty(:_)``: Allows custom coding keys for specific properties.
-- ``CodingKeyIgnored()``: Ignores specific properties from the coding process.
+## Macros
+- ``MockBuilder(numberOfItems: Int, dataGeneratorType: .random)``: Generates a mock instance and an array of mock data based on your model.
+- ``MockBuilderProperty<T: Any>(value: T)``: Sets an initial value to a property within a struct or class. 
+- ``CodingKeys(codingKeyType: CodingKeyType)``: Automatically generates `CodingKeys` for a struct based on the specified `CodingKeyType`.
+- ``CodingKeyProperty(:_)``: Allows you to adjust the coding key for a specific property.
+- ``CodingKeyIgnored()``: Allows you to exclude specific properties from the coding process when using the `CodingKeys` macro.
 
 ## Requirements
 
@@ -31,20 +32,33 @@ Usage of `MockBuilder`:
 ```swift
 import RJSwiftMacros
 
-@MockBuilder(numberOfItems: 3, dataGeneratorType: .random)
+@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct Person {
     let name: String
     let surname: String
+    @MockBuilderProperty(value: "NickNick") let nickName: String
 
     #if DEBUG
     static var mock: Person {
-        .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string())
+        .init(
+            name: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
+            surname: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
+            nickName: MockBuilderSupportedType.generate(elementType: .string("NickNick")) as! String
+            )
     }
 
     static var mockArray: [Person ] {
         [
-            .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
-            .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
+            .init(
+                name: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
+                surname: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
+                nickName: MockBuilderSupportedType.generate(elementType: .string("NickNick")) as! String
+                ),
+            .init(
+                name: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
+                surname: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
+                nickName: MockBuilderSupportedType.generate(elementType: .string("NickNick")) as! String
+                ),
         ]
     }
     #endif
@@ -72,7 +86,7 @@ class Car {
 }
 ```
 
-CodingKeys generation with `snakeCase`.
+CodingKeys generation with `.snakeCase`.
 ```swift
 @CodingKeys(codingKeyType: .snakeCase)
 class Car {

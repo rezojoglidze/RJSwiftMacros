@@ -22,7 +22,7 @@
             
             // Mock Builder Macros
             MockBuilderMacro.self,
-            MockBuilderItemMacro.self
+            MockBuilderPropertyMacro.self
         ]
     }
 #endif

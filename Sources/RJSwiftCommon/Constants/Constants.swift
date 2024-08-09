@@ -15,7 +15,11 @@ public enum Constants: String {
     case numberOfItemsLabelIdentifier = "numberOfItems"
     case dataGeneratorTypeLabelIdentifier = "dataGeneratorType"
     
-    // MARK: Coding Key Macro
+    // MARK: Mock Builder Property Macro
+    case mockBuilderProperyIdentifier = "MockBuilderProperty"
+    case mockBuilderPropertyMacroValueParamIdentifier = "value"
+    
+    // MARK: Coding Key Macros
     case codingKeyTypeIdentifier = "codingKeyType"
     case codingKeyPropertyIdentifier = "CodingKeyProperty"
     case codingKeyIgnoredIdentifier = "CodingKeyIgnored"

@@ -25,9 +25,16 @@ protocol URLDataProvider {
 }
 
 protocol NumericDataProvider {
-    func randomInt(min: Int, max: Int) -> Int
-    func randomFloat(min: Float, max: Float) -> Float
+    func randomInt<T: FixedWidthInteger & SignedInteger>(min: T, max: T) -> T
+    
+    func randomUInt<T: FixedWidthInteger & UnsignedInteger>(min: T, max: T) -> T
+    
     func randomDouble(min: Double, max: Double) -> Double
+    
+    func randomFloat<T: BinaryFloatingPoint & Comparable>(min: T, max: T) -> T where T.RawSignificand: FixedWidthInteger
+    
+    func randomDecimal(min: Decimal, max: Decimal) -> Decimal
+    func randomNSDecimalNumber(min: NSDecimalNumber, max: NSDecimalNumber) -> NSDecimalNumber
 }
 
 
@@ -193,15 +200,33 @@ extension FakeDataProvider: URLDataProvider {
 }
 
 extension FakeDataProvider: NumericDataProvider {
-    func randomInt(min: Int, max: Int) -> Int {
-        Int.random(in: min...max)
+    func randomInt<T: FixedWidthInteger & SignedInteger>(min: T, max: T) -> T {
+        return T.random(in: min...max)
     }
     
-    func randomFloat(min: Float, max: Float) -> Float {
-        Float.random(in: min...max)
+    func randomUInt<T: FixedWidthInteger & UnsignedInteger>(min: T, max: T) -> T {
+        return T.random(in: min...max)
     }
     
     func randomDouble(min: Double, max: Double) -> Double {
         Double.random(in: min...max)
+    }
+    
+    func randomFloat<T: BinaryFloatingPoint & Comparable>(min: T, max: T) -> T where T.RawSignificand: FixedWidthInteger {
+        let range = max - min
+        let randomValue = T.random(in: 0...1) * range + min
+        return randomValue
+    }
+
+    func randomDecimal(min: Decimal, max: Decimal) -> Decimal {
+        let range = max - min
+        let randomValue = Decimal(Double.random(in: 0...1)) * range + min
+        return randomValue
+    }
+    
+    func randomNSDecimalNumber(min: NSDecimalNumber, max: NSDecimalNumber) -> NSDecimalNumber {
+        let range = max.subtracting(min)
+        let randomValue = NSDecimalNumber(value: Double.random(in: 0...1)).multiplying(by: range).adding(min)
+        return randomValue
     }
 }

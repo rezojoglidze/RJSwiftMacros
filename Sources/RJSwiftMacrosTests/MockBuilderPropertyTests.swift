@@ -1,8 +1,8 @@
 //
-//  File.swift
+//  MockBuilderPropertyTests.swift
 //  
 //
-//  Created by Rezo Joglidze on 28.07.24.
+//  Created by Rezo Joglidze on 05.08.24.
 //
 
 import XCTest
@@ -15,13 +15,14 @@ import SwiftSyntaxMacrosTestSupport
 #if canImport(RJSwiftMacrosImpl)
 @testable import RJSwiftMacrosImpl
 
-// MARK: Mock Builder Tests
-final class MockBuilderTests: XCTestCase {
+// MARK: Mock Builder Item Tests
+final class MockBuilderPropertyTests: XCTestCase {
     // MARK: Properties
     let testMacros: [String : Macro.Type] = [
-        "MockBuilder" : MockBuilderMacro.self
+        "MockBuilder" : MockBuilderMacro.self,
+        "MockBuilderProperty": MockBuilderPropertyMacro.self
     ]
-        
+    
     // MARK: Test MockBuilder Macro for struct. Struct includes all supporeted types variables.
     func testMockBuilderPropertyMacro_all_supported_cases_for_struct() throws {
         assertMacroExpansion(
@@ -42,8 +43,6 @@ final class MockBuilderTests: XCTestCase {
                 let float32Variable: Float32
                 let float64Variable: Float64
                 let doubleVariable: Double
-                let decimalVariable: Decimal
-                let nsDecimalNumberVariable: NSDecimalNumber
                 let stringVariable: String
                 let boolVariable: Bool
                 let dateVariable: Date
@@ -73,8 +72,6 @@ final class MockBuilderTests: XCTestCase {
                 let float32Variable: Float32
                 let float64Variable: Float64
                 let doubleVariable: Double
-                let decimalVariable: Decimal
-                let nsDecimalNumberVariable: NSDecimalNumber
                 let stringVariable: String
                 let boolVariable: Bool
                 let dateVariable: Date
@@ -104,8 +101,6 @@ final class MockBuilderTests: XCTestCase {
                         float32Variable: MockBuilderSupportedType.generate(elementType: .float32(), generatorType: .random) as! Float32,
                         float64Variable: MockBuilderSupportedType.generate(elementType: .float64(), generatorType: .random) as! Float64,
                         doubleVariable: MockBuilderSupportedType.generate(elementType: .double(), generatorType: .random) as! Double,
-                        decimalVariable: MockBuilderSupportedType.generate(elementType: .decimal(), generatorType: .random) as! Decimal,
-                        nsDecimalNumberVariable: MockBuilderSupportedType.generate(elementType: .nsdecimalnumber(), generatorType: .random) as! NSDecimalNumber,
                         stringVariable: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
                         boolVariable: MockBuilderSupportedType.generate(elementType: .bool(), generatorType: .random) as! Bool,
                         dateVariable: MockBuilderSupportedType.generate(elementType: .date, generatorType: .random) as! Date,
@@ -137,8 +132,6 @@ final class MockBuilderTests: XCTestCase {
                             float32Variable: MockBuilderSupportedType.generate(elementType: .float32(), generatorType: .random) as! Float32,
                             float64Variable: MockBuilderSupportedType.generate(elementType: .float64(), generatorType: .random) as! Float64,
                             doubleVariable: MockBuilderSupportedType.generate(elementType: .double(), generatorType: .random) as! Double,
-                            decimalVariable: MockBuilderSupportedType.generate(elementType: .decimal(), generatorType: .random) as! Decimal,
-                            nsDecimalNumberVariable: MockBuilderSupportedType.generate(elementType: .nsdecimalnumber(), generatorType: .random) as! NSDecimalNumber,
                             stringVariable: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
                             boolVariable: MockBuilderSupportedType.generate(elementType: .bool(), generatorType: .random) as! Bool,
                             dateVariable: MockBuilderSupportedType.generate(elementType: .date, generatorType: .random) as! Date,
@@ -166,8 +159,6 @@ final class MockBuilderTests: XCTestCase {
                             float32Variable: MockBuilderSupportedType.generate(elementType: .float32(), generatorType: .random) as! Float32,
                             float64Variable: MockBuilderSupportedType.generate(elementType: .float64(), generatorType: .random) as! Float64,
                             doubleVariable: MockBuilderSupportedType.generate(elementType: .double(), generatorType: .random) as! Double,
-                            decimalVariable: MockBuilderSupportedType.generate(elementType: .decimal(), generatorType: .random) as! Decimal,
-                            nsDecimalNumberVariable: MockBuilderSupportedType.generate(elementType: .nsdecimalnumber(), generatorType: .random) as! NSDecimalNumber,
                             stringVariable: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
                             boolVariable: MockBuilderSupportedType.generate(elementType: .bool(), generatorType: .random) as! Bool,
                             dateVariable: MockBuilderSupportedType.generate(elementType: .date, generatorType: .random) as! Date,
@@ -346,120 +337,130 @@ final class MockBuilderTests: XCTestCase {
         )
     }
     
-    // MARK: Test Mock Builder Macro for class which has property type of struct
-    func testMockBuilderMacro_for_class_which_has_custom_type_property() throws {
+    func testMockBuilderPropertyMacro_for_MockBuilderProperty_builder() throws {
         assertMacroExpansion(
-            #"""
-            @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
-            struct Person {
-               let name: String
-            }
-            
-            @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
-            class Car {
-                let color: String
-                let owner: Person
-                
-                init(color: String, owner: Person) {
-                    self.color = color
-                    self.owner = owner
-                }
-            }
-            """#,
-            expandedSource: """
-            struct Person {
-               let name: String
+        #"""
+        @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+        struct ExampleAllSupportedTypesForMockBuilderProperty {
+            @MockBuilderProperty(value: 12) let intVariable: Int
+            @MockBuilderProperty(value: 38) let int8Variable: Int8
+            @MockBuilderProperty(value: 1893) let int16Variable: Int16
+            @MockBuilderProperty(value: 89012) let int32Variable: Int32
+            @MockBuilderProperty(value: 31293) let int64Variable: Int64
+            @MockBuilderProperty(value: 381) let uintVariable: UInt
+            @MockBuilderProperty(value: 71) let uint8Variable: UInt8
+            @MockBuilderProperty(value: 7462) let uint16Variable: UInt16
+            @MockBuilderProperty(value: 9893) let uint32Variable: UInt32
+            @MockBuilderProperty(value: 1934) let uint64Variable: UInt64
+            @MockBuilderProperty(value: 8933.21) let floatVariable: Float
+            @MockBuilderProperty(value: 849012.31) let float32Variable: Float32
+            @MockBuilderProperty(value: 31213.321) let float64Variable: Float64
+            @MockBuilderProperty(value: 93213.23) let doubleVariable: Double
+            @MockBuilderProperty(value: 2123.2313123123) let nsDecimalNumberVariable: NSDecimalNumber
+            @MockBuilderProperty(value: 8734.3154) let decimalVariable: Decimal
+            @MockBuilderProperty(value: "Hello John") let stringVariable: String
+            @MockBuilderProperty(value: false) let boolVariable: Bool
+            @MockBuilderProperty(value: "https://www.apple.com") let urlVariable: URL
+        }
+        """#,
+        expandedSource:"""
+        struct ExampleAllSupportedTypesForMockBuilderProperty {
+            let intVariable: Int
+            let int8Variable: Int8
+            let int16Variable: Int16
+            let int32Variable: Int32
+            let int64Variable: Int64
+            let uintVariable: UInt
+            let uint8Variable: UInt8
+            let uint16Variable: UInt16
+            let uint32Variable: UInt32
+            let uint64Variable: UInt64
+            let floatVariable: Float
+            let float32Variable: Float32
+            let float64Variable: Float64
+            let doubleVariable: Double
+            let nsDecimalNumberVariable: NSDecimalNumber
+            let decimalVariable: Decimal
+            let stringVariable: String
+            let boolVariable: Bool
+            let urlVariable: URL
 
-                #if DEBUG
-                static var mock: Person {
+            #if DEBUG
+            static var mock: ExampleAllSupportedTypesForMockBuilderProperty {
+                .init(
+                    intVariable: MockBuilderSupportedType.generate(elementType: .int(12)) as! Int,
+                    int8Variable: MockBuilderSupportedType.generate(elementType: .int8(38)) as! Int8,
+                    int16Variable: MockBuilderSupportedType.generate(elementType: .int16(1893)) as! Int16,
+                    int32Variable: MockBuilderSupportedType.generate(elementType: .int32(89012)) as! Int32,
+                    int64Variable: MockBuilderSupportedType.generate(elementType: .int64(31293)) as! Int64,
+                    uintVariable: MockBuilderSupportedType.generate(elementType: .uint(381)) as! UInt,
+                    uint8Variable: MockBuilderSupportedType.generate(elementType: .uint8(71)) as! UInt8,
+                    uint16Variable: MockBuilderSupportedType.generate(elementType: .uint16(7462)) as! UInt16,
+                    uint32Variable: MockBuilderSupportedType.generate(elementType: .uint32(9893)) as! UInt32,
+                    uint64Variable: MockBuilderSupportedType.generate(elementType: .uint64(1934)) as! UInt64,
+                    floatVariable: MockBuilderSupportedType.generate(elementType: .float(8933.21)) as! Float,
+                    float32Variable: MockBuilderSupportedType.generate(elementType: .float32(849012.3)) as! Float32,
+                    float64Variable: MockBuilderSupportedType.generate(elementType: .float64(31213.321)) as! Float64,
+                    doubleVariable: MockBuilderSupportedType.generate(elementType: .double(93213.23)) as! Double,
+                    nsDecimalNumberVariable: MockBuilderSupportedType.generate(elementType: .nsdecimalnumber(2123.2313123123)) as! NSDecimalNumber,
+                    decimalVariable: MockBuilderSupportedType.generate(elementType: .decimal(8734.3154)) as! Decimal,
+                    stringVariable: MockBuilderSupportedType.generate(elementType: .string("Hello John")) as! String,
+                    boolVariable: MockBuilderSupportedType.generate(elementType: .bool(false)) as! Bool,
+                    urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL
+                    )
+            }
+        
+            static var mockArray: [ExampleAllSupportedTypesForMockBuilderProperty ] {
+                [
                     .init(
-                        name: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String
-                        )
-                }
-
-                static var mockArray: [Person ] {
-                    [
-                        .init(
-                            name: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String
-                            ),
-                        .init(
-                            name: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String
-                            ),
-                    ]
-                }
-                #endif
-            }
-            class Car {
-                let color: String
-                let owner: Person
-                
-                init(color: String, owner: Person) {
-                    self.color = color
-                    self.owner = owner
-                }
-
-                #if DEBUG
-                static var mock: Car {
+                        intVariable: MockBuilderSupportedType.generate(elementType: .int(12)) as! Int,
+                        int8Variable: MockBuilderSupportedType.generate(elementType: .int8(38)) as! Int8,
+                        int16Variable: MockBuilderSupportedType.generate(elementType: .int16(1893)) as! Int16,
+                        int32Variable: MockBuilderSupportedType.generate(elementType: .int32(89012)) as! Int32,
+                        int64Variable: MockBuilderSupportedType.generate(elementType: .int64(31293)) as! Int64,
+                        uintVariable: MockBuilderSupportedType.generate(elementType: .uint(381)) as! UInt,
+                        uint8Variable: MockBuilderSupportedType.generate(elementType: .uint8(71)) as! UInt8,
+                        uint16Variable: MockBuilderSupportedType.generate(elementType: .uint16(7462)) as! UInt16,
+                        uint32Variable: MockBuilderSupportedType.generate(elementType: .uint32(9893)) as! UInt32,
+                        uint64Variable: MockBuilderSupportedType.generate(elementType: .uint64(1934)) as! UInt64,
+                        floatVariable: MockBuilderSupportedType.generate(elementType: .float(8933.21)) as! Float,
+                        float32Variable: MockBuilderSupportedType.generate(elementType: .float32(849012.3)) as! Float32,
+                        float64Variable: MockBuilderSupportedType.generate(elementType: .float64(31213.321)) as! Float64,
+                        doubleVariable: MockBuilderSupportedType.generate(elementType: .double(93213.23)) as! Double,
+                        nsDecimalNumberVariable: MockBuilderSupportedType.generate(elementType: .nsdecimalnumber(2123.2313123123)) as! NSDecimalNumber,
+                        decimalVariable: MockBuilderSupportedType.generate(elementType: .decimal(8734.3154)) as! Decimal,
+                        stringVariable: MockBuilderSupportedType.generate(elementType: .string("Hello John")) as! String,
+                        boolVariable: MockBuilderSupportedType.generate(elementType: .bool(false)) as! Bool,
+                        urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL
+                        ),
                     .init(
-                        color: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
-                        owner: Person.mock
-                        )
-                }
-
-                static var mockArray: [Car ] {
-                    [
-                        .init(
-                            color: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
-                            owner: Person.mock
-                            ),
-                        .init(
-                            color: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
-                            owner: Person.mock
-                            ),
-                    ]
-                }
-                #endif
+                        intVariable: MockBuilderSupportedType.generate(elementType: .int(12)) as! Int,
+                        int8Variable: MockBuilderSupportedType.generate(elementType: .int8(38)) as! Int8,
+                        int16Variable: MockBuilderSupportedType.generate(elementType: .int16(1893)) as! Int16,
+                        int32Variable: MockBuilderSupportedType.generate(elementType: .int32(89012)) as! Int32,
+                        int64Variable: MockBuilderSupportedType.generate(elementType: .int64(31293)) as! Int64,
+                        uintVariable: MockBuilderSupportedType.generate(elementType: .uint(381)) as! UInt,
+                        uint8Variable: MockBuilderSupportedType.generate(elementType: .uint8(71)) as! UInt8,
+                        uint16Variable: MockBuilderSupportedType.generate(elementType: .uint16(7462)) as! UInt16,
+                        uint32Variable: MockBuilderSupportedType.generate(elementType: .uint32(9893)) as! UInt32,
+                        uint64Variable: MockBuilderSupportedType.generate(elementType: .uint64(1934)) as! UInt64,
+                        floatVariable: MockBuilderSupportedType.generate(elementType: .float(8933.21)) as! Float,
+                        float32Variable: MockBuilderSupportedType.generate(elementType: .float32(849012.3)) as! Float32,
+                        float64Variable: MockBuilderSupportedType.generate(elementType: .float64(31213.321)) as! Float64,
+                        doubleVariable: MockBuilderSupportedType.generate(elementType: .double(93213.23)) as! Double,
+                        nsDecimalNumberVariable: MockBuilderSupportedType.generate(elementType: .nsdecimalnumber(2123.2313123123)) as! NSDecimalNumber,
+                        decimalVariable: MockBuilderSupportedType.generate(elementType: .decimal(8734.3154)) as! Decimal,
+                        stringVariable: MockBuilderSupportedType.generate(elementType: .string("Hello John")) as! String,
+                        boolVariable: MockBuilderSupportedType.generate(elementType: .bool(false)) as! Bool,
+                        urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL
+                        ),
+                ]
             }
-            """,
-            macros: testMacros
+            #endif
+        }
+        """,
+        macros: testMacros
         )
     }
-
-// TODO: fix it, .motorcycle return isnot correct
-//    func testMockBuilderMacro_for_enum() throws {
-//        assertMacroExpansion(
-//            #"""
-//            @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
-//            enum VehicleType {
-//               case car
-//               case bus
-//               case motorcycle
-//            }
-//            """#,
-//            expandedSource: """
-//            enum VehicleType {
-//               case car
-//               case bus
-//               case motorcycle
-//
-//                #if DEBUG
-//                static var mock: VehicleType {
-//                    .motorcycle
-//                }
-//
-//                static var mockArray: [VehicleType ] {
-//                    [
-//                        .car,
-//                        .bus,
-//                    ]
-//                }
-//                #endif
-//            }
-//            """,
-//            macros: testMacros
-//            )
-//    }
 }
-#else
-   #warning("macros are only supported when running tests for the host platform")
 #endif

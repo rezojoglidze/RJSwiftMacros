@@ -10,31 +10,33 @@ import SwiftDiagnostics
 import SwiftSyntaxMacros
 
 // MARK: - Mock Builder Diagnostic
-public enum MockBuilderDiagnostic: String, DiagnosticMessage {
-    case notAnStructOrEnum
+public enum MockBuilderDiagnostic: DiagnosticMessage {
     case argumentNotGreaterThanZero
     case enumWithEmptyCases
+    case mockBuilderPropertyNotSupported(String)
+    
+    var rawValue: String {
+        switch self {
+        case .argumentNotGreaterThanZero: "argumentNotGreaterThanZero"
+        case .enumWithEmptyCases: "enumWithEmptyCases"
+        case .mockBuilderPropertyNotSupported: "mockBuilderPropertyNotSupported"
+        }
+    }
     
     // MARK: Properties
     public var severity: DiagnosticSeverity {
         switch self {
-        case .notAnStructOrEnum:
-            return .error
-        case .argumentNotGreaterThanZero:
-            return .error
-        case .enumWithEmptyCases:
-            return .error
+        case .argumentNotGreaterThanZero: .error
+        case .enumWithEmptyCases: .error
+        case .mockBuilderPropertyNotSupported: .warning
         }
     }
     
     public var message: String {
         switch self {
-        case .notAnStructOrEnum: // TODO: fix it
-            return "@MockBuilder can only be applied to Structs and Enums"
-        case .argumentNotGreaterThanZero:
-            return "'numberOfitems' argument must be greater than zero"
-        case .enumWithEmptyCases:
-            return "Enum must contain at least one case"
+        case .argumentNotGreaterThanZero: "'numberOfitems' argument must be greater than zero"
+        case .enumWithEmptyCases: "Enum must contain at least one case"
+        case .mockBuilderPropertyNotSupported(let type): "Type \(type) isn't supported from `MockBuilderProperty` macro"
         }
     }
     
@@ -97,7 +99,7 @@ public enum MockBuilderDiagnostic: String, DiagnosticMessage {
                     ]
                 )
             ]
-        case .argumentNotGreaterThanZero, .notAnStructOrEnum:
+        case .argumentNotGreaterThanZero, .mockBuilderPropertyNotSupported:
             return [] // No suggestion to provide
         }
     }

@@ -16,6 +16,11 @@ public extension DeclSyntaxProtocol {
             .filter { $0.isStoredProperty }
     }
     
+    func getMemberBlockItems(with memberBlock: MemberBlockSyntax) -> [MemberBlockItemSyntax] {
+        memberBlock.members
+            .compactMap { $0.as(MemberBlockItemSyntax.self) }
+    }
+    
     func getInitMembers(with memberBlock: MemberBlockSyntax) -> [InitializerDeclSyntax] {
         memberBlock.members
             .compactMap { $0.decl.as(InitializerDeclSyntax.self) }

@@ -62,7 +62,8 @@ extension MockBuilderMacro {
         let parameters = caseItem.parameters.map {
             ParameterItem(
                 identifierName: $0.0?.text,
-                identifierType: $0.1
+                identifierType: $0.1,
+                initialValue: nil
             )
         }
         
@@ -110,7 +111,8 @@ extension MockBuilderMacro {
             let parameters = caseItem.parameters.map {
                 ParameterItem(
                     identifierName: $0.0?.text,
-                    identifierType: $0.1
+                    identifierType: $0.1,
+                    initialValue: nil
                 )
             }
             
@@ -157,14 +159,6 @@ extension MockBuilderMacro {
     ) -> [EnumCaseDeclSyntax] {
         var totalNumberOfCases: [EnumCaseDeclSyntax] = []
         
-        /*
-         we will extend the cases according to the number of items.
-         for example, if cases are [case1, case2, case3]
-         and numberOfItems = 2, the result should be [case1, case2].
-         
-         If cases are [case1, case2] and numberOfItems = 7, the result
-         should be [case1, case2, case1, case2, case1, case2, case1]
-         */
         for i in 0..<numberOfItems {
             totalNumberOfCases.append(
                 cases[i % cases.count]

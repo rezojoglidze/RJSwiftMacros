@@ -65,11 +65,6 @@ public struct MockBuilderMacro: MemberMacro {
             )
         }
         
-        MockBuilderDiagnostic.report(
-            diagnostic: .notAnStructOrEnum,
-            node: Syntax(declaration),
-            context: context
-        )
         return []
     }
 }
@@ -240,7 +235,8 @@ extension MockBuilderMacro {
             
             let expressionSyntax = getExpressionSyntax(
                 from: parameter.identifierType,
-                generatorType: generatorType
+                generatorType: generatorType,
+                initialValue: parameter.initialValue
             )
             let isFirst = parameter.identifierName == parameters.first?.identifierName
             let isLast = parameter.identifierName == parameters.last?.identifierName
