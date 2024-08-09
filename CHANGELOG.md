@@ -1,5 +1,9 @@
 # Change Log
 
+### [0.3.0(25)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.0) — *10 08 2024*
+Macros
+- `MockBuilderProperty<T: Any>(value: T)`: This macro is used to set an initial value to a property within a struct or class.
+
 ### [0.2.9(24)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.9) — *03 08 2024*
 Fix bug
 Mock Builder macro description issue from "show quick help".
