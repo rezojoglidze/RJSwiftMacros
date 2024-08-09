@@ -2,7 +2,7 @@
 
 RJSwiftMacros is a Swift package that provides macros.
 
-## Features
+## Macros
 - ``MockBuilder(numberOfItems: Int, dataGeneratorType: .random)``: Generates a mock instance and an array of mock data based on your model.
 - ``MockBuilderProperty<T: Any>(value: T)``: Sets an initial value to a property within a struct or class. 
 - ``CodingKeys(codingKeyType: CodingKeyType)``: Automatically generates `CodingKeys` for a struct based on the specified `CodingKeyType`.
@@ -86,7 +86,7 @@ class Car {
 }
 ```
 
-CodingKeys generation with `snakeCase`.
+CodingKeys generation with `.snakeCase`.
 ```swift
 @CodingKeys(codingKeyType: .snakeCase)
 class Car {
