@@ -36,7 +36,7 @@ public enum MockBuilderDiagnostic: DiagnosticMessage {
         switch self {
         case .argumentNotGreaterThanZero: "'numberOfitems' argument must be greater than zero"
         case .enumWithEmptyCases: "Enum must contain at least one case"
-        case .mockBuilderPropertyNotSupported(let type): "Type \(type) isn't supported from MockBuilderProperty"
+        case .mockBuilderPropertyNotSupported(let type): "Type \(type) isn't supported from `MockBuilderProperty` macro"
         }
     }
     
