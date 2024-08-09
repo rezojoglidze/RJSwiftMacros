@@ -17,7 +17,8 @@ public enum DataGeneratorType: String {
 }
 
 // MARK: ❗⚠️❗Keep all cases names in lowercase.❗⚠️❗
-public enum MockBuilderSupportedType {
+// MARK: ❗⚠️❗if type isn't supported from MockBuilderItem macro add it to `notSupportedTypesFromMockBuilderProperty`.❗⚠️❗
+public enum MockBuilderSupportedType: Equatable {
     case int(Int? = nil)
     case int8(Int8? = nil)
     case int16(Int16? = nil)
@@ -49,7 +50,7 @@ public enum MockBuilderSupportedType {
     // MARK: Initialiazer
     public init?(
         rawValue: String,
-        initialValue: AnyObject?
+        initialValue: AnyObject? = nil
     ) {
         let unwrappedValue = (initialValue as? String ?? .empty).replacingOccurrences(of: "\"", with: "")
         
@@ -91,7 +92,7 @@ public enum MockBuilderSupportedType {
     }
     
     // MARK: Properties
-    private static var typesWithNoAssociatedValue: [Self] = [
+    private static var notSupportedTypesFromMockBuilderProperty: [Self] = [
         .date,
         .objectidentifier,
         .cgpoint,
@@ -100,6 +101,12 @@ public enum MockBuilderSupportedType {
         .cgvector,
         .cgfloat
     ]
+    
+    public static func isSupportedFromMockBuilderPropertyMacro(type: Self) -> Bool {
+        MockBuilderSupportedType.notSupportedTypesFromMockBuilderProperty.contains(where: {
+            $0.rawValue.lowercased() == type.rawValue.lowercased()
+        })
+    }
     
     public var rawValue: String {
         switch self {
@@ -228,7 +235,7 @@ public enum MockBuilderSupportedType {
                 return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased())(URL(string: \"\(associatedValue)\"))) as! \(elementType.rawValue)"
             } else if let associatedValue {
                 return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased())(\(associatedValue))) as! \(elementType.rawValue)"
-            } else if MockBuilderSupportedType.typesWithNoAssociatedValue.contains(where: { $0.rawValue.lowercased() == elementType.rawValue.lowercased() }) {
+            } else if Self.isSupportedFromMockBuilderPropertyMacro(type: elementType) {
                 return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased()), generatorType: .\(generatorType.rawValue)) as! \(elementType.rawValue)"
             } else {
                 return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased())(), generatorType: .\(generatorType.rawValue)) as! \(elementType.rawValue)"

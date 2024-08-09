@@ -65,11 +65,6 @@ public struct MockBuilderMacro: MemberMacro {
             )
         }
         
-        MockBuilderDiagnostic.report(
-            diagnostic: .notAnStructOrEnum,
-            node: Syntax(declaration),
-            context: context
-        )
         return []
     }
 }

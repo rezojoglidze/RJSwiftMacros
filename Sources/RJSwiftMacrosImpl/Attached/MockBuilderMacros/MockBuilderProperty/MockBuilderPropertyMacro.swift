@@ -8,6 +8,7 @@
 import SwiftSyntax
 import SwiftSyntaxMacros
 import RJSwiftCommon
+import RJSwiftMacrosImplDependencies
 
 // MARK: - Mock Builder Item Macro
 public struct MockBuilderPropertyMacro: PeerMacro {
@@ -17,21 +18,30 @@ public struct MockBuilderPropertyMacro: PeerMacro {
         providingPeersOf declaration: some SwiftSyntax.DeclSyntaxProtocol,
         in context: some SwiftSyntaxMacros.MacroExpansionContext
     ) throws -> [SwiftSyntax.DeclSyntax] {
-        getItemSupportedType(from: node)
+        checkIfMockBuilderPropertyIsSupported(
+            of: node,
+            declaration: declaration,
+            context: context
+        )
+        
         return []
     }
     
-    private static func getItemSupportedType(from node: SwiftSyntax.AttributeSyntax) -> MockBuilderSupportedType? {
-        guard let argumentTuple = node.arguments?.as(LabeledExprListSyntax.self) else {
-            return nil
+    private static func checkIfMockBuilderPropertyIsSupported(
+        of node: SwiftSyntax.AttributeSyntax,
+        declaration: some SwiftSyntax.DeclSyntaxProtocol,
+        context: some SwiftSyntaxMacros.MacroExpansionContext
+    ) {
+        if let variableDecl = declaration.as(VariableDeclSyntax.self),
+           let variableType = variableDecl.variableType?.as(IdentifierTypeSyntax.self)?.name.text,
+           let mockSupportedType = MockBuilderSupportedType(rawValue: variableType) {
+            
+            if MockBuilderSupportedType.isSupportedFromMockBuilderPropertyMacro(type: mockSupportedType) {
+                MockBuilderDiagnostic.report(
+                    diagnostic: .mockBuilderPropertyNotSupported(mockSupportedType.rawValue),
+                    node: Syntax(node),
+                    context: context)
+            }
         }
-//        
-//        guard let dataTypeElement = argumentTuple.first(where: { $0.label?.text == Constants.mockBuilderTypeParamIdentifier.rawValue }),
-//              let argumentValue = dataTypeElement.expression.as(MemberAccessExprSyntax.self)?.declName.baseName,
-//              let itemSupportedType = MockBuilderSupportedType(rawValue: argumentValue.text) else {
-//            return nil
-//        }
-        
-        return nil
     }
 }
