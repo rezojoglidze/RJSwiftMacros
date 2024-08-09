@@ -121,7 +121,7 @@ extension MockBuilderMacro {
                    let mockPropertyType = variableDecl.variableType,
                    propertyName == mockPropertyName {
                     // Found a match, update the propertyName and propertyType
-                    let mockPropertyInitialValue =  variableDecl.variableValue?.replacingOccurrences(of: "\"", with: "") as? AnyObject
+                    let mockPropertyInitialValue =  variableDecl.variableValue as? AnyObject
                     
                     return (mockPropertyName, mockPropertyType, mockPropertyInitialValue)
                 }

@@ -71,7 +71,7 @@ struct ExampleAllSupportedTypes {
     let urlVariable: URL
 }
 
-print("ExampleAllSupportedTypes.mock: ", ExampleAllSupportedTypes.mock)
+print("ExampleAllSupportedTypes.mock: ", ExampleAllSupportedTypes.mock.stringVariable)
 
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
@@ -91,7 +91,11 @@ struct ExampleAllSupportedTypesForMockBuilderProperty {
     @MockBuilderProperty(value: 31213.321) let float64Variable: Float64
     @MockBuilderProperty(value: 93213.23) let doubleVariable: Double
     @MockBuilderProperty(value: 2123.2313123123) let nsDecimalNumberVariable: NSDecimalNumber
+    @MockBuilderProperty(value: 8734.3154) let decimalVariable: Decimal
     @MockBuilderProperty(value: "Hello John") let stringVariable: String
     @MockBuilderProperty(value: false) let boolVariable: Bool
-    let cgFloat: CGFloat
+    let cgFloatVariable: CGFloat
+    @MockBuilderProperty(value: "https://www.apple.com") let urlVariable: URL
 }
+
+print(ExampleAllSupportedTypesForMockBuilderProperty.mock.urlVariable.absoluteString)

@@ -51,7 +51,7 @@ public enum MockBuilderSupportedType {
         rawValue: String,
         initialValue: AnyObject?
     ) {
-        let unwrappedValue = initialValue as? String ?? .empty
+        let unwrappedValue = (initialValue as? String ?? .empty).replacingOccurrences(of: "\"", with: "")
         
         switch rawValue.lowercased() {
         case "int": self = .int(Int(unwrappedValue))
@@ -75,7 +75,7 @@ public enum MockBuilderSupportedType {
             } else {
                 self  = .nsdecimalnumber(nil)
             }
-        case "string": self = .string(initialValue as? String)
+        case "string": self = .string(unwrappedValue)
         case "bool": self = .bool(Bool(unwrappedValue))
         case "date": self = .date
         case "uuid": self = .uuid(UUID(uuidString: unwrappedValue))
@@ -139,6 +139,7 @@ public enum MockBuilderSupportedType {
         generatorType: DataGeneratorType? = nil
     ) -> Any {
         let defaultMaxValue = 100000
+        
         return switch elementType {
         case .int(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int.zero, max: Int(defaultMaxValue)))
         case .int8(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int8.zero, max: Int8.max))
@@ -210,7 +211,7 @@ public enum MockBuilderSupportedType {
         case .nsdecimalnumber(let initialValue):
             associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .string(let initialValue):
-            associatedValue = initialValue != nil ? "\"\(initialValue!)\"" : nil
+            associatedValue = initialValue != nil && initialValue?.isEmpty == false ? "\"\(initialValue!)\"" : nil
         case .bool(let initialValue):
             associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .uuid(let initialValue):
@@ -222,7 +223,10 @@ public enum MockBuilderSupportedType {
         }
         
         var exprString: String {
-            if let associatedValue {
+            if case .url(let url) = elementType,
+               let associatedValue = url?.absoluteString {
+                return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased())(URL(string: \"\(associatedValue)\"))) as! \(elementType.rawValue)"
+            } else if let associatedValue {
                 return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased())(\(associatedValue))) as! \(elementType.rawValue)"
             } else if MockBuilderSupportedType.typesWithNoAssociatedValue.contains(where: { $0.rawValue.lowercased() == elementType.rawValue.lowercased() }) {
                 return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased()), generatorType: .\(generatorType.rawValue)) as! \(elementType.rawValue)"
