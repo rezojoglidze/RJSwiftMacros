@@ -90,6 +90,8 @@ struct ExampleAllSupportedTypesForMockBuilderProperty {
     @MockBuilderProperty(value: 849012.31) let float32Variable: Float32
     @MockBuilderProperty(value: 31213.321) let float64Variable: Float64
     @MockBuilderProperty(value: 93213.23) let doubleVariable: Double
+    @MockBuilderProperty(value: 2123.2313123123) let nsDecimalNumberVariable: NSDecimalNumber
     @MockBuilderProperty(value: "Hello John") let stringVariable: String
     @MockBuilderProperty(value: false) let boolVariable: Bool
+    let cgFloat: CGFloat
 }

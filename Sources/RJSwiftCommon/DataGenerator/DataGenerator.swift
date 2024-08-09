@@ -136,7 +136,7 @@ public enum MockBuilderSupportedType {
     //MARK: Methods
     public static func generate(
         elementType: MockBuilderSupportedType,
-        generatorType: DataGeneratorType
+        generatorType: DataGeneratorType? = nil
     ) -> Any {
         let defaultMaxValue = 100000
         return switch elementType {
@@ -223,7 +223,7 @@ public enum MockBuilderSupportedType {
         
         var exprString: String {
             if let associatedValue {
-                return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased())(\(associatedValue)), generatorType: .\(generatorType.rawValue)) as! \(elementType.rawValue)"
+                return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased())(\(associatedValue))) as! \(elementType.rawValue)"
             } else if MockBuilderSupportedType.typesWithNoAssociatedValue.contains(where: { $0.rawValue.lowercased() == elementType.rawValue.lowercased() }) {
                 return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased()), generatorType: .\(generatorType.rawValue)) as! \(elementType.rawValue)"
             } else {
