@@ -40,7 +40,7 @@ public macro MockBuilder(
 ) = #externalMacro(module: "RJSwiftMacrosImpl", type: "MockBuilderMacro")
 
 
-/// - `MockBuilderProperty<T: Any>(value: T)`: This macro is used to set an initial value to a property within a struct or class. It is a generic macro, meaning it can accept any type (T) as a parameter.
+/// - `MockBuilderProperty<T: Any>(value: T)`: This macro sets an initial value to a property within a struct or class. It is a generic macro, meaning it can accept any type (T) as a parameter.
 ///  If the provided type is unsupported, a warning message will be displayed. This macro is particularly useful in scenarios where you need to initialize properties with specific values.
 /// ```
 ///  import RJSwiftMacros
