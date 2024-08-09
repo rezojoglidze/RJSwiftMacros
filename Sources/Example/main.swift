@@ -94,7 +94,6 @@ struct ExampleAllSupportedTypesForMockBuilderProperty {
     @MockBuilderProperty(value: 8734.3154) let decimalVariable: Decimal
     @MockBuilderProperty(value: "Hello John") let stringVariable: String
     @MockBuilderProperty(value: false) let boolVariable: Bool
-    let cgFloatVariable: CGFloat
     @MockBuilderProperty(value: "https://www.apple.com") let urlVariable: URL
 }
 

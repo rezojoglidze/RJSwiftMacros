@@ -8,9 +8,9 @@
 import Foundation
 import RJSwiftMacrosImplDependencies
 
-/// - Generate `CodingKeys`  with ``CodingKeys(codingKeyType: CodingKeyType)`` Macro.
-/// - `CodingKeyType` has two case `camelCase` and  `snakeCase`.
-/// - Passing `codingKeyType` param with `nil` caused coding keys generation with camel cased.
+/// - The `CodingKeys(codingKeyType: CodingKeyType)`` macro automatically generates `CodingKeys` for a struct based on the specified `CodingKeyType`.
+/// - `CodingKeyType` has two options: `.camelCase` and `.snakeCase`.
+/// - If the codingKeyType parameter is not provided (nil), the macro defaults to generating coding keys in camelCase.
 /// ```
 /// @CodingKeys()
 /// struct Person {
@@ -41,8 +41,7 @@ import RJSwiftMacrosImplDependencies
 public macro CodingKeys(codingKeyType: CodingKeyType? = nil) = #externalMacro(module: "RJSwiftMacrosImpl", type: "CodingKeysMacro")
 
 
-/// - Adjust coding key with ``CodingKeyProperty(_:)``
-///
+/// - `CodingKeyProperty(_:)` macro allows you to adjust the coding key for a specific property.
 /// ```
 /// @CodingKeys
 /// struct Person {
@@ -56,8 +55,8 @@ public macro CodingKeys(codingKeyType: CodingKeyType? = nil) = #externalMacro(mo
 @attached(peer)
 public macro CodingKeyProperty(_ value: String) = #externalMacro(module: "RJSwiftMacrosImpl", type: "CodingKeyPropertyMacro")
 
-/// - To Ignore specific properties from the coding process``CodingKeyIgnored()``
-///
+
+/// - `CodingKeyIgnored()` macro allows you to exclude specific properties from the coding process when using the `CodingKeys` macro. Properties marked with `CodingKeyIgnored()` will not be included in the generated CodingKeys enum, and therefore, will not be encoded or decoded.
 /// ```
 /// @CodingKeys
 /// struct Person {

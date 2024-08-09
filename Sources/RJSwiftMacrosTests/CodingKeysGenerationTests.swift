@@ -168,7 +168,6 @@ final class CodingKeysGenerationTests: XCTestCase {
            macros: testMacros
         )
     }
-    
 }
 #else
    #warning("macros are only supported when running tests for the host platform")
