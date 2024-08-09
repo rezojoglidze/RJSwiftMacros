@@ -12,35 +12,6 @@ import SwiftDiagnostics
 import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
-    /*
-     enum CodingKeys: String, CodingKey {
-         case name
-         case surname = "second_name"
-     }
-     
-     struct Car {
-         let color: String
-         var model: String
-         
-         var calculatedName: String {
-             "Doodge"
-         }
-         static var allAccounts: [String] = []
-         
-         var friendlyName: String {
-             get {
-                 return ""
-             }
-             set {
-                 self.model = newValue
-             }
-         }
-         
-         func getModel() {
-             
-         }
-     */
-
 // MARK: - Coding Keys Macro
 public struct CodingKeysMacro: MemberMacro {
     // MARK: Methods

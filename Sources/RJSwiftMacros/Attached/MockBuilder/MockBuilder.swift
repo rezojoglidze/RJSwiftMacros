@@ -73,5 +73,5 @@ public macro MockBuilder(
 ///      #endif
 ///  }
 ///```
-@attached(peer, names: named(MockBuilderPropertyMacro))
+@attached(peer)
 public macro MockBuilderProperty<T: Any>(value: T) = #externalMacro(module: "RJSwiftMacrosImpl", type: "MockBuilderPropertyMacro")
