@@ -10,6 +10,8 @@ import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
 /// - ``MockBuilder(numberOfItems: Int, dataGeneratorType: .random)``: This macro generates a mock instance and an array of mock data based on your model. It allows you to specify the number of items and the type of data generation strategy (`.random` in this case or `.default`), making it highly flexible for testing and development purposes.
+/// > [!WARNING]
+/// >`MockBuilder` macro doesn't work at `SwiftUI` `#Preview` macro. Here is a [solution](https://stackoverflow.com/questions/78856674/does-attached-macros-work-in-the-preview-body/78856731#78856731)
 ///
 /// ## Key Features:
 /// - **Default Usage**: `@MockBuilder()` generates a one single mock instance.
