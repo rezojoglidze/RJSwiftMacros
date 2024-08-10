@@ -10,6 +10,9 @@ RJSwiftMacros is a Swift package that provides macros.
 - **Default Usage**: `@MockBuilder()` generates a one single mock instance.
 - **Customizable**: You can also specify parameters like `numberOfItems` and `dataGeneratorType` if you need to have array of mock items.
 
+> [!WARNING]  
+> `MockBuilder` macro doesn't work well at `SwiftUI` `#Preview` macro. Here is a [solution](https://stackoverflow.com/questions/78856674/does-attached-macros-work-in-the-preview-body/78856731#78856731).
+
 ### MockBuilderProperty
 - ``MockBuilderProperty<T: Any>(value: T)``: Sets an initial value to a property within a struct or class. 
 
