@@ -1,6 +1,9 @@
 # Change Log
 
 
+### [0.3.3(28)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.3) — *10 08 2024*
+- `MockBuilder` macro doesn't work at `SwiftUI` `#Preview` macro. Add warning message and solution at macro description.
+  
 ### [0.3.2(27)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.2) — *10 08 2024*
 - Change `MockBuilder` behaviour. Make its params optional to create only `mock` variable and skip the `mockArray` variable
 
