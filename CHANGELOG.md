@@ -1,5 +1,9 @@
 # Change Log
 
+
+### [0.3.2(27)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.2) — *10 08 2024*
+- Change `MockBuilder` behaviour. Make its params optional to create only `mock` variable and skip the `mockArray` variable
+
 ### [0.3.1(26)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.1) — *10 08 2024*
 - Add `Image` type support for `MockBuilderMacro` 
 
