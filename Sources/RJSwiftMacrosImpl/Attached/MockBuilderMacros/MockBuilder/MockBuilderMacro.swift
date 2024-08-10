@@ -22,9 +22,9 @@ public struct MockBuilderMacro: MemberMacro {
         in context: some SwiftSyntaxMacros.MacroExpansionContext
     ) throws -> [SwiftSyntax.DeclSyntax] {
         
-        let numberOfItems = try getNumberOfItems(from: node)
-        
-        if numberOfItems <= 0 {
+            let numberOfItems = getNumberOfItems(from: node)
+
+        if let numberOfItems, numberOfItems <= 0 {
             MockBuilderDiagnostic.report(
                 diagnostic: .argumentNotGreaterThanZero,
                 node: Syntax(declaration),
@@ -74,7 +74,7 @@ extension MockBuilderMacro {
     // MARK: Methods
     static func generateMockCodeSyntax(
         identifierToken: TokenSyntax,
-        mockArrayData: ArrayElementListSyntax,
+        mockArrayData: ArrayElementListSyntax?,
         singleMockItemData: ExprSyntax
     ) -> IfConfigDeclSyntax {
         
@@ -118,42 +118,48 @@ extension MockBuilderMacro {
             }
         )
         
-        let mockArrayCode = VariableDeclSyntax(
-            leadingTrivia: .newline,
-            modifiers: DeclModifierListSyntax {
-                DeclModifierSyntax(
+        var mockArrayCode: VariableDeclSyntax? {
+            if let mockArrayData {
+                return VariableDeclSyntax(
                     leadingTrivia: .newline,
-                    name: .keyword(.static)
-                )
-            },
-            bindingSpecifier: .keyword(.var),
-            bindings: PatternBindingListSyntax {
-                PatternBindingSyntax(
-                    pattern: IdentifierPatternSyntax(identifier: .identifier(Constants.mockArrayIdentifier.rawValue)),
-                    typeAnnotation: TypeAnnotationSyntax(colon: .colonToken(),type: mockArrayCodeReturnType),
-                    accessorBlock: AccessorBlockSyntax(
-                        leftBrace: .leftBraceToken(),
-                        accessors: .getter(
-                            CodeBlockItemListSyntax {
-                                CodeBlockItemSyntax(
-                                    item: .expr(
-                                        ExprSyntax(
-                                            ArrayExprSyntax(
-                                                leftSquare: .leftSquareToken(),
-                                                elements: mockArrayData,
-                                                rightSquare: .rightSquareToken(leadingTrivia: .newline)
+                    modifiers: DeclModifierListSyntax {
+                        DeclModifierSyntax(
+                            leadingTrivia: .newline,
+                            name: .keyword(.static)
+                        )
+                    },
+                    bindingSpecifier: .keyword(.var),
+                    bindings: PatternBindingListSyntax {
+                        PatternBindingSyntax(
+                            pattern: IdentifierPatternSyntax(identifier: .identifier(Constants.mockArrayIdentifier.rawValue)),
+                            typeAnnotation: TypeAnnotationSyntax(colon: .colonToken(),type: mockArrayCodeReturnType),
+                            accessorBlock: AccessorBlockSyntax(
+                                leftBrace: .leftBraceToken(),
+                                accessors: .getter(
+                                    CodeBlockItemListSyntax {
+                                        CodeBlockItemSyntax(
+                                            item: .expr(
+                                                ExprSyntax(
+                                                    ArrayExprSyntax(
+                                                        leftSquare: .leftSquareToken(),
+                                                        elements: mockArrayData,
+                                                        rightSquare: .rightSquareToken(leadingTrivia: .newline)
+                                                    )
+                                                )
                                             )
                                         )
-                                    )
-                                )
-                                
-                            }
-                        ),
-                        rightBrace: .rightBraceToken()
-                    )
+                                        
+                                    }
+                                ),
+                                rightBrace: .rightBraceToken()
+                            )
+                        )
+                    }
                 )
+            } else {
+                return nil
             }
-        )
+        }
         
         // This will make the code available only on DEBUG mode
         return IfConfigDeclSyntax(
@@ -166,7 +172,9 @@ extension MockBuilderMacro {
                     elements: .decls(
                         MemberBlockItemListSyntax {
                             MemberBlockItemSyntax(decl: singleMockItemCode)
-                            MemberBlockItemSyntax(decl: mockArrayCode);
+                            if let mockArrayCode {
+                                MemberBlockItemSyntax(decl: mockArrayCode);
+                            }
                         }
                     )
                 )
@@ -189,10 +197,10 @@ extension MockBuilderMacro {
         return generatorType
     }
     
-    private static func getNumberOfItems(from node: SwiftSyntax.AttributeSyntax) throws -> Int {
+    private static func getNumberOfItems(from node: SwiftSyntax.AttributeSyntax) -> Int? {
         guard let arguments = node.arguments?.as(LabeledExprListSyntax.self),
               let argumentTuple = arguments.first(where: { $0.label?.text == Constants.numberOfItemsLabelIdentifier.rawValue }) else {
-            fatalError("Compiler bug: Argument must exist")
+            return nil
         }
         
         if let prefixExpression = argumentTuple

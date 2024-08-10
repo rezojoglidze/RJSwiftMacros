@@ -16,7 +16,7 @@ extension MockBuilderMacro {
     static func MockBuilderMacroForEnum(
         enumDecl: EnumDeclSyntax,
         identifierToken: TokenSyntax, //enum name
-        numberOfItems: Int,
+        numberOfItems: Int?,
         generatorType: DataGeneratorType,
         context: some SwiftSyntaxMacros.MacroExpansionContext
     ) -> [SwiftSyntax.DeclSyntax] {
@@ -34,11 +34,17 @@ extension MockBuilderMacro {
             return []
         }
         
-        let mockArrayData = generateMockArrayCases(
-            cases: cases,
-            numberOfItems: numberOfItems,
-            generatorType: generatorType
-        )
+        var mockArrayData: ArrayElementListSyntax? {
+            if let numberOfItems {
+                return generateMockArrayCases(
+                    cases: cases,
+                    numberOfItems: numberOfItems,
+                    generatorType: generatorType
+                )
+            } else {
+                return nil
+            }
+        }
         
         let singleMockEnumCase = generateSingleMockEnumCase(cases: cases, generatorType: generatorType)
 

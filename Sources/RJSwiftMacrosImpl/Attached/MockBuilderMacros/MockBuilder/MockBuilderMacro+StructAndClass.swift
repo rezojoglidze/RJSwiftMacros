@@ -16,7 +16,7 @@ extension MockBuilderMacro {
     static func MockBuilderMacroForClassOrSturct<T: DeclSyntaxProtocol>(
         decl: T,
         identifierToken: TokenSyntax, //Class or Struct name
-        numberOfItems: Int,
+        numberOfItems: Int?,
         generatorType: DataGeneratorType,
         context: MacroExpansionContext
     ) -> [SwiftSyntax.DeclSyntax] {
@@ -27,7 +27,13 @@ extension MockBuilderMacro {
         )
         
         let singleMockItemData = generateSingleMockItemData(parameters: validParameters, generatorType: generatorType)
-        let mockArrayData = generateMockArrayData(parameters: validParameters, numberOfItems: numberOfItems, generatorType: generatorType)
+        var mockArrayData: ArrayElementListSyntax? {
+            if let numberOfItems {
+                return generateMockArrayData(parameters: validParameters, numberOfItems: numberOfItems, generatorType: generatorType)
+            } else {
+                return nil
+            }
+        }
         
         let mockCode = generateMockCodeSyntax(
             identifierToken: identifierToken,

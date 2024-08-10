@@ -68,5 +68,5 @@ public macro CodingKeyProperty(_ value: String) = #externalMacro(module: "RJSwif
 ///     }
 /// }
 /// ```
-@attached(peer, names: named(CodingKeyIgnored))
+@attached(peer)
 public macro CodingKeyIgnored() = #externalMacro(module: "RJSwiftMacrosImpl", type: "CodingKeyIgnoredMacro")

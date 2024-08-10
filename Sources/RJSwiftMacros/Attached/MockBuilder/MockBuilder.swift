@@ -9,25 +9,47 @@ import Foundation
 import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
-/// - `MockBuilder(numberOfItems: Int, dataGeneratorType: .random)`: This macro generates a mock instance and an array of mock data based on your model. It allows you to specify the number of items and the type of data generation strategy (`.random` in this case or `.default`), making it highly flexible for testing and development purposes.
+/// - ``MockBuilder(numberOfItems: Int, dataGeneratorType: .random)``: This macro generates a mock instance and an array of mock data based on your model. It allows you to specify the number of items and the type of data generation strategy (`.random` in this case or `.default`), making it highly flexible for testing and development purposes.
+///
+/// ## Key Features:
+/// - **Default Usage**: `@MockBuilder()` generates a one single mock instance.
+/// - **Customizable**: You can also specify parameters like `numberOfItems` and `dataGeneratorType` if you need to have array of mock items.
+///
+/// ## MockBuilder(numberOfItems: Int, dataGeneratorType: .random) usage:
 /// ```
 ///  import RJSwiftMacros
 ///
-///  @MockBuilder(numberOfItems: 3, dataGeneratorType: .random)
+///  @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 ///  struct Person {
 ///      let name: String
-///      let surname: String
 ///
 ///      #if DEBUG
 ///      static var mock: Person {
-///          .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string())
+///          .init(name: DataGenerator.random().string())
 ///      }
 ///
 ///      static var mockArray: [Person ] {
 ///          [
-///              .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
-///              .init(name: DataGenerator.random().string(), surname: DataGenerator.random().string()),
+///              .init(name: DataGenerator.random().string()),
+///              .init(name: DataGenerator.random().string()),
 ///          ]
+///      }
+///      #endif
+///  }
+///}
+///```
+///
+/// ## MockBuilder() usage:
+/// ```
+///  import RJSwiftMacros
+///
+///  @MockBuilder()
+///  struct Person {
+///      let name: String
+///
+///      #if DEBUG
+///      static var mock: Person {
+///          .init(name: DataGenerator.random().string())
 ///      }
 ///      #endif
 ///  }
@@ -35,8 +57,8 @@ import RJSwiftMacrosImplDependencies
 ///```
 @attached(member, names: named(mock), named(mockArray))
 public macro MockBuilder(
-    numberOfItems: Int,
-    dataGeneratorType: DataGeneratorType
+    numberOfItems: Int? = nil,
+    dataGeneratorType: DataGeneratorType = .random
 ) = #externalMacro(module: "RJSwiftMacrosImpl", type: "MockBuilderMacro")
 
 
