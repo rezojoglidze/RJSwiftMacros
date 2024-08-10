@@ -1,12 +1,14 @@
 # Change Log
 
+### [0.3.1(26)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.1) — *10 08 2024*
+- Add `Image` type support for `MockBuilderMacro` 
+
 ### [0.3.0(25)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.0) — *10 08 2024*
-Macros
-- `MockBuilderProperty<T: Any>(value: T)`: This macro is used to set an initial value to a property within a struct or class.
+- `MockBuilderProperty<T: Any>(value: T)`: This macro sets an initial value to a property within a struct or class.
 
 ### [0.2.9(24)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.9) — *03 08 2024*
 Fix bug
-Mock Builder macro description issue from "show quick help".
+- Mock Builder macro description issue from "show quick help".
 
 ### [0.2.8(23)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.8) — *03 08 2024*
 Fix bug
@@ -16,21 +18,18 @@ Fix bug
 Add `codingKeyType` param to `CodingKeys` Macro. It has two case `camelCase` and  `snakeCase`.
 
 ### [0.2.3(18)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.3) — *01 08 2024*
-Add `mock` variable generation to the `MockBuilder` Macro.
+- Add `mock` variable generation to the `MockBuilder` Macro.
 
 ### [0.2.2(17)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.2) — *30 07 2024*
-Add definition to the macros
+- Add definition to the macros
 
 ### [0.2.1(16)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.1) — *30 07 2024*
-Macros
 - `MockBuilder` macro Bug fixing
   
 ### [0.2.0(15)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.2.0) — *29 07 2024*
-Macros
 - `MockBuilder(numberOfItems: Int, dataGeneratorType: .random)`: Generates an array of mock data from our models.
   
 ### [0.1.13(14)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.1.13) — *26 07 2024*
-Macros
 - `CodingKeys()`: Automatically generates CodingKeys for your structs.
 - `CodingKeyProperty(:_)`: Allows custom coding keys for specific properties.
 - `CodingKeyIgnored()`: Ignores specific properties from the coding process.
