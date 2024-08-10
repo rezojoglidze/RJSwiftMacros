@@ -5,7 +5,7 @@
 //  Created by Rezo Joglidze on 15.07.24.
 //
 
-import Foundation
+import SwiftUI
 import RJSwiftMacros
 import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
@@ -32,6 +32,7 @@ struct University {
     let students: [Person]
     let privateVehicles: [VehicleType]
     @MockBuilderProperty(value: false) let isFree: Bool
+    let image: Image
     
     var oldName: String {
         "Tbilisi"

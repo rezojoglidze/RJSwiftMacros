@@ -5,7 +5,7 @@
 //  Created by Rezo Joglidze on 28.07.24.
 //
 
-import Foundation
+import SwiftUI
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
@@ -46,6 +46,7 @@ public enum MockBuilderSupportedType: Equatable {
     case cgvector
     case cgfloat
     case url(URL? = nil)
+    case image
     
     // MARK: Initialiazer
     public init?(
@@ -87,6 +88,7 @@ public enum MockBuilderSupportedType: Equatable {
         case "cgvector": self = .cgvector
         case "cgfloat": self = .cgfloat
         case "url": self = .url(URL(string: unwrappedValue))
+        case "image": self = .image
         default: return nil
         }
     }
@@ -99,7 +101,8 @@ public enum MockBuilderSupportedType: Equatable {
         .cgrect,
         .cgsize,
         .cgvector,
-        .cgfloat
+        .cgfloat,
+        .image
     ]
     
     public static func isSupportedFromMockBuilderPropertyMacro(type: Self) -> Bool {
@@ -137,6 +140,7 @@ public enum MockBuilderSupportedType: Equatable {
         case .cgvector: "CGVector"
         case .cgfloat: "CGFloat"
         case .url: "URL"
+        case .image: "Image"
         }
     }
     
@@ -175,6 +179,7 @@ public enum MockBuilderSupportedType: Equatable {
         case .cgvector: CGVector()
         case .cgfloat: CGFloat()
         case .url(let value): value ?? (generatorType == .`default` ? URL(string: "https://www.apple.com")! : Provider().url())
+        case .image: Image(systemName: "swift")
         }
     }
 
@@ -225,7 +230,7 @@ public enum MockBuilderSupportedType: Equatable {
             associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .url(let initialValue):
             associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat:
+        case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat, .image:
             associatedValue = nil
         }
         
