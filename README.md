@@ -48,13 +48,15 @@ struct Person {
     let name: String
     let surname: String
     @MockBuilderProperty(value: "NickNick") let nickName: String
+    let closureVariable: (String, Double) -> Void
 
     #if DEBUG
     static var mock: Person {
         .init(
             name: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
             surname: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
-            nickName: MockBuilderSupportedType.generate(elementType: .string("NickNick")) as! String
+            nickName: MockBuilderSupportedType.generate(elementType: .string("NickNick")) as! String,
+            closureVariable: { _, _ in }
             )
     }
 
@@ -63,12 +65,14 @@ struct Person {
             .init(
                 name: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
                 surname: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
-                nickName: MockBuilderSupportedType.generate(elementType: .string("NickNick")) as! String
+                nickName: MockBuilderSupportedType.generate(elementType: .string("NickNick")) as! String,
+                closureVariable: { _, _ in }
                 ),
             .init(
                 name: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
                 surname: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
-                nickName: MockBuilderSupportedType.generate(elementType: .string("NickNick")) as! String
+                nickName: MockBuilderSupportedType.generate(elementType: .string("NickNick")) as! String,
+                closureVariable: { _, _ in }
                 ),
         ]
     }
