@@ -1,5 +1,7 @@
 # Change Log
 
+### [0.3.4(29)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.4) — *10 08 2024*
+- Add closure support from `MockBuilderMacro`.
 
 ### [0.3.3(28)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.3) — *10 08 2024*
 - `MockBuilder` macro doesn't work at `SwiftUI` `#Preview` macro. Add warning message and solution at macro description.
