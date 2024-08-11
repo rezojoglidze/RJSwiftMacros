@@ -21,14 +21,39 @@ final class MockBuilderTests: XCTestCase {
     let testMacros: [String : Macro.Type] = [
         "MockBuilder" : MockBuilderMacro.self
     ]
-        
+
     // MARK: Test MockBuilder Macro for struct. Struct includes all supporeted types variables.
     func testMockBuilderPropertyMacro_all_supported_cases_for_struct() throws {
         assertMacroExpansion(
             #"""
-            @MockBuilder()
-            struct Person {
-                let name: String
+            @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+            struct ExampleAllSupportedTypes {
+                let intVariable: Int
+                let int8Variable: Int8
+                let int16Variable: Int16
+                let int32Variable: Int32
+                let int64Variable: Int64
+                let uintVariable: UInt
+                let uint8Variable: UInt8
+                let uint16Variable: UInt16
+                let uint32Variable: UInt32
+                let uint64Variable: UInt64
+                let floatVariable: Float
+                let float32Variable: Float32
+                let float64Variable: Float64
+                let doubleVariable: Double
+                let stringVariable: String
+                let boolVariable: Bool
+                let dateVariable: Date
+                let uuidVariable: UUID
+                let objectIndetifierVariable: ObjectIdentifier
+                let cgPointVariable: CGPoint
+                let cgRectVariable: CGRect
+                let cgSizeVariable: CGSize
+                let cgVectorVariable: CGVector
+                let cgFloatVariable: CGFloat
+                let urlVariable: URL
+                let imageVariable: Image
             }
             """#,
             expandedSource: """
