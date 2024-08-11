@@ -15,6 +15,7 @@ import RJSwiftMacrosImplDependencies
 struct Person {
     let name: String
     @CodingKeyProperty("second_name") let surname: String
+    let closureVariable: () -> Void
 }
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)

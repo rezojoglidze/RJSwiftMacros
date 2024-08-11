@@ -6,6 +6,7 @@
 //
 
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
@@ -43,6 +44,12 @@ extension MockBuilderMacro {
         } else if let type = type.as(IdentifierTypeSyntax.self) {
             return getSimpleExprSyntax(
                 simpleType: type.as(IdentifierTypeSyntax.self)!,
+                generatorType: generatorType,
+                initialValue: initialValue
+            )
+        } else if let type = type.as(FunctionTypeSyntax.self) {
+            return getSimpleExprSyntax(
+                simpleType: type,
                 generatorType: generatorType,
                 initialValue: initialValue
             )
@@ -134,31 +141,64 @@ extension MockBuilderMacro {
         )
     }
     
-    private static func getSimpleExprSyntax(
-        simpleType: IdentifierTypeSyntax,
+    // MARK: Simple Expr Syntax Methods
+    private static func getSimpleExprSyntax<T: TypeSyntaxProtocol>(
+        simpleType: T,
         generatorType: DataGeneratorType,
         initialValue: AnyObject?
-    ) -> ExprSyntax {
-        
-        if let supportedType = SupportedType(
-            rawValue: simpleType.name.text,
-            initialValue: initialValue
-        ) {
-            return supportedType.exprSyntax(
-                elementType: supportedType,
-                generatorType: generatorType
+    ) -> ExprSyntax? {
+        if let simleIdentifierType = simpleType.as(IdentifierTypeSyntax.self) {
+            if let supportedType = SupportedType(
+                rawValue: simleIdentifierType.name.text,
+                initialValue: initialValue
+            ) {
+                return supportedType.exprSyntax(
+                    elementType: supportedType,
+                    generatorType: generatorType
+                )
+            }
+            
+            // Custom type that attaches MockBuilder in its declaration:
+            return ExprSyntax(
+                MemberAccessExprSyntax(
+                    base: DeclReferenceExprSyntax(
+                        baseName: simleIdentifierType.name
+                    ),
+                    period: .periodToken(),
+                    name: .identifier(Constants.mockIdentifier.rawValue)
+                )
             )
+        } else if let simleFunctionType = simpleType.as(FunctionTypeSyntax.self) {
+            return getSimpleExprSyntaxForClosure(
+                simpleType: simleFunctionType,
+                generatorType: generatorType,
+                initialValue: initialValue
+            )
+        } else {
+            return nil
         }
-        
-        // Custom type that attaches MockBuilder in its declaration:
-        return ExprSyntax(
-            MemberAccessExprSyntax(
-                base: DeclReferenceExprSyntax(
-                    baseName: simpleType.name
-                ),
-                period: .periodToken(),
-                name: .identifier(Constants.mockIdentifier.rawValue)
-            )
-        )
     }
+    
+    private static func getSimpleExprSyntaxForClosure(
+        simpleType: FunctionTypeSyntax,
+        generatorType: DataGeneratorType,
+        initialValue: AnyObject?) -> ExprSyntax? {
+            let closerParameters = simpleType.parameters.map { _ in "_" }.joined(separator: ", ")
+            var closureString: String {
+                if closerParameters.isEmpty {
+                    return " {}"
+                } else {
+                    return " { \(closerParameters) in }"
+                }
+            }
+            
+            let closureExpresion = ClosureExprSyntax(
+                leadingTrivia: .init(stringLiteral: closureString),
+                leftBrace: .endOfFileToken(),
+                statements: CodeBlockItemListSyntax(),
+                rightBrace: .endOfFileToken()
+            )
+            
+            return ExprSyntax( closureExpresion)
+        }
 }

@@ -22,8 +22,8 @@ public struct MockBuilderMacro: MemberMacro {
         in context: some SwiftSyntaxMacros.MacroExpansionContext
     ) throws -> [SwiftSyntax.DeclSyntax] {
         
-            let numberOfItems = getNumberOfItems(from: node)
-
+        let numberOfItems = getNumberOfItems(from: node)
+        
         if let numberOfItems, numberOfItems <= 0 {
             MockBuilderDiagnostic.report(
                 diagnostic: .argumentNotGreaterThanZero,
