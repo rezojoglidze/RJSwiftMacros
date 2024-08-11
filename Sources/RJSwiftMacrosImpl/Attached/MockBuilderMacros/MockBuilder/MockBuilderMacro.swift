@@ -241,24 +241,25 @@ extension MockBuilderMacro {
         
         for parameter in parameters {
             
-            let expressionSyntax = getExpressionSyntax(
+            if let expressionSyntax = getExpressionSyntax(
                 from: parameter.identifierType,
                 generatorType: generatorType,
                 initialValue: parameter.initialValue
-            )
-            let isFirst = parameter.identifierName == parameters.first?.identifierName
-            let isLast = parameter.identifierName == parameters.last?.identifierName
-            
-            let parameterElement = LabeledExprSyntax(
-                leadingTrivia: isFirst ? .newline : nil,
-                label: parameter.hasName ? .identifier(parameter.identifierName!) : nil,
-                colon: parameter.hasName ? .colonToken() : nil,
-                expression: expressionSyntax,
-                trailingComma: isLast ? nil : .commaToken(),
-                trailingTrivia: .newline
-            )
-            
-            parameterList.append(parameterElement)
+            ) {
+                let isFirst = parameter.identifierName == parameters.first?.identifierName
+                let isLast = parameter.identifierName == parameters.last?.identifierName
+                
+                let parameterElement = LabeledExprSyntax(
+                    leadingTrivia: isFirst ? .newline : nil,
+                    label: parameter.hasName ? .identifier(parameter.identifierName!) : nil,
+                    colon: parameter.hasName ? .colonToken() : nil,
+                    expression: expressionSyntax,
+                    trailingComma: isLast ? nil : .commaToken(),
+                    trailingTrivia: .newline
+                )
+                
+                parameterList.append(parameterElement)
+            }
         }
         
         return parameterList
