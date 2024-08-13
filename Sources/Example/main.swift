@@ -3,7 +3,7 @@
 //
 //
 //  Created by Rezo Joglidze on 15.07.24.
-//
+//`
 
 import SwiftUI
 import RJSwiftMacros
@@ -16,6 +16,7 @@ struct Person {
     let name: String
     @CodingKeyProperty("second_name") let surname: String
     let closureVariable: () -> Void
+    let character: Character
 }
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)

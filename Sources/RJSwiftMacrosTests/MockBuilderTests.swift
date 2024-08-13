@@ -42,6 +42,7 @@ final class MockBuilderTests: XCTestCase {
                 let float32Variable: Float32
                 let float64Variable: Float64
                 let doubleVariable: Double
+                let characterVariable: Character
                 let stringVariable: String
                 let boolVariable: Bool
                 let dateVariable: Date
@@ -73,6 +74,7 @@ final class MockBuilderTests: XCTestCase {
                 let float32Variable: Float32
                 let float64Variable: Float64
                 let doubleVariable: Double
+                let characterVariable: Character
                 let stringVariable: String
                 let boolVariable: Bool
                 let dateVariable: Date
@@ -104,6 +106,7 @@ final class MockBuilderTests: XCTestCase {
                         float32Variable: MockBuilderSupportedType.generate(elementType: .float32(), generatorType: .random) as! Float32,
                         float64Variable: MockBuilderSupportedType.generate(elementType: .float64(), generatorType: .random) as! Float64,
                         doubleVariable: MockBuilderSupportedType.generate(elementType: .double(), generatorType: .random) as! Double,
+                        characterVariable: MockBuilderSupportedType.generate(elementType: .character(), generatorType: .random) as! Character,
                         stringVariable: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
                         boolVariable: MockBuilderSupportedType.generate(elementType: .bool(), generatorType: .random) as! Bool,
                         dateVariable: MockBuilderSupportedType.generate(elementType: .date, generatorType: .random) as! Date,
@@ -137,6 +140,7 @@ final class MockBuilderTests: XCTestCase {
                             float32Variable: MockBuilderSupportedType.generate(elementType: .float32(), generatorType: .random) as! Float32,
                             float64Variable: MockBuilderSupportedType.generate(elementType: .float64(), generatorType: .random) as! Float64,
                             doubleVariable: MockBuilderSupportedType.generate(elementType: .double(), generatorType: .random) as! Double,
+                            characterVariable: MockBuilderSupportedType.generate(elementType: .character(), generatorType: .random) as! Character,
                             stringVariable: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
                             boolVariable: MockBuilderSupportedType.generate(elementType: .bool(), generatorType: .random) as! Bool,
                             dateVariable: MockBuilderSupportedType.generate(elementType: .date, generatorType: .random) as! Date,
@@ -166,6 +170,7 @@ final class MockBuilderTests: XCTestCase {
                             float32Variable: MockBuilderSupportedType.generate(elementType: .float32(), generatorType: .random) as! Float32,
                             float64Variable: MockBuilderSupportedType.generate(elementType: .float64(), generatorType: .random) as! Float64,
                             doubleVariable: MockBuilderSupportedType.generate(elementType: .double(), generatorType: .random) as! Double,
+                            characterVariable: MockBuilderSupportedType.generate(elementType: .character(), generatorType: .random) as! Character,
                             stringVariable: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
                             boolVariable: MockBuilderSupportedType.generate(elementType: .bool(), generatorType: .random) as! Bool,
                             dateVariable: MockBuilderSupportedType.generate(elementType: .date, generatorType: .random) as! Date,

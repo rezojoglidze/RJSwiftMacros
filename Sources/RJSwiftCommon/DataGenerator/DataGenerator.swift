@@ -35,6 +35,7 @@ public enum MockBuilderSupportedType: Equatable {
     case double(Double? = nil)
     case decimal(Decimal? = nil)
     case nsdecimalnumber(NSDecimalNumber? = nil)
+    case character(Character? = nil)
     case string(String? = nil)
     case bool(Bool? = nil)
     case date
@@ -77,6 +78,7 @@ public enum MockBuilderSupportedType: Equatable {
             } else {
                 self  = .nsdecimalnumber(nil)
             }
+        case "character": self = .character(unwrappedValue.first)
         case "string": self = .string(unwrappedValue)
         case "bool": self = .bool(Bool(unwrappedValue))
         case "date": self = .date
@@ -112,35 +114,40 @@ public enum MockBuilderSupportedType: Equatable {
     }
     
     public var rawValue: String {
-        switch self {
-        case .int: "Int"
-        case .int8: "Int8"
-        case .int16: "Int16"
-        case .int32: "Int32"
-        case .int64: "Int64"
-        case .uint: "UInt"
-        case .uint8: "UInt8"
-        case .uint16: "UInt16"
-        case .uint32: "UInt32"
-        case .uint64: "UInt64"
-        case .float: "Float"
+        func getName(of type: Any) -> String {
+            return String(describing: type.self)
+        }
+        
+        return switch self {
+        case .int: getName(of: Int.self)
+        case .int8: getName(of: Int8.self)
+        case .int16: getName(of: Int16.self)
+        case .int32: getName(of: Int32.self)
+        case .int64: getName(of: Int64.self)
+        case .uint: getName(of: UInt.self)
+        case .uint8: getName(of: UInt8.self)
+        case .uint16: getName(of: UInt16.self)
+        case .uint32: getName(of: UInt32.self)
+        case .uint64: getName(of: UInt64.self)
+        case .float: getName(of: Float.self)
         case .float32: "Float32"
         case .float64: "Float64"
-        case .double: "Double"
+        case .double: getName(of: Double.self)
         case .decimal: "Decimal"
-        case .nsdecimalnumber: "NSDecimalNumber"
-        case .string: "String"
-        case .bool: "Bool"
-        case .date: "Date"
-        case .uuid: "UUID"
-        case .objectidentifier: "ObjectIdentifier"
-        case .cgpoint: "CGPoint"
-        case .cgrect: "CGRect"
-        case .cgsize: "CGSize"
-        case .cgvector: "CGVector"
-        case .cgfloat: "CGFloat"
-        case .url: "URL"
-        case .image: "Image"
+        case .nsdecimalnumber: getName(of: NSDecimalNumber.self)
+        case .character: getName(of: Character.self)
+        case .string: getName(of: String.self)
+        case .bool: getName(of: Bool.self)
+        case .date: getName(of: Date.self)
+        case .uuid: getName(of: UUID.self)
+        case .objectidentifier: getName(of: ObjectIdentifier.self)
+        case .cgpoint: getName(of: CGPoint.self)
+        case .cgrect: getName(of: CGRect.self)
+        case .cgsize: getName(of: CGSize.self)
+        case .cgvector: getName(of: CGVector.self)
+        case .cgfloat: getName(of: CGFloat.self)
+        case .url: getName(of: URL.self)
+        case .image: getName(of: Image.self)
         }
     }
     
@@ -168,6 +175,7 @@ public enum MockBuilderSupportedType: Equatable {
         case .double(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomDouble(min: Double.leastNonzeroMagnitude, max: Double(defaultMaxValue)))
         case .decimal(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomDecimal(min: Decimal.leastNonzeroMagnitude, max: Decimal(defaultMaxValue)))
         case .nsdecimalnumber(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomNSDecimalNumber(min: NSDecimalNumber.zero, max: NSDecimalNumber(value: defaultMaxValue)))
+        case .character(let character): character ?? (Provider().randomString().first ?? "R")
         case .string(let value): value ?? (generatorType == .`default` ? "Hello World" : Provider().randomString())
         case .bool(let value): value ?? (generatorType == .`default` ? true : Provider().randomBool())
         case .date: generatorType == .`default` ? Date(timeIntervalSinceReferenceDate: 0) : Provider().date()
@@ -222,6 +230,8 @@ public enum MockBuilderSupportedType: Equatable {
             associatedValue = initialValue != nil ? "\(initialValue!)" : nil
         case .nsdecimalnumber(let initialValue):
             associatedValue = initialValue != nil ? "\(initialValue!)" : nil
+        case .character(let character):
+            associatedValue = character != nil ? "\(character!)" : nil
         case .string(let initialValue):
             associatedValue = initialValue != nil && initialValue?.isEmpty == false ? "\"\(initialValue!)\"" : nil
         case .bool(let initialValue):
