@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  String+Extension.swift
+//
 //
 //  Created by Rezo Joglidze on 01.08.24.
 //
