@@ -44,6 +44,7 @@ final class MockBuilderPropertyTests: XCTestCase {
             @MockBuilderProperty(value: 93213.23) let doubleVariable: Double
             @MockBuilderProperty(value: 2123.2313123123) let nsDecimalNumberVariable: NSDecimalNumber
             @MockBuilderProperty(value: 8734.3154) let decimalVariable: Decimal
+            @MockBuilderProperty(value: "C") let characterVariable: Character
             @MockBuilderProperty(value: "Hello John") let stringVariable: String
             @MockBuilderProperty(value: false) let boolVariable: Bool
             @MockBuilderProperty(value: "https://www.apple.com") let urlVariable: URL
@@ -67,6 +68,7 @@ final class MockBuilderPropertyTests: XCTestCase {
             let doubleVariable: Double
             let nsDecimalNumberVariable: NSDecimalNumber
             let decimalVariable: Decimal
+            let characterVariable: Character
             let stringVariable: String
             let boolVariable: Bool
             let urlVariable: URL
@@ -90,6 +92,7 @@ final class MockBuilderPropertyTests: XCTestCase {
                     doubleVariable: MockBuilderSupportedType.generate(elementType: .double(93213.23)) as! Double,
                     nsDecimalNumberVariable: MockBuilderSupportedType.generate(elementType: .nsdecimalnumber(2123.2313123123)) as! NSDecimalNumber,
                     decimalVariable: MockBuilderSupportedType.generate(elementType: .decimal(8734.3154)) as! Decimal,
+                    characterVariable: MockBuilderSupportedType.generate(elementType: .character("C")) as! Character,
                     stringVariable: MockBuilderSupportedType.generate(elementType: .string("Hello John")) as! String,
                     boolVariable: MockBuilderSupportedType.generate(elementType: .bool(false)) as! Bool,
                     urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL
@@ -115,6 +118,7 @@ final class MockBuilderPropertyTests: XCTestCase {
                         doubleVariable: MockBuilderSupportedType.generate(elementType: .double(93213.23)) as! Double,
                         nsDecimalNumberVariable: MockBuilderSupportedType.generate(elementType: .nsdecimalnumber(2123.2313123123)) as! NSDecimalNumber,
                         decimalVariable: MockBuilderSupportedType.generate(elementType: .decimal(8734.3154)) as! Decimal,
+                        characterVariable: MockBuilderSupportedType.generate(elementType: .character("C")) as! Character,
                         stringVariable: MockBuilderSupportedType.generate(elementType: .string("Hello John")) as! String,
                         boolVariable: MockBuilderSupportedType.generate(elementType: .bool(false)) as! Bool,
                         urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL
@@ -136,6 +140,7 @@ final class MockBuilderPropertyTests: XCTestCase {
                         doubleVariable: MockBuilderSupportedType.generate(elementType: .double(93213.23)) as! Double,
                         nsDecimalNumberVariable: MockBuilderSupportedType.generate(elementType: .nsdecimalnumber(2123.2313123123)) as! NSDecimalNumber,
                         decimalVariable: MockBuilderSupportedType.generate(elementType: .decimal(8734.3154)) as! Decimal,
+                        characterVariable: MockBuilderSupportedType.generate(elementType: .character("C")) as! Character,
                         stringVariable: MockBuilderSupportedType.generate(elementType: .string("Hello John")) as! String,
                         boolVariable: MockBuilderSupportedType.generate(elementType: .bool(false)) as! Bool,
                         urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL

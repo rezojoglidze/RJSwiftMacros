@@ -156,23 +156,31 @@ public enum MockBuilderSupportedType: Equatable {
         generatorType: DataGeneratorType
     ) -> String {
         let firstPart = "MockBuilderSupportedType.generate(elementType: "
-        let associatedValue = associatedValue ?? .empty
         
-        switch self {
-        case .int, .int8, .int16, .int32, .int64, .uint, .uint8, .uint16, .uint32, .uint64,
-             .float, .float32, .float64, .double, .decimal, .nsdecimalnumber, .bool, .uuid:
-            return firstPart + ".\(rawValue.lowercased())(\(associatedValue))) as! \(rawValue)"
-            
-        case .string, .character:
-            return firstPart + ".\(rawValue.lowercased())(\("\"\(associatedValue.removeQuotes())\""))) as! \(rawValue)"
-            
-        case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat, .image:
-            return firstPart + ".\(rawValue.lowercased()), generatorType: .\(generatorType.rawValue)) as! \(rawValue)"
-            
-        case .url(let url):
-            let urlString = "URL(string: \"\(url?.absoluteString ?? .empty)\")"
-            
-            return firstPart + ".\(self.rawValue.lowercased())(\(urlString))) as! \(self.rawValue)"
+        // MARK: If type has associated value
+        if let associatedValue {
+            switch self {
+            case .string, .character:
+                return firstPart + ".\(rawValue.lowercased())(\("\"\(associatedValue.removeQuotes())\""))) as! \(rawValue)"
+                
+            case .url:
+                return firstPart + ".\(rawValue.lowercased())(URL(string: \"\(associatedValue)\"))) as! \(rawValue)"
+                
+            default:
+                return firstPart + ".\(rawValue.lowercased())(\(associatedValue))) as! \(rawValue)"
+            }
+        } else {
+            switch self {
+            case .int, .int8, .int16, .int32, .int64, .uint, .uint8, .uint16, .uint32, .uint64,
+                    .float, .float32, .float64, .double, .decimal, .nsdecimalnumber, .bool, .uuid, .url:
+                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue)) as! \(rawValue)"
+                
+            case .string, .character:
+                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue)) as! \(rawValue)"
+                
+            case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat, .image:
+                return firstPart + ".\(rawValue.lowercased()), generatorType: .\(generatorType.rawValue)) as! \(rawValue)"
+            }
         }
     }
     
