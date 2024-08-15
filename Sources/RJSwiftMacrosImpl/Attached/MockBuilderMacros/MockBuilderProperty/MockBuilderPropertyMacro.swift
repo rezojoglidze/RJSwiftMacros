@@ -36,7 +36,7 @@ public struct MockBuilderPropertyMacro: PeerMacro {
            let variableType = variableDecl.variableType?.as(IdentifierTypeSyntax.self)?.name.text,
            let mockSupportedType = MockBuilderSupportedType(rawValue: variableType) {
             
-            if MockBuilderSupportedType.isSupportedFromMockBuilderPropertyMacro(type: mockSupportedType) {
+            if MockBuilderSupportedType.notSupportedFromMockBuilderPropertyMacro(type: mockSupportedType) {
                 MockBuilderDiagnostic.report(
                     diagnostic: .mockBuilderPropertyNotSupported(mockSupportedType.rawValue),
                     node: Syntax(node),
