@@ -107,7 +107,7 @@ public enum MockBuilderSupportedType: Equatable {
         .image
     ]
     
-    public static func isSupportedFromMockBuilderPropertyMacro(type: Self) -> Bool {
+    public static func notSupportedFromMockBuilderPropertyMacro(type: Self) -> Bool {
         MockBuilderSupportedType.notSupportedTypesFromMockBuilderProperty.contains(where: {
             $0.rawValue.lowercased() == type.rawValue.lowercased()
         })
@@ -148,6 +148,39 @@ public enum MockBuilderSupportedType: Equatable {
         case .cgfloat: getName(of: CGFloat.self)
         case .url: getName(of: URL.self)
         case .image: getName(of: Image.self)
+        }
+    }
+    
+    func exprStringValue(
+        with associatedValue: String?,
+        generatorType: DataGeneratorType
+    ) -> String {
+        let firstPart = "MockBuilderSupportedType.generate(elementType: "
+        
+        // MARK: If type has associated value
+        if let associatedValue {
+            switch self {
+            case .string, .character:
+                return firstPart + ".\(rawValue.lowercased())(\("\"\(associatedValue.removeQuotes())\""))) as! \(rawValue)"
+                
+            case .url:
+                return firstPart + ".\(rawValue.lowercased())(URL(string: \"\(associatedValue)\"))) as! \(rawValue)"
+                
+            default:
+                return firstPart + ".\(rawValue.lowercased())(\(associatedValue))) as! \(rawValue)"
+            }
+        } else {
+            switch self {
+            case .int, .int8, .int16, .int32, .int64, .uint, .uint8, .uint16, .uint32, .uint64,
+                    .float, .float32, .float64, .double, .decimal, .nsdecimalnumber, .bool, .uuid, .url:
+                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue)) as! \(rawValue)"
+                
+            case .string, .character:
+                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue)) as! \(rawValue)"
+                
+            case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat, .image:
+                return firstPart + ".\(rawValue.lowercased()), generatorType: .\(generatorType.rawValue)) as! \(rawValue)"
+            }
         }
     }
     
@@ -198,66 +231,53 @@ public enum MockBuilderSupportedType: Equatable {
         var associatedValue: String?
         
         switch elementType {
-        case .int(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .int8(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .int16(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .int32(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .int64(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .uint(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .uint8(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .uint16(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .uint32(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .uint64(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .float(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .float32(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .float64(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .double(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .decimal(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .nsdecimalnumber(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
+        case .int(let intValue):
+            associatedValue = intValue != nil ? "\(intValue!)" : nil
+        case .int8(let intValue):
+            associatedValue = intValue != nil ? "\(intValue!)" : nil
+        case .int16(let intValue):
+            associatedValue = intValue != nil ? "\(intValue!)" : nil
+        case .int32(let intValue):
+            associatedValue = intValue != nil ? "\(intValue!)" : nil
+        case .int64(let intValue):
+            associatedValue = intValue != nil ? "\(intValue!)" : nil
+        case .uint(let uint):
+            associatedValue = uint != nil ? "\(uint!)" : nil
+        case .uint8(let uint):
+            associatedValue = uint != nil ? "\(uint!)" : nil
+        case .uint16(let uint):
+            associatedValue = uint != nil ? "\(uint!)" : nil
+        case .uint32(let uint):
+            associatedValue = uint != nil ? "\(uint!)" : nil
+        case .uint64(let uint):
+            associatedValue = uint != nil ? "\(uint!)" : nil
+        case .float(let float):
+            associatedValue = float != nil ? "\(float!)" : nil
+        case .float32(let float):
+            associatedValue = float != nil ? "\(float!)" : nil
+        case .float64(let float):
+            associatedValue = float != nil ? "\(float!)" : nil
+        case .double(let double):
+            associatedValue = double != nil ? "\(double!)" : nil
+        case .decimal(let decimal):
+            associatedValue = decimal != nil ? "\(decimal!)" : nil
+        case .nsdecimalnumber(let nsDecimalNumber):
+            associatedValue = nsDecimalNumber != nil ? "\(nsDecimalNumber!)" : nil
         case .character(let character):
             associatedValue = character != nil ? "\(character!)" : nil
-        case .string(let initialValue):
-            associatedValue = initialValue != nil && initialValue?.isEmpty == false ? "\"\(initialValue!)\"" : nil
-        case .bool(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .uuid(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
-        case .url(let initialValue):
-            associatedValue = initialValue != nil ? "\(initialValue!)" : nil
+        case .string(let string):
+            associatedValue = string != nil && string?.isEmpty == false ? "\"\(string!)\"" : nil
+        case .bool(let bool):
+            associatedValue = bool != nil ? "\(bool!)" : nil
+        case .uuid(let uuid):
+            associatedValue = uuid != nil ? "\(uuid!)" : nil
+        case .url(let urlString):
+            associatedValue = urlString != nil ? "\(urlString!)" : nil
         case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat, .image:
             associatedValue = nil
         }
         
-        var exprString: String {
-            if case .url(let url) = elementType,
-               let associatedValue = url?.absoluteString {
-                return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased())(URL(string: \"\(associatedValue)\"))) as! \(elementType.rawValue)"
-            } else if let associatedValue {
-                return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased())(\(associatedValue))) as! \(elementType.rawValue)"
-            } else if Self.isSupportedFromMockBuilderPropertyMacro(type: elementType) {
-                return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased()), generatorType: .\(generatorType.rawValue)) as! \(elementType.rawValue)"
-            } else {
-                return "MockBuilderSupportedType.generate(elementType: .\(elementType.rawValue.lowercased())(), generatorType: .\(generatorType.rawValue)) as! \(elementType.rawValue)"
-            }
-        }
-        
-        return ExprSyntax(stringLiteral: exprString)
+        return ExprSyntax(stringLiteral: exprStringValue(with: associatedValue, generatorType: generatorType))
     }
 }
 

@@ -14,10 +14,22 @@ import RJSwiftMacrosImplDependencies
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct Person {
     let name: String
-    @CodingKeyProperty("second_name") let surname: String
+    
+    @MockBuilderProperty(value: "surname")
+    @CodingKeyProperty("second_name")
+    let surname: String
+    
     let closureVariable: () -> Void
-    let character: Character
+    @MockBuilderProperty(value: "k") let character: Character
 }
+
+@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+struct ExampleAllSupportedTypesd {
+    @MockBuilderProperty(value: "StringVariable") let mockVariable: String
+    @MockBuilderProperty(value: "C") let characterVariable: Character
+}
+
+print(ExampleAllSupportedTypesd.mock.characterVariable)
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 enum VehicleType: String {
