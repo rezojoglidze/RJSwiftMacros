@@ -48,6 +48,8 @@ final class MockBuilderPropertyTests: XCTestCase {
             @MockBuilderProperty(value: "Hello John") let stringVariable: String
             @MockBuilderProperty(value: false) let boolVariable: Bool
             @MockBuilderProperty(value: "https://www.apple.com") let urlVariable: URL
+            @MockBuilderProperty(value: Color.blue) let color: Color
+            @MockBuilderProperty(value: Image(systemName: "swift")) let image: Image
         }
         """#,
         expandedSource:"""
@@ -72,6 +74,8 @@ final class MockBuilderPropertyTests: XCTestCase {
             let stringVariable: String
             let boolVariable: Bool
             let urlVariable: URL
+            let color: Color
+            let image: Image
 
             #if DEBUG
             static var mock: ExampleAllSupportedTypesForMockBuilderProperty {
@@ -95,7 +99,9 @@ final class MockBuilderPropertyTests: XCTestCase {
                     characterVariable: MockBuilderSupportedType.generate(elementType: .character("C")) as! Character,
                     stringVariable: MockBuilderSupportedType.generate(elementType: .string("Hello John")) as! String,
                     boolVariable: MockBuilderSupportedType.generate(elementType: .bool(false)) as! Bool,
-                    urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL
+                    urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL,
+                    color: MockBuilderSupportedType.generate(elementType: .color(Color.blue)) as! Color,
+                    image: MockBuilderSupportedType.generate(elementType: .image(Image(systemName: "swift"))) as! Image
                     )
             }
         
@@ -121,7 +127,9 @@ final class MockBuilderPropertyTests: XCTestCase {
                         characterVariable: MockBuilderSupportedType.generate(elementType: .character("C")) as! Character,
                         stringVariable: MockBuilderSupportedType.generate(elementType: .string("Hello John")) as! String,
                         boolVariable: MockBuilderSupportedType.generate(elementType: .bool(false)) as! Bool,
-                        urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL
+                        urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL,
+                        color: MockBuilderSupportedType.generate(elementType: .color(Color.blue)) as! Color,
+                        image: MockBuilderSupportedType.generate(elementType: .image(Image(systemName: "swift"))) as! Image
                         ),
                     .init(
                         intVariable: MockBuilderSupportedType.generate(elementType: .int(12)) as! Int,
@@ -143,7 +151,9 @@ final class MockBuilderPropertyTests: XCTestCase {
                         characterVariable: MockBuilderSupportedType.generate(elementType: .character("C")) as! Character,
                         stringVariable: MockBuilderSupportedType.generate(elementType: .string("Hello John")) as! String,
                         boolVariable: MockBuilderSupportedType.generate(elementType: .bool(false)) as! Bool,
-                        urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL
+                        urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL,
+                        color: MockBuilderSupportedType.generate(elementType: .color(Color.blue)) as! Color,
+                        image: MockBuilderSupportedType.generate(elementType: .image(Image(systemName: "swift"))) as! Image
                         ),
                 ]
             }

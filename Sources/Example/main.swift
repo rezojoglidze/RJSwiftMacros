@@ -21,6 +21,9 @@ struct Person {
     @MockBuilderProperty(value: Color.blue)
     let color: Color?
     
+    @MockBuilderProperty(value: Image(systemName: "swift"))
+    let image: Image?
+    
     let closureVariable: () -> Void
     @MockBuilderProperty(value: "k") let character: Character
 }
