@@ -18,11 +18,13 @@ struct Person {
     @CodingKeyProperty("second_name")
     let surname: [String?]?
     
-    let color: Color
+    @MockBuilderProperty(value: Color.blue)
+    let color: Color?
     
     let closureVariable: () -> Void
     @MockBuilderProperty(value: "k") let character: Character
 }
+
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct ExampleAllSupportedTypesd {

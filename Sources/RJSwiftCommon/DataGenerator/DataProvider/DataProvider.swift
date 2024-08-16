@@ -264,13 +264,20 @@ extension MockDataProvider: ColorProvider {
     func randomColor() -> Color {
         [
             Color.black,
-            Color.red,
             Color.blue,
-            Color.yellow,
+            Color.brown,
+            Color.cyan,
             Color.gray,
+            Color.indigo,
+            Color.mint,
             Color.orange,
             Color.pink,
-            Color.purple
+            Color.purple,
+            Color.yellow,
+            Color.accentColor,
+            Color.primary,
+            Color.gray,
+            Color.red
         ].randomElement()?.opacity(0.6) ?? Color.black.opacity(0.6)
     }
 }
