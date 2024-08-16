@@ -18,6 +18,8 @@ struct Person {
     @CodingKeyProperty("second_name")
     let surname: [String?]?
     
+    let color: Color
+    
     let closureVariable: () -> Void
     @MockBuilderProperty(value: "k") let character: Character
 }
@@ -43,7 +45,7 @@ struct University {
     @MockBuilderProperty(value: "TSU") let name: String
     let president: Person
     let students: [Person]
-    let privateVehicles: [VehicleType]
+    let privateVehicles: [VehicleType]?
     @MockBuilderProperty(value: false) let isFree: Bool
     let image: Image
     

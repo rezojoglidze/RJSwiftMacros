@@ -124,7 +124,6 @@ extension MockBuilderMacro {
         generatorType: DataGeneratorType,
         initialValue: AnyObject?
     ) -> ExprSyntax? {
-        // REZO
         if let simpleIdentifierType = simpleType.as(IdentifierTypeSyntax.self) {
             if let supportedType = SupportedType(
                 rawValue: simpleIdentifierType.name.text,

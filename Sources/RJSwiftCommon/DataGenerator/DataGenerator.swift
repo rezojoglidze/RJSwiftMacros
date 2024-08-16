@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-fileprivate typealias Provider = FakeDataProvider
+fileprivate typealias Provider = MockDataProvider
 // MARK: - Data Generator Type
 public enum DataGeneratorType: String {
     case `default`
@@ -48,6 +48,7 @@ public enum MockBuilderSupportedType: Equatable {
     case cgfloat
     case url(URL? = nil)
     case image
+    case color
     
     // MARK: Initialiazer
     public init?(
@@ -76,7 +77,7 @@ public enum MockBuilderSupportedType: Equatable {
             if let decimalValue = Decimal(string: unwrappedInitialValue) {
                 self = .nsdecimalnumber(NSDecimalNumber(decimal: decimalValue))
             } else {
-                self  = .nsdecimalnumber(nil)
+                self = .nsdecimalnumber(nil)
             }
         case "character": self = .character(unwrappedInitialValue.first)
         case "string": self = .string(unwrappedInitialValue)
@@ -91,6 +92,7 @@ public enum MockBuilderSupportedType: Equatable {
         case "cgfloat": self = .cgfloat
         case "url": self = .url(URL(string: unwrappedInitialValue))
         case "image": self = .image
+        case "color" : self = .color
         default: return nil
         }
     }
@@ -104,7 +106,8 @@ public enum MockBuilderSupportedType: Equatable {
         .cgsize,
         .cgvector,
         .cgfloat,
-        .image
+        .image,
+        .color,
     ]
     
     public static func notSupportedFromMockBuilderPropertyMacro(type: Self) -> Bool {
@@ -148,6 +151,8 @@ public enum MockBuilderSupportedType: Equatable {
         case .cgfloat: getName(of: CGFloat.self)
         case .url: getName(of: URL.self)
         case .image: getName(of: Image.self)
+        case .color: getName(of: Color.self)
+
         }
     }
     
@@ -180,7 +185,7 @@ public enum MockBuilderSupportedType: Equatable {
             case .string, .character:
                 return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue))" + lastPart
                 
-            case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat, .image:
+            case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat, .image, .color:
                 return firstPart + ".\(rawValue.lowercased()), generatorType: .\(generatorType.rawValue))" + lastPart
             }
         }
@@ -222,7 +227,8 @@ public enum MockBuilderSupportedType: Equatable {
         case .cgvector: CGVector()
         case .cgfloat: CGFloat()
         case .url(let value): value ?? (generatorType == .`default` ? URL(string: "https://www.apple.com")! : Provider().url())
-        case .image: Image(systemName: "swift")
+        case .image: Provider().randomImage()
+        case .color: Provider().randomColor()
         }
     }
 
@@ -276,7 +282,7 @@ public enum MockBuilderSupportedType: Equatable {
             associatedValue = uuid != nil ? "\(uuid!)" : nil
         case .url(let urlString):
             associatedValue = urlString != nil ? "\(urlString!)" : nil
-        case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat, .image:
+        case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat, .image, .color:
             associatedValue = nil
         }
         

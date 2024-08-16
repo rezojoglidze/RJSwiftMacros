@@ -55,6 +55,7 @@ final class MockBuilderTests: XCTestCase {
                 let cgFloatVariable: CGFloat
                 let urlVariable: URL
                 let imageVariable: Image
+                let colorVariable: Color
                 let closureVariable: (String, Double) -> Void
             }
             """#,
@@ -87,6 +88,7 @@ final class MockBuilderTests: XCTestCase {
                 let cgFloatVariable: CGFloat
                 let urlVariable: URL
                 let imageVariable: Image
+                let colorVariable: Color
                 let closureVariable: (String, Double) -> Void
             
                 #if DEBUG
@@ -119,6 +121,7 @@ final class MockBuilderTests: XCTestCase {
                         cgFloatVariable: MockBuilderSupportedType.generate(elementType: .cgfloat, generatorType: .random) as! CGFloat,
                         urlVariable: MockBuilderSupportedType.generate(elementType: .url(), generatorType: .random) as! URL,
                         imageVariable: MockBuilderSupportedType.generate(elementType: .image, generatorType: .random) as! Image,
+                        colorVariable: MockBuilderSupportedType.generate(elementType: .color, generatorType: .random) as! Color,
                         closureVariable: { _, _ in }
                         )
                 }
@@ -153,6 +156,7 @@ final class MockBuilderTests: XCTestCase {
                             cgFloatVariable: MockBuilderSupportedType.generate(elementType: .cgfloat, generatorType: .random) as! CGFloat,
                             urlVariable: MockBuilderSupportedType.generate(elementType: .url(), generatorType: .random) as! URL,
                             imageVariable: MockBuilderSupportedType.generate(elementType: .image, generatorType: .random) as! Image,
+                            colorVariable: MockBuilderSupportedType.generate(elementType: .color, generatorType: .random) as! Color,
                             closureVariable: { _, _ in }
                             ),
                         .init(
@@ -183,6 +187,7 @@ final class MockBuilderTests: XCTestCase {
                             cgFloatVariable: MockBuilderSupportedType.generate(elementType: .cgfloat, generatorType: .random) as! CGFloat,
                             urlVariable: MockBuilderSupportedType.generate(elementType: .url(), generatorType: .random) as! URL,
                             imageVariable: MockBuilderSupportedType.generate(elementType: .image, generatorType: .random) as! Image,
+                            colorVariable: MockBuilderSupportedType.generate(elementType: .color, generatorType: .random) as! Color,
                             closureVariable: { _, _ in }
                             ),
                     ]
