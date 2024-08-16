@@ -170,6 +170,15 @@ extension MockBuilderMacro {
         generatorType: DataGeneratorType,
         initialValue: AnyObject?
     ) -> ExprSyntax? {
+        // If unwrapped value is array type return ArrayExprSyntax
+        if let arrayTypeSyntax = simpleOptionalType.wrappedType.as(ArrayTypeSyntax.self) {
+           return getArrayExprSyntax(
+                arrayType: arrayTypeSyntax,
+                generatorType: generatorType,
+                initialValue: initialValue
+            )
+        }
+        
         guard let type = simpleOptionalType.wrappedType.as(IdentifierTypeSyntax.self)?.name else { return nil }
         
         if let supportedType = SupportedType(

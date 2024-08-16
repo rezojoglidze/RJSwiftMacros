@@ -15,9 +15,8 @@ import RJSwiftMacrosImplDependencies
 struct Person {
     let name: String?
     
-    @MockBuilderProperty(value: "surname")
     @CodingKeyProperty("second_name")
-    let surname: String
+    let surname: [String?]?
     
     let closureVariable: () -> Void
     @MockBuilderProperty(value: "k") let character: Character
