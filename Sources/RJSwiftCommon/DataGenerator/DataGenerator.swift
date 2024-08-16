@@ -54,42 +54,42 @@ public enum MockBuilderSupportedType: Equatable {
         rawValue: String,
         initialValue: AnyObject? = nil
     ) {
-        let unwrappedValue = (initialValue as? String ?? .empty).replacingOccurrences(of: "\"", with: "")
+        let unwrappedInitialValue = (initialValue as? String ?? .empty).replacingOccurrences(of: "\"", with: "")
         
         switch rawValue.lowercased() {
-        case "int": self = .int(Int(unwrappedValue))
-        case "int8": self = .int8(Int8(unwrappedValue))
-        case "int16": self = .int16(Int16(unwrappedValue))
-        case "int32": self = .int32(Int32(unwrappedValue))
-        case "int64": self = .int64(Int64(unwrappedValue))
-        case "uint": self = .uint(UInt(unwrappedValue))
-        case "uint8": self = .uint8(UInt8(unwrappedValue))
-        case "uint16": self = .uint16(UInt16(unwrappedValue))
-        case "uint32": self = .uint32(UInt32(unwrappedValue))
-        case "uint64": self = .uint64(UInt64(unwrappedValue))
-        case "float": self = .float(Float(unwrappedValue))
-        case "float32": self = .float32(Float32(unwrappedValue))
-        case "float64": self = .float64(Float64(unwrappedValue))
-        case "double": self = .double(Double(unwrappedValue))
-        case "decimal": self = .decimal(Decimal(string: unwrappedValue))
+        case "int": self = .int(Int(unwrappedInitialValue))
+        case "int8": self = .int8(Int8(unwrappedInitialValue))
+        case "int16": self = .int16(Int16(unwrappedInitialValue))
+        case "int32": self = .int32(Int32(unwrappedInitialValue))
+        case "int64": self = .int64(Int64(unwrappedInitialValue))
+        case "uint": self = .uint(UInt(unwrappedInitialValue))
+        case "uint8": self = .uint8(UInt8(unwrappedInitialValue))
+        case "uint16": self = .uint16(UInt16(unwrappedInitialValue))
+        case "uint32": self = .uint32(UInt32(unwrappedInitialValue))
+        case "uint64": self = .uint64(UInt64(unwrappedInitialValue))
+        case "float": self = .float(Float(unwrappedInitialValue))
+        case "float32": self = .float32(Float32(unwrappedInitialValue))
+        case "float64": self = .float64(Float64(unwrappedInitialValue))
+        case "double": self = .double(Double(unwrappedInitialValue))
+        case "decimal": self = .decimal(Decimal(string: unwrappedInitialValue))
         case "nsdecimalnumber":
-            if let decimalValue = Decimal(string: unwrappedValue) {
+            if let decimalValue = Decimal(string: unwrappedInitialValue) {
                 self = .nsdecimalnumber(NSDecimalNumber(decimal: decimalValue))
             } else {
                 self  = .nsdecimalnumber(nil)
             }
-        case "character": self = .character(unwrappedValue.first)
-        case "string": self = .string(unwrappedValue)
-        case "bool": self = .bool(Bool(unwrappedValue))
+        case "character": self = .character(unwrappedInitialValue.first)
+        case "string": self = .string(unwrappedInitialValue)
+        case "bool": self = .bool(Bool(unwrappedInitialValue))
         case "date": self = .date
-        case "uuid": self = .uuid(UUID(uuidString: unwrappedValue))
+        case "uuid": self = .uuid(UUID(uuidString: unwrappedInitialValue))
         case "objectidentifier": self = .objectidentifier
         case "cgpoint": self = .cgpoint
         case "cgrect": self = .cgrect
         case "cgsize": self = .cgsize
         case "cgvector": self = .cgvector
         case "cgfloat": self = .cgfloat
-        case "url": self = .url(URL(string: unwrappedValue))
+        case "url": self = .url(URL(string: unwrappedInitialValue))
         case "image": self = .image
         default: return nil
         }
@@ -151,20 +151,22 @@ public enum MockBuilderSupportedType: Equatable {
         }
     }
     
-    func exprStringValue(
+    func exprStringLiteral(
         with associatedValue: String?,
-        generatorType: DataGeneratorType
+        generatorType: DataGeneratorType,
+        typeIsOptional: Bool
     ) -> String {
         let firstPart = "MockBuilderSupportedType.generate(elementType: "
+        let lastPart = typeIsOptional ? " as? \(rawValue)" : " as! \(rawValue)"
         
         // MARK: If type has associated value
         if let associatedValue {
             switch self {
             case .string, .character:
-                return firstPart + ".\(rawValue.lowercased())(\("\"\(associatedValue.removeQuotes())\""))) as! \(rawValue)"
+                return firstPart + ".\(rawValue.lowercased())(\("\"\(associatedValue.removeQuotes())\"")))" + lastPart
                 
             case .url:
-                return firstPart + ".\(rawValue.lowercased())(URL(string: \"\(associatedValue)\"))) as! \(rawValue)"
+                return firstPart + ".\(rawValue.lowercased())(URL(string: \"\(associatedValue)\")))" + lastPart
                 
             default:
                 return firstPart + ".\(rawValue.lowercased())(\(associatedValue))) as! \(rawValue)"
@@ -173,13 +175,13 @@ public enum MockBuilderSupportedType: Equatable {
             switch self {
             case .int, .int8, .int16, .int32, .int64, .uint, .uint8, .uint16, .uint32, .uint64,
                     .float, .float32, .float64, .double, .decimal, .nsdecimalnumber, .bool, .uuid, .url:
-                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue)) as! \(rawValue)"
+                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue))" + lastPart
                 
             case .string, .character:
-                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue)) as! \(rawValue)"
+                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue))" + lastPart
                 
             case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat, .image:
-                return firstPart + ".\(rawValue.lowercased()), generatorType: .\(generatorType.rawValue)) as! \(rawValue)"
+                return firstPart + ".\(rawValue.lowercased()), generatorType: .\(generatorType.rawValue))" + lastPart
             }
         }
     }
@@ -226,7 +228,8 @@ public enum MockBuilderSupportedType: Equatable {
 
     public func exprSyntax(
         elementType: MockBuilderSupportedType,
-        generatorType: DataGeneratorType
+        generatorType: DataGeneratorType,
+        typeIsOptional: Bool
     ) -> ExprSyntax {
         var associatedValue: String?
         
@@ -277,7 +280,13 @@ public enum MockBuilderSupportedType: Equatable {
             associatedValue = nil
         }
         
-        return ExprSyntax(stringLiteral: exprStringValue(with: associatedValue, generatorType: generatorType))
+        return ExprSyntax(
+            stringLiteral: exprStringLiteral(
+                with: associatedValue,
+                generatorType: generatorType,
+                typeIsOptional: typeIsOptional
+            )
+        )
     }
 }
 

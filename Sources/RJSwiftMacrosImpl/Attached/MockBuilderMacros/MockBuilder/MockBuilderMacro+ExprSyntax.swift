@@ -34,20 +34,9 @@ extension MockBuilderMacro {
                 generatorType: generatorType,
                 initialValue: initialValue
             )
-        } else if type.isOptional,
-                  let type = type.as(OptionalTypeSyntax.self) {
-            return getOptionalExprSyntax(
-                optionalType: type,
-                generatorType: generatorType,
-                initialValue: initialValue
-            )
-        } else if let type = type.as(IdentifierTypeSyntax.self) {
-            return getSimpleExprSyntax(
-                simpleType: type.as(IdentifierTypeSyntax.self)!,
-                generatorType: generatorType,
-                initialValue: initialValue
-            )
-        } else if let type = type.as(FunctionTypeSyntax.self) {
+        } else if type.as(IdentifierTypeSyntax.self) != nil ||
+                  type.as(OptionalTypeSyntax.self) != nil ||
+                  type.as(FunctionTypeSyntax.self) != nil {
             return getSimpleExprSyntax(
                 simpleType: type,
                 generatorType: generatorType,
@@ -129,32 +118,22 @@ extension MockBuilderMacro {
         return nil
     }
     
-    private static func getOptionalExprSyntax(
-        optionalType: OptionalTypeSyntax,
-        generatorType: DataGeneratorType,
-        initialValue: AnyObject?
-    ) -> ExprSyntax? {
-        return getExpressionSyntax(
-            from: optionalType.wrappedType,
-            generatorType: generatorType,
-            initialValue: initialValue
-        )
-    }
-    
     // MARK: Simple Expr Syntax Methods
     private static func getSimpleExprSyntax<T: TypeSyntaxProtocol>(
         simpleType: T,
         generatorType: DataGeneratorType,
         initialValue: AnyObject?
     ) -> ExprSyntax? {
-        if let simleIdentifierType = simpleType.as(IdentifierTypeSyntax.self) {
+        // REZO
+        if let simpleIdentifierType = simpleType.as(IdentifierTypeSyntax.self) {
             if let supportedType = SupportedType(
-                rawValue: simleIdentifierType.name.text,
+                rawValue: simpleIdentifierType.name.text,
                 initialValue: initialValue
             ) {
                 return supportedType.exprSyntax(
                     elementType: supportedType,
-                    generatorType: generatorType
+                    generatorType: generatorType,
+                    typeIsOptional: false
                 )
             }
             
@@ -162,11 +141,17 @@ extension MockBuilderMacro {
             return ExprSyntax(
                 MemberAccessExprSyntax(
                     base: DeclReferenceExprSyntax(
-                        baseName: simleIdentifierType.name
+                        baseName: simpleIdentifierType.name
                     ),
                     period: .periodToken(),
                     name: .identifier(Constants.mockIdentifier.rawValue)
                 )
+            )
+        } else if let simpleIOptionaldentifierType = simpleType.as(OptionalTypeSyntax.self) {
+            return getSimpleExprSyntaxForOptionalType(
+                simpleOptionalType: simpleIOptionaldentifierType,
+                generatorType: generatorType,
+                initialValue: initialValue
             )
         } else if let simleFunctionType = simpleType.as(FunctionTypeSyntax.self) {
             return getSimpleExprSyntaxForClosure(
@@ -179,6 +164,38 @@ extension MockBuilderMacro {
         }
     }
     
+    // MARK: Get Simple Expr Syntax For Optional Type
+    private static func getSimpleExprSyntaxForOptionalType(
+        simpleOptionalType: OptionalTypeSyntax,
+        generatorType: DataGeneratorType,
+        initialValue: AnyObject?
+    ) -> ExprSyntax? {
+        guard let type = simpleOptionalType.wrappedType.as(IdentifierTypeSyntax.self)?.name else { return nil }
+        
+        if let supportedType = SupportedType(
+            rawValue: type.text,
+            initialValue: initialValue
+        ) {
+            return supportedType.exprSyntax(
+                elementType: supportedType,
+                generatorType: generatorType,
+                typeIsOptional: true
+            )
+        }
+        
+        // Custom type that attaches MockBuilder in its declaration:
+        return ExprSyntax(
+            MemberAccessExprSyntax(
+                base: DeclReferenceExprSyntax(
+                    baseName: type
+                ),
+                period: .periodToken(),
+                name: .identifier(Constants.mockIdentifier.rawValue)
+            )
+        )
+    }
+    
+    // MARK: Get Simple Expr Syntax For Closure
     private static func getSimpleExprSyntaxForClosure(
         simpleType: FunctionTypeSyntax,
         generatorType: DataGeneratorType,

@@ -440,6 +440,113 @@ final class MockBuilderTests: XCTestCase {
         )
     }
 
+    // MARK: Test Mock Builder Macro for all supported `optional` cases
+    func testMockBuilderPropertyMacro_for_all_supported_optional_cases_for_struct() throws {
+        assertMacroExpansion(
+            #"""
+            @MockBuilder()
+            struct ExampleAllSupportedTypes {
+                let intVariable: Int?
+                let int8Variable: Int8?
+                let int16Variable: Int16?
+                let int32Variable: Int32?
+                let int64Variable: Int64?
+                let uintVariable: UInt?
+                let uint8Variable: UInt8?
+                let uint16Variable: UInt16?
+                let uint32Variable: UInt32?
+                let uint64Variable: UInt64?
+                let floatVariable: Float?
+                let float32Variable: Float32?
+                let float64Variable: Float64?
+                let doubleVariable: Double?
+                let characterVariable: Character?
+                let stringVariable: String?
+                let boolVariable: Bool?
+                let dateVariable: Date?
+                let uuidVariable: UUID?
+                let objectIndetifierVariable: ObjectIdentifier?
+                let cgPointVariable: CGPoint?
+                let cgRectVariable: CGRect?
+                let cgSizeVariable: CGSize?
+                let cgVectorVariable: CGVector?
+                let cgFloatVariable: CGFloat?
+                let urlVariable: URL?
+                let imageVariable: Image?
+                let closureVariable: (String, Double) -> Void?
+            }
+            """#,
+            expandedSource: """
+            struct ExampleAllSupportedTypes {
+                let intVariable: Int?
+                let int8Variable: Int8?
+                let int16Variable: Int16?
+                let int32Variable: Int32?
+                let int64Variable: Int64?
+                let uintVariable: UInt?
+                let uint8Variable: UInt8?
+                let uint16Variable: UInt16?
+                let uint32Variable: UInt32?
+                let uint64Variable: UInt64?
+                let floatVariable: Float?
+                let float32Variable: Float32?
+                let float64Variable: Float64?
+                let doubleVariable: Double?
+                let characterVariable: Character?
+                let stringVariable: String?
+                let boolVariable: Bool?
+                let dateVariable: Date?
+                let uuidVariable: UUID?
+                let objectIndetifierVariable: ObjectIdentifier?
+                let cgPointVariable: CGPoint?
+                let cgRectVariable: CGRect?
+                let cgSizeVariable: CGSize?
+                let cgVectorVariable: CGVector?
+                let cgFloatVariable: CGFloat?
+                let urlVariable: URL?
+                let imageVariable: Image?
+                let closureVariable: (String, Double) -> Void?
+            
+                #if DEBUG
+                static var mock: ExampleAllSupportedTypes {
+                    .init(
+                        intVariable: MockBuilderSupportedType.generate(elementType: .int(), generatorType: .random) as? Int,
+                        int8Variable: MockBuilderSupportedType.generate(elementType: .int8(), generatorType: .random) as? Int8,
+                        int16Variable: MockBuilderSupportedType.generate(elementType: .int16(), generatorType: .random) as? Int16,
+                        int32Variable: MockBuilderSupportedType.generate(elementType: .int32(), generatorType: .random) as? Int32,
+                        int64Variable: MockBuilderSupportedType.generate(elementType: .int64(), generatorType: .random) as? Int64,
+                        uintVariable: MockBuilderSupportedType.generate(elementType: .uint(), generatorType: .random) as? UInt,
+                        uint8Variable: MockBuilderSupportedType.generate(elementType: .uint8(), generatorType: .random) as? UInt8,
+                        uint16Variable: MockBuilderSupportedType.generate(elementType: .uint16(), generatorType: .random) as? UInt16,
+                        uint32Variable: MockBuilderSupportedType.generate(elementType: .uint32(), generatorType: .random) as? UInt32,
+                        uint64Variable: MockBuilderSupportedType.generate(elementType: .uint64(), generatorType: .random) as? UInt64,
+                        floatVariable: MockBuilderSupportedType.generate(elementType: .float(), generatorType: .random) as? Float,
+                        float32Variable: MockBuilderSupportedType.generate(elementType: .float32(), generatorType: .random) as? Float32,
+                        float64Variable: MockBuilderSupportedType.generate(elementType: .float64(), generatorType: .random) as? Float64,
+                        doubleVariable: MockBuilderSupportedType.generate(elementType: .double(), generatorType: .random) as? Double,
+                        characterVariable: MockBuilderSupportedType.generate(elementType: .character(), generatorType: .random) as? Character,
+                        stringVariable: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as? String,
+                        boolVariable: MockBuilderSupportedType.generate(elementType: .bool(), generatorType: .random) as? Bool,
+                        dateVariable: MockBuilderSupportedType.generate(elementType: .date, generatorType: .random) as? Date,
+                        uuidVariable: MockBuilderSupportedType.generate(elementType: .uuid(), generatorType: .random) as? UUID,
+                        objectIndetifierVariable: MockBuilderSupportedType.generate(elementType: .objectidentifier, generatorType: .random) as? ObjectIdentifier,
+                        cgPointVariable: MockBuilderSupportedType.generate(elementType: .cgpoint, generatorType: .random) as? CGPoint,
+                        cgRectVariable: MockBuilderSupportedType.generate(elementType: .cgrect, generatorType: .random) as? CGRect,
+                        cgSizeVariable: MockBuilderSupportedType.generate(elementType: .cgsize, generatorType: .random) as? CGSize,
+                        cgVectorVariable: MockBuilderSupportedType.generate(elementType: .cgvector, generatorType: .random) as? CGVector,
+                        cgFloatVariable: MockBuilderSupportedType.generate(elementType: .cgfloat, generatorType: .random) as? CGFloat,
+                        urlVariable: MockBuilderSupportedType.generate(elementType: .url(), generatorType: .random) as? URL,
+                        imageVariable: MockBuilderSupportedType.generate(elementType: .image, generatorType: .random) as? Image,
+                        closureVariable: { _, _ in }
+                        )
+                }
+                #endif
+            }
+            """,
+            macros: testMacros
+        )
+    }
+
 // TODO: fix it, .motorcycle return isnot correct
 //    func testMockBuilderMacro_for_enum() throws {
 //        assertMacroExpansion(

@@ -13,7 +13,7 @@ import RJSwiftMacrosImplDependencies
 @CodingKeys(codingKeyType: .snakeCase)
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct Person {
-    let name: String
+    let name: String?
     
     @MockBuilderProperty(value: "surname")
     @CodingKeyProperty("second_name")
