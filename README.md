@@ -5,7 +5,7 @@ RJSwiftMacros is a Swift package that provides macros.
 ## Macros
 
 > [!WARNING]  
-> `MockBuilder` macro doesn't work well at `SwiftUI` `#Preview` macro. Here is a [solution](https://stackoverflow.com/questions/78856674/does-attached-macros-work-in-the-preview-body/78856731#78856731).
+> `MockBuilder` macro doesn't work at `SwiftUI` `#Preview` macro. Here is a [solution](https://stackoverflow.com/questions/78856674/does-attached-macros-work-in-the-preview-body/78856731#78856731).
 
 ### MockBuilder
 - ``MockBuilder(numberOfItems: Int, dataGeneratorType: .random)``: Generates a mock instance and an array of mock data based on your model.
