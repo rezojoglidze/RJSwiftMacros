@@ -1,5 +1,8 @@
 # Change Log
 
+### [0.3.7(32)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.7) — *17 08 2024*
+- Update iOS version to .v15
+
 ### [0.3.6(31)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.6) — *17 08 2024*
 - Update swift-syntax version to 510.0.0
 
