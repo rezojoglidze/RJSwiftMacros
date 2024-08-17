@@ -8,7 +8,7 @@ let package = Package(
     name: "RJSwiftMacros",
     platforms: [
         .macOS(.v12),
-        .iOS(.v13),
+        .iOS(.v15),
         .tvOS(.v13),
         .watchOS(.v6),
         .macCatalyst(.v13)
