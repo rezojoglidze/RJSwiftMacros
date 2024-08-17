@@ -50,7 +50,8 @@ struct Person {
 
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
-struct ExampleAllSupportedTypesd {
+struct ExampleAllSupportedTypesd: Equatable {
+    var uuid: UUID = .init()
     @MockBuilderProperty(value: "StringVariable") let mockVariable: String
     @MockBuilderProperty(value: "C") let characterVariable: Character
 }

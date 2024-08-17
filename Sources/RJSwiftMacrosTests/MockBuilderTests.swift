@@ -27,7 +27,8 @@ final class MockBuilderTests: XCTestCase {
         assertMacroExpansion(
             #"""
             @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
-            struct ExampleAllSupportedTypes {
+            struct ExampleAllSupportedTypes: Equatable {
+                var uuid: UUID = .init()
                 let intVariable: Int
                 let int8Variable: Int8
                 let int16Variable: Int16
@@ -60,7 +61,8 @@ final class MockBuilderTests: XCTestCase {
             }
             """#,
             expandedSource: """
-            struct ExampleAllSupportedTypes {
+            struct ExampleAllSupportedTypes: Equatable {
+                var uuid: UUID = .init()
                 let intVariable: Int
                 let int8Variable: Int8
                 let int16Variable: Int16
@@ -120,13 +122,13 @@ final class MockBuilderTests: XCTestCase {
                         cgVectorVariable: MockBuilderSupportedType.generate(elementType: .cgvector, generatorType: .random) as! CGVector,
                         cgFloatVariable: MockBuilderSupportedType.generate(elementType: .cgfloat, generatorType: .random) as! CGFloat,
                         urlVariable: MockBuilderSupportedType.generate(elementType: .url(), generatorType: .random) as! URL,
-                        imageVariable: MockBuilderSupportedType.generate(elementType: .image, generatorType: .random) as! Image,
-                        colorVariable: MockBuilderSupportedType.generate(elementType: .color, generatorType: .random) as! Color,
+                        imageVariable: MockBuilderSupportedType.generate(elementType: .image(), generatorType: .random) as! Image,
+                        colorVariable: MockBuilderSupportedType.generate(elementType: .color(), generatorType: .random) as! Color,
                         closureVariable: { _, _ in }
                         )
                 }
             
-                static var mockArray: [ExampleAllSupportedTypes ] {
+                static var mockArray: [ExampleAllSupportedTypes] {
                     [
                         .init(
                             intVariable: MockBuilderSupportedType.generate(elementType: .int(), generatorType: .random) as! Int,
@@ -155,8 +157,8 @@ final class MockBuilderTests: XCTestCase {
                             cgVectorVariable: MockBuilderSupportedType.generate(elementType: .cgvector, generatorType: .random) as! CGVector,
                             cgFloatVariable: MockBuilderSupportedType.generate(elementType: .cgfloat, generatorType: .random) as! CGFloat,
                             urlVariable: MockBuilderSupportedType.generate(elementType: .url(), generatorType: .random) as! URL,
-                            imageVariable: MockBuilderSupportedType.generate(elementType: .image, generatorType: .random) as! Image,
-                            colorVariable: MockBuilderSupportedType.generate(elementType: .color, generatorType: .random) as! Color,
+                            imageVariable: MockBuilderSupportedType.generate(elementType: .image(), generatorType: .random) as! Image,
+                            colorVariable: MockBuilderSupportedType.generate(elementType: .color(), generatorType: .random) as! Color,
                             closureVariable: { _, _ in }
                             ),
                         .init(
@@ -186,8 +188,8 @@ final class MockBuilderTests: XCTestCase {
                             cgVectorVariable: MockBuilderSupportedType.generate(elementType: .cgvector, generatorType: .random) as! CGVector,
                             cgFloatVariable: MockBuilderSupportedType.generate(elementType: .cgfloat, generatorType: .random) as! CGFloat,
                             urlVariable: MockBuilderSupportedType.generate(elementType: .url(), generatorType: .random) as! URL,
-                            imageVariable: MockBuilderSupportedType.generate(elementType: .image, generatorType: .random) as! Image,
-                            colorVariable: MockBuilderSupportedType.generate(elementType: .color, generatorType: .random) as! Color,
+                            imageVariable: MockBuilderSupportedType.generate(elementType: .image(), generatorType: .random) as! Image,
+                            colorVariable: MockBuilderSupportedType.generate(elementType: .color(), generatorType: .random) as! Color,
                             closureVariable: { _, _ in }
                             ),
                     ]
@@ -292,7 +294,7 @@ final class MockBuilderTests: XCTestCase {
                         cgVectorVariable: MockBuilderSupportedType.generate(elementType: .cgvector, generatorType: .random) as! CGVector,
                         cgFloatVariable: MockBuilderSupportedType.generate(elementType: .cgfloat, generatorType: .random) as! CGFloat,
                         urlVariable: MockBuilderSupportedType.generate(elementType: .url(), generatorType: .random) as! URL,
-                        imageVariable: MockBuilderSupportedType.generate(elementType: .image, generatorType: .random) as! Image,
+                        imageVariable: MockBuilderSupportedType.generate(elementType: .image(), generatorType: .random) as! Image,
                         closureVariable: {}
                         )
                 }
@@ -325,7 +327,7 @@ final class MockBuilderTests: XCTestCase {
                             cgVectorVariable: MockBuilderSupportedType.generate(elementType: .cgvector, generatorType: .random) as! CGVector,
                             cgFloatVariable: MockBuilderSupportedType.generate(elementType: .cgfloat, generatorType: .random) as! CGFloat,
                             urlVariable: MockBuilderSupportedType.generate(elementType: .url(), generatorType: .random) as! URL,
-                            imageVariable: MockBuilderSupportedType.generate(elementType: .image, generatorType: .random) as! Image,
+                            imageVariable: MockBuilderSupportedType.generate(elementType: .image(), generatorType: .random) as! Image,
                             closureVariable: {}
                             ),
                         .init(
@@ -354,7 +356,7 @@ final class MockBuilderTests: XCTestCase {
                             cgVectorVariable: MockBuilderSupportedType.generate(elementType: .cgvector, generatorType: .random) as! CGVector,
                             cgFloatVariable: MockBuilderSupportedType.generate(elementType: .cgfloat, generatorType: .random) as! CGFloat,
                             urlVariable: MockBuilderSupportedType.generate(elementType: .url(), generatorType: .random) as! URL,
-                            imageVariable: MockBuilderSupportedType.generate(elementType: .image, generatorType: .random) as! Image,
+                            imageVariable: MockBuilderSupportedType.generate(elementType: .image(), generatorType: .random) as! Image,
                             closureVariable: {}
                             ),
                     ]
@@ -543,7 +545,7 @@ final class MockBuilderTests: XCTestCase {
                         cgVectorVariable: MockBuilderSupportedType.generate(elementType: .cgvector, generatorType: .random) as? CGVector,
                         cgFloatVariable: MockBuilderSupportedType.generate(elementType: .cgfloat, generatorType: .random) as? CGFloat,
                         urlVariable: MockBuilderSupportedType.generate(elementType: .url(), generatorType: .random) as? URL,
-                        imageVariable: MockBuilderSupportedType.generate(elementType: .image, generatorType: .random) as? Image,
+                        imageVariable: MockBuilderSupportedType.generate(elementType: .image(), generatorType: .random) as? Image,
                         colorVariable: MockBuilderSupportedType.generate(elementType: .color(), generatorType: .random) as? Color,
                         closureVariable: { _, _ in }
                         )
