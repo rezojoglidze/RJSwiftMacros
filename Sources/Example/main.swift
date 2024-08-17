@@ -10,6 +10,26 @@ import RJSwiftMacros
 import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
+
+@CodingKeys()
+@MockBuilder(numberOfItems: 1, dataGeneratorType: .default)
+struct CarModel: Decodable {
+   @CodingKeyIgnored() var title: String?
+    
+    var closure: (() -> ())?
+
+    let print: String
+    let cars: [Car]
+    
+    @CodingKeys()
+    @MockBuilder(numberOfItems: 5, dataGeneratorType: .default)
+    struct Car: Decodable {
+       @MockBuilderProperty(value: 2) let title: String
+        let description: String
+    }
+}
+
+
 @CodingKeys(codingKeyType: .snakeCase)
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct Person {

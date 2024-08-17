@@ -16,7 +16,7 @@ public enum DataGeneratorType: String {
     case random
 }
 
-// MARK: ❗⚠️❗Keep all cases names in lowercase.❗⚠️❗
+// MARK: - ❗⚠️❗Keep all cases names in lowercase.❗⚠️❗
 // MARK: ❗⚠️❗if type isn't supported from MockBuilderItem macro add it to `notSupportedTypesFromMockBuilderProperty`.❗⚠️❗
 public enum MockBuilderSupportedType: Equatable {
     case int(Int? = nil)
@@ -114,6 +114,7 @@ public enum MockBuilderSupportedType: Equatable {
         })
     }
     
+    // MARK: RawValue
     public var rawValue: String {
         func getName(of type: Any) -> String {
             return String(describing: type.self)
@@ -154,6 +155,7 @@ public enum MockBuilderSupportedType: Equatable {
         }
     }
     
+    // MARK: Methods
     func exprStringLiteral(
         with associatedValue: String?,
         generatorType: DataGeneratorType,
@@ -189,7 +191,6 @@ public enum MockBuilderSupportedType: Equatable {
         }
     }
     
-    //MARK: Methods
     public static func generate(
         elementType: MockBuilderSupportedType,
         generatorType: DataGeneratorType? = nil

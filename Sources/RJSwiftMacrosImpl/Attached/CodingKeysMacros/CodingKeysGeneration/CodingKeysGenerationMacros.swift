@@ -22,6 +22,7 @@ public struct CodingKeysMacro: MemberMacro {
     ) throws -> [DeclSyntax] {
         let cases: [String] = try declaration.memberBlock.members.compactMap { member in
             guard let variableDecl = member.decl.as(VariableDeclSyntax.self),
+                  variableTypeIsSuitable(with: variableDecl),
                   let property = variableDecl.bindings.first?.pattern.as(IdentifierPatternSyntax.self)?.identifier.text else { return nil }
             
             if let element = attributesElement(withIdentifier: Constants.codingKeyPropertyIdentifier.rawValue, in: variableDecl.attributes) {
@@ -52,6 +53,15 @@ enum CodingKeys: String, CodingKey {
 }
 """
         return [casesDecl]
+    }
+    
+    static func variableTypeIsSuitable(with variableDecl: VariableDeclSyntax) -> Bool {
+        if variableDecl.variableType?.as(IdentifierTypeSyntax.self) != nil ||
+            variableDecl.variableType?.as(ArrayTypeSyntax.self) != nil {
+            return true
+        }
+
+        return false
     }
     
     static func needToSkipCodingKeyCase(variableDecl: VariableDeclSyntax) -> Bool {
