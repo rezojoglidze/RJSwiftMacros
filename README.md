@@ -41,6 +41,8 @@ Macro generates two `static` properties: `mock` and `mockArray`. `mockArray` cou
 
 To generate only `.mock` value, you can use `@MockBuilder()` without any param passing.
 ```swift
+import RJSwiftMacros
+
 @MockBuilder()
 struct Car {
     let name: String
@@ -115,6 +117,8 @@ struct Person {
 ### CodingKeys macro
 Usage of `CodingKeys` without `codingKeyType` param passing generates CodingKeys with `.camelCase`. `CodingKeys` macro works only with stored property types. If you want to set custom coding key to the desired param, use `@CodingKeyProperty(desired_value)`. To ignore desired param from `CodingKeys` enum, use `@CodingKeyIgnored()`.
 ```swift
+import RJSwiftMacros
+
 @CodingKeys()
 class Car {
     let modelColor: String
@@ -136,6 +140,8 @@ class Car {
 
 CodingKeys generation with `.snakeCase`.
 ```swift
+import RJSwiftMacros
+
 @CodingKeys(codingKeyType: .snakeCase)
 struct University {
     let name: String
