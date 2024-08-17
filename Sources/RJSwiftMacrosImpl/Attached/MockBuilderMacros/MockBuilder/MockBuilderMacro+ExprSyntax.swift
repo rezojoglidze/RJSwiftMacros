@@ -138,16 +138,21 @@ extension MockBuilderMacro {
                 )
             }
             
-            // Custom type that attaches MockBuilder in its declaration:
-            return ExprSyntax(
-                MemberAccessExprSyntax(
-                    base: DeclReferenceExprSyntax(
-                        baseName: simpleIdentifierType.name
-                    ),
-                    period: .periodToken(),
-                    name: .identifier(Constants.mockIdentifier.rawValue)
+            if let initialValue = initialValue as? String {
+                // For example, if we pass enum case `VehicleType.car`, in this case we need string value of its.
+                return ExprSyntax(stringLiteral: initialValue)
+            } else {
+                // Custom type that attaches MockBuilder in its declaration:
+                return ExprSyntax(
+                    MemberAccessExprSyntax(
+                        base: DeclReferenceExprSyntax(
+                            baseName: simpleIdentifierType.name
+                        ),
+                        period: .periodToken(),
+                        name: .identifier(Constants.mockIdentifier.rawValue)
+                    )
                 )
-            )
+            }
         } else if let simpleIOptionaldentifierType = simpleType.as(OptionalTypeSyntax.self) {
             return getSimpleExprSyntaxForOptionalType(
                 simpleOptionalType: simpleIOptionaldentifierType,

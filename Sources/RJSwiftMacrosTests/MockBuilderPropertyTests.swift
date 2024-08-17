@@ -50,6 +50,13 @@ final class MockBuilderPropertyTests: XCTestCase {
             @MockBuilderProperty(value: "https://www.apple.com") let urlVariable: URL
             @MockBuilderProperty(value: Color.blue) let color: Color
             @MockBuilderProperty(value: Image(systemName: "swift")) let image: Image
+            @MockBuilderProperty(value: VehicleType.car) let vehicle: VehicleType
+        }
+        
+        enum VehicleType: String, Decodable {
+            case car
+            case bus
+            case motorcycle
         }
         """#,
         expandedSource:"""
@@ -76,6 +83,7 @@ final class MockBuilderPropertyTests: XCTestCase {
             let urlVariable: URL
             let color: Color
             let image: Image
+            let vehicle: VehicleType
 
             #if DEBUG
             static var mock: ExampleAllSupportedTypesForMockBuilderProperty {
@@ -101,7 +109,8 @@ final class MockBuilderPropertyTests: XCTestCase {
                     boolVariable: MockBuilderSupportedType.generate(elementType: .bool(false)) as! Bool,
                     urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL,
                     color: MockBuilderSupportedType.generate(elementType: .color(Color.blue)) as! Color,
-                    image: MockBuilderSupportedType.generate(elementType: .image(Image(systemName: "swift"))) as! Image
+                    image: MockBuilderSupportedType.generate(elementType: .image(Image(systemName: "swift"))) as! Image,
+                    vehicle: VehicleType.car
                     )
             }
         
@@ -129,7 +138,8 @@ final class MockBuilderPropertyTests: XCTestCase {
                         boolVariable: MockBuilderSupportedType.generate(elementType: .bool(false)) as! Bool,
                         urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL,
                         color: MockBuilderSupportedType.generate(elementType: .color(Color.blue)) as! Color,
-                        image: MockBuilderSupportedType.generate(elementType: .image(Image(systemName: "swift"))) as! Image
+                        image: MockBuilderSupportedType.generate(elementType: .image(Image(systemName: "swift"))) as! Image,
+                        vehicle: VehicleType.car
                         ),
                     .init(
                         intVariable: MockBuilderSupportedType.generate(elementType: .int(12)) as! Int,
@@ -153,11 +163,18 @@ final class MockBuilderPropertyTests: XCTestCase {
                         boolVariable: MockBuilderSupportedType.generate(elementType: .bool(false)) as! Bool,
                         urlVariable: MockBuilderSupportedType.generate(elementType: .url(URL(string: "https://www.apple.com"))) as! URL,
                         color: MockBuilderSupportedType.generate(elementType: .color(Color.blue)) as! Color,
-                        image: MockBuilderSupportedType.generate(elementType: .image(Image(systemName: "swift"))) as! Image
+                        image: MockBuilderSupportedType.generate(elementType: .image(Image(systemName: "swift"))) as! Image,
+                        vehicle: VehicleType.car
                         ),
                 ]
             }
             #endif
+        }
+        
+        enum VehicleType: String, Decodable {
+            case car
+            case bus
+            case motorcycle
         }
         """,
         macros: testMacros
