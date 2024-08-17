@@ -40,7 +40,8 @@ extension MockBuilderMacro {
             return getSimpleExprSyntax(
                 simpleType: type,
                 generatorType: generatorType,
-                initialValue: initialValue
+                initialValue: initialValue, 
+                typeIsOptional: false
             )
         } else {
             return nil
@@ -122,7 +123,8 @@ extension MockBuilderMacro {
     private static func getSimpleExprSyntax<T: TypeSyntaxProtocol>(
         simpleType: T,
         generatorType: DataGeneratorType,
-        initialValue: AnyObject?
+        initialValue: AnyObject?,
+        typeIsOptional: Bool
     ) -> ExprSyntax? {
         if let simpleIdentifierType = simpleType.as(IdentifierTypeSyntax.self) {
             if let supportedType = SupportedType(
@@ -132,7 +134,7 @@ extension MockBuilderMacro {
                 return supportedType.exprSyntax(
                     elementType: supportedType,
                     generatorType: generatorType,
-                    typeIsOptional: false
+                    typeIsOptional: typeIsOptional
                 )
             }
             
@@ -175,31 +177,16 @@ extension MockBuilderMacro {
                 arrayType: arrayTypeSyntax,
                 generatorType: generatorType,
                 initialValue: initialValue
-            )
+           )
         }
         
-        guard let type = simpleOptionalType.wrappedType.as(IdentifierTypeSyntax.self)?.name else { return nil }
+        guard let type = simpleOptionalType.wrappedType.as(IdentifierTypeSyntax.self) else { return nil }
         
-        if let supportedType = SupportedType(
-            rawValue: type.text,
-            initialValue: initialValue
-        ) {
-            return supportedType.exprSyntax(
-                elementType: supportedType,
-                generatorType: generatorType,
-                typeIsOptional: true
-            )
-        }
-        
-        // Custom type that attaches MockBuilder in its declaration:
-        return ExprSyntax(
-            MemberAccessExprSyntax(
-                base: DeclReferenceExprSyntax(
-                    baseName: type
-                ),
-                period: .periodToken(),
-                name: .identifier(Constants.mockIdentifier.rawValue)
-            )
+        return getSimpleExprSyntax(
+            simpleType: type,
+            generatorType: generatorType,
+            initialValue: initialValue,
+            typeIsOptional: true
         )
     }
     
