@@ -30,7 +30,7 @@ final class CodingKeysGenerationTests: XCTestCase {
            struct University {
                let name: String
                let studentCapacity: Int
-               let cars: [String]
+               let cars: [String]?
                var closure: (() -> ())?
 
                static var students: [String] = []
@@ -50,7 +50,7 @@ final class CodingKeysGenerationTests: XCTestCase {
            struct University {
                let name: String
                let studentCapacity: Int
-               let cars: [String]
+               let cars: [String]?
                var closure: (() -> ())?
 
                static var students: [String] = []

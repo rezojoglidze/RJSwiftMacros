@@ -58,7 +58,7 @@ struct ExampleAllSupportedTypesd {
 print(ExampleAllSupportedTypesd.mock.characterVariable)
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
-enum VehicleType: String {
+enum VehicleType: String, Decodable {
     case car
     case bus
     case motorcycle

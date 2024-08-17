@@ -56,8 +56,17 @@ enum CodingKeys: String, CodingKey {
     }
     
     static func variableTypeIsSuitable(with variableDecl: VariableDeclSyntax) -> Bool {
-        if variableDecl.variableType?.as(IdentifierTypeSyntax.self) != nil ||
-            variableDecl.variableType?.as(ArrayTypeSyntax.self) != nil {
+        var variableType: TypeSyntax? {
+            if let decl = variableDecl.variableType?.as(OptionalTypeSyntax.self)?.wrappedType {
+                return decl
+            } else {
+                return variableDecl.variableType
+            }
+        }
+        
+        
+        if variableType?.as(IdentifierTypeSyntax.self) != nil ||
+            variableType?.as(ArrayTypeSyntax.self) != nil {
             return true
         }
 
