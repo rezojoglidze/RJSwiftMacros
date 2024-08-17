@@ -19,6 +19,73 @@ public enum DataGeneratorType: String {
 // MARK: - ❗⚠️❗Keep all cases names in lowercase.❗⚠️❗
 // MARK: ❗⚠️❗if type isn't supported from MockBuilderItem macro add it to `notSupportedTypesFromMockBuilderProperty`.❗⚠️❗
 public enum MockBuilderSupportedType: Equatable {
+    public static func == (lhs: MockBuilderSupportedType, rhs: MockBuilderSupportedType) -> Bool {
+        switch (lhs, rhs) {
+        case (.int(let lhsValue), .int(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.int8(let lhsValue), .int8(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.int16(let lhsValue), .int16(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.int32(let lhsValue), .int32(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.int64(let lhsValue), .int64(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.uint(let lhsValue), .uint(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.uint8(let lhsValue), .uint8(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.uint16(let lhsValue), .uint16(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.uint32(let lhsValue), .uint32(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.uint64(let lhsValue), .uint64(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.float(let lhsValue), .float(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.float32(let lhsValue), .float32(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.float64(let lhsValue), .float64(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.double(let lhsValue), .double(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.decimal(let lhsValue), .decimal(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.nsdecimalnumber(let lhsValue), .nsdecimalnumber(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.character(let lhsValue), .character(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.string(let lhsValue), .string(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.bool(let lhsValue), .bool(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.date, .date):
+            return true
+        case (.uuid(let lhsValue), .uuid(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.objectidentifier, .objectidentifier):
+            return true
+        case (.cgpoint, .cgpoint):
+            return true
+        case (.cgrect, .cgrect):
+            return true
+        case (.cgsize, .cgsize):
+            return true
+        case (.cgvector, .cgvector):
+            return true
+        case (.cgfloat, .cgfloat):
+            return true
+        case (.url(let lhsValue), .url(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.image(let lhsValue), .image(let rhsValue)):
+            return lhsValue as? Image == rhsValue as? Image
+        case (.color(let lhsValue), .color(let rhsValue)):
+            return lhsValue as? Color == rhsValue as? Color
+        default:
+            return false
+        }
+    }
+    
     case int(Int? = nil)
     case int8(Int8? = nil)
     case int16(Int16? = nil)
@@ -47,8 +114,8 @@ public enum MockBuilderSupportedType: Equatable {
     case cgvector
     case cgfloat
     case url(URL? = nil)
-    case image(String? = nil)
-    case color(String? = nil)
+    case image(Any? = nil)
+    case color(Any? = nil)
     
     // MARK: Initialiazer
     public init?(
