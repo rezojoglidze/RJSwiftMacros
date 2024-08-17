@@ -28,8 +28,14 @@ RJSwiftMacros is a Swift package that provides macros.
 ## Installation
 **Swift Package Manager**
 
-You can add `RJSwiftMacros` as a dependency in your Project file
+To depend on `RJSwiftMacros` in a SwiftPM package, add the following to your Package.swift.
 
+```swift
+dependencies: [
+  .package(url: "https://github.com/rezojoglidze/RJSwiftMacros", from: "<#latest RJSwiftMacros tag#>"),
+],
+```
+To add `RJSwiftMacros` as a dependency of your Xcode project, go to the Package Dependencies tab of your Xcode project, click the plus button and search for https://github.com/rezojoglidze/RJSwiftMacros
 
 ## Usage
 
