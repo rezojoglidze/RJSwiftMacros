@@ -5,7 +5,7 @@
 //  Created by Rezo Joglidze on 28.07.24.
 //
 
-import Foundation
+import SwiftUI
 
 // MARK: - Protocols For Fake Data
 protocol StringDataProvider {
@@ -37,9 +37,17 @@ protocol NumericDataProvider {
     func randomNSDecimalNumber(min: NSDecimalNumber, max: NSDecimalNumber) -> NSDecimalNumber
 }
 
+protocol ImageProvider {
+    func randomImage() -> Image
+}
 
-// MARK: - Fake Data Provider
-struct FakeDataProvider: StringDataProvider {
+protocol ColorProvider {
+    func randomColor() -> Color
+}
+
+
+// MARK: - Mock Data Provider
+struct MockDataProvider: StringDataProvider {
     func randomString() -> String {
         return [
             "Jeanie",
@@ -146,13 +154,15 @@ struct FakeDataProvider: StringDataProvider {
     }
 }
 
-extension FakeDataProvider: BooleanDataProvider {
+// MARK: Boolean Data Provider
+extension MockDataProvider: BooleanDataProvider {
     func randomBool() -> Bool {
         Bool.random()
     }
 }
 
-extension FakeDataProvider: DateDataProvider {
+// MARK: Date Data Provider
+extension MockDataProvider: DateDataProvider {
     func date() -> Date {
         let years = 5
         let daysInYears = 365.25 // Consider average year including leap years
@@ -172,7 +182,8 @@ extension FakeDataProvider: DateDataProvider {
     }
 }
 
-extension FakeDataProvider: URLDataProvider {
+// MARK: URL Data Provider
+extension MockDataProvider: URLDataProvider {
     func url() -> URL {
         [
             URL(string: "https://www.google.com")!,
@@ -199,7 +210,8 @@ extension FakeDataProvider: URLDataProvider {
     }
 }
 
-extension FakeDataProvider: NumericDataProvider {
+// MARK: Numeric Data Provider
+extension MockDataProvider: NumericDataProvider {
     func randomInt<T: FixedWidthInteger & SignedInteger>(min: T, max: T) -> T {
         return T.random(in: min...max)
     }
@@ -228,5 +240,44 @@ extension FakeDataProvider: NumericDataProvider {
         let range = max.subtracting(min)
         let randomValue = NSDecimalNumber(value: Double.random(in: 0...1)).multiplying(by: range).adding(min)
         return randomValue
+    }
+}
+
+extension MockDataProvider: ImageProvider {
+    func randomImage() -> Image {
+        [
+            Image(systemName: "swift"),
+            Image(systemName: "star"),
+            Image(systemName: "calendar"),
+            Image(systemName: "xmark.circle"),
+            Image(systemName: "airplane"),
+            Image(systemName: "house"),
+            Image(systemName: "keyboard"),
+            Image(systemName: "lock"),
+            Image(systemName: "wifi"),
+            Image(systemName: "car.fill"),
+        ].randomElement() ?? Image(systemName: "swift")
+    }
+}
+
+extension MockDataProvider: ColorProvider {
+    func randomColor() -> Color {
+        [
+            Color.black,
+            Color.blue,
+            Color.brown,
+            Color.cyan,
+            Color.gray,
+            Color.indigo,
+            Color.mint,
+            Color.orange,
+            Color.pink,
+            Color.purple,
+            Color.yellow,
+            Color.accentColor,
+            Color.primary,
+            Color.gray,
+            Color.red
+        ].randomElement()?.opacity(0.6) ?? Color.black.opacity(0.6)
     }
 }

@@ -7,7 +7,7 @@ import CompilerPluginSupport
 let package = Package(
     name: "RJSwiftMacros",
     platforms: [
-        .macOS(.v11),
+        .macOS(.v12),
         .iOS(.v13),
         .tvOS(.v13),
         .watchOS(.v6),

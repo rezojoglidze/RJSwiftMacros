@@ -9,16 +9,83 @@ import SwiftUI
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-fileprivate typealias Provider = FakeDataProvider
+fileprivate typealias Provider = MockDataProvider
 // MARK: - Data Generator Type
 public enum DataGeneratorType: String {
     case `default`
     case random
 }
 
-// MARK: ❗⚠️❗Keep all cases names in lowercase.❗⚠️❗
+// MARK: - ❗⚠️❗Keep all cases names in lowercase.❗⚠️❗
 // MARK: ❗⚠️❗if type isn't supported from MockBuilderItem macro add it to `notSupportedTypesFromMockBuilderProperty`.❗⚠️❗
 public enum MockBuilderSupportedType: Equatable {
+    public static func == (lhs: MockBuilderSupportedType, rhs: MockBuilderSupportedType) -> Bool {
+        switch (lhs, rhs) {
+        case (.int(let lhsValue), .int(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.int8(let lhsValue), .int8(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.int16(let lhsValue), .int16(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.int32(let lhsValue), .int32(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.int64(let lhsValue), .int64(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.uint(let lhsValue), .uint(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.uint8(let lhsValue), .uint8(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.uint16(let lhsValue), .uint16(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.uint32(let lhsValue), .uint32(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.uint64(let lhsValue), .uint64(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.float(let lhsValue), .float(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.float32(let lhsValue), .float32(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.float64(let lhsValue), .float64(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.double(let lhsValue), .double(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.decimal(let lhsValue), .decimal(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.nsdecimalnumber(let lhsValue), .nsdecimalnumber(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.character(let lhsValue), .character(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.string(let lhsValue), .string(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.bool(let lhsValue), .bool(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.date, .date):
+            return true
+        case (.uuid(let lhsValue), .uuid(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.objectidentifier, .objectidentifier):
+            return true
+        case (.cgpoint, .cgpoint):
+            return true
+        case (.cgrect, .cgrect):
+            return true
+        case (.cgsize, .cgsize):
+            return true
+        case (.cgvector, .cgvector):
+            return true
+        case (.cgfloat, .cgfloat):
+            return true
+        case (.url(let lhsValue), .url(let rhsValue)):
+            return lhsValue == rhsValue
+        case (.image(let lhsValue), .image(let rhsValue)):
+            return lhsValue as? Image == rhsValue as? Image
+        case (.color(let lhsValue), .color(let rhsValue)):
+            return lhsValue as? Color == rhsValue as? Color
+        default:
+            return false
+        }
+    }
+    
     case int(Int? = nil)
     case int8(Int8? = nil)
     case int16(Int16? = nil)
@@ -47,50 +114,52 @@ public enum MockBuilderSupportedType: Equatable {
     case cgvector
     case cgfloat
     case url(URL? = nil)
-    case image
+    case image(Any? = nil)
+    case color(Any? = nil)
     
     // MARK: Initialiazer
     public init?(
         rawValue: String,
         initialValue: AnyObject? = nil
     ) {
-        let unwrappedValue = (initialValue as? String ?? .empty).replacingOccurrences(of: "\"", with: "")
+        let wrappedInitialValue = (initialValue as? String ?? .empty).replacingOccurrences(of: "\"", with: "")
         
         switch rawValue.lowercased() {
-        case "int": self = .int(Int(unwrappedValue))
-        case "int8": self = .int8(Int8(unwrappedValue))
-        case "int16": self = .int16(Int16(unwrappedValue))
-        case "int32": self = .int32(Int32(unwrappedValue))
-        case "int64": self = .int64(Int64(unwrappedValue))
-        case "uint": self = .uint(UInt(unwrappedValue))
-        case "uint8": self = .uint8(UInt8(unwrappedValue))
-        case "uint16": self = .uint16(UInt16(unwrappedValue))
-        case "uint32": self = .uint32(UInt32(unwrappedValue))
-        case "uint64": self = .uint64(UInt64(unwrappedValue))
-        case "float": self = .float(Float(unwrappedValue))
-        case "float32": self = .float32(Float32(unwrappedValue))
-        case "float64": self = .float64(Float64(unwrappedValue))
-        case "double": self = .double(Double(unwrappedValue))
-        case "decimal": self = .decimal(Decimal(string: unwrappedValue))
+        case "int": self = .int(Int(wrappedInitialValue))
+        case "int8": self = .int8(Int8(wrappedInitialValue))
+        case "int16": self = .int16(Int16(wrappedInitialValue))
+        case "int32": self = .int32(Int32(wrappedInitialValue))
+        case "int64": self = .int64(Int64(wrappedInitialValue))
+        case "uint": self = .uint(UInt(wrappedInitialValue))
+        case "uint8": self = .uint8(UInt8(wrappedInitialValue))
+        case "uint16": self = .uint16(UInt16(wrappedInitialValue))
+        case "uint32": self = .uint32(UInt32(wrappedInitialValue))
+        case "uint64": self = .uint64(UInt64(wrappedInitialValue))
+        case "float": self = .float(Float(wrappedInitialValue))
+        case "float32": self = .float32(Float32(wrappedInitialValue))
+        case "float64": self = .float64(Float64(wrappedInitialValue))
+        case "double": self = .double(Double(wrappedInitialValue))
+        case "decimal": self = .decimal(Decimal(string: wrappedInitialValue))
         case "nsdecimalnumber":
-            if let decimalValue = Decimal(string: unwrappedValue) {
+            if let decimalValue = Decimal(string: wrappedInitialValue) {
                 self = .nsdecimalnumber(NSDecimalNumber(decimal: decimalValue))
             } else {
-                self  = .nsdecimalnumber(nil)
+                self = .nsdecimalnumber(nil)
             }
-        case "character": self = .character(unwrappedValue.first)
-        case "string": self = .string(unwrappedValue)
-        case "bool": self = .bool(Bool(unwrappedValue))
+        case "character": self = .character(wrappedInitialValue.first)
+        case "string": self = .string(wrappedInitialValue)
+        case "bool": self = .bool(Bool(wrappedInitialValue))
         case "date": self = .date
-        case "uuid": self = .uuid(UUID(uuidString: unwrappedValue))
+        case "uuid": self = .uuid(UUID(uuidString: wrappedInitialValue))
         case "objectidentifier": self = .objectidentifier
         case "cgpoint": self = .cgpoint
         case "cgrect": self = .cgrect
         case "cgsize": self = .cgsize
         case "cgvector": self = .cgvector
         case "cgfloat": self = .cgfloat
-        case "url": self = .url(URL(string: unwrappedValue))
-        case "image": self = .image
+        case "url": self = .url(URL(string: wrappedInitialValue))
+        case "image": self = .image(initialValue as? String)
+        case "color" : self = .color(initialValue as? String)
         default: return nil
         }
     }
@@ -103,8 +172,7 @@ public enum MockBuilderSupportedType: Equatable {
         .cgrect,
         .cgsize,
         .cgvector,
-        .cgfloat,
-        .image
+        .cgfloat
     ]
     
     public static func notSupportedFromMockBuilderPropertyMacro(type: Self) -> Bool {
@@ -113,6 +181,7 @@ public enum MockBuilderSupportedType: Equatable {
         })
     }
     
+    // MARK: RawValue
     public var rawValue: String {
         func getName(of type: Any) -> String {
             return String(describing: type.self)
@@ -148,23 +217,28 @@ public enum MockBuilderSupportedType: Equatable {
         case .cgfloat: getName(of: CGFloat.self)
         case .url: getName(of: URL.self)
         case .image: getName(of: Image.self)
+        case .color: getName(of: Color.self)
+
         }
     }
     
-    func exprStringValue(
+    // MARK: Methods
+    func exprStringLiteral(
         with associatedValue: String?,
-        generatorType: DataGeneratorType
+        generatorType: DataGeneratorType,
+        typeIsOptional: Bool
     ) -> String {
         let firstPart = "MockBuilderSupportedType.generate(elementType: "
+        let lastPart = typeIsOptional ? " as? \(rawValue)" : " as! \(rawValue)"
         
         // MARK: If type has associated value
         if let associatedValue {
             switch self {
             case .string, .character:
-                return firstPart + ".\(rawValue.lowercased())(\("\"\(associatedValue.removeQuotes())\""))) as! \(rawValue)"
+                return firstPart + ".\(rawValue.lowercased())(\("\"\(associatedValue.removeQuotes())\"")))" + lastPart
                 
             case .url:
-                return firstPart + ".\(rawValue.lowercased())(URL(string: \"\(associatedValue)\"))) as! \(rawValue)"
+                return firstPart + ".\(rawValue.lowercased())(URL(string: \"\(associatedValue)\")))" + lastPart
                 
             default:
                 return firstPart + ".\(rawValue.lowercased())(\(associatedValue))) as! \(rawValue)"
@@ -172,19 +246,18 @@ public enum MockBuilderSupportedType: Equatable {
         } else {
             switch self {
             case .int, .int8, .int16, .int32, .int64, .uint, .uint8, .uint16, .uint32, .uint64,
-                    .float, .float32, .float64, .double, .decimal, .nsdecimalnumber, .bool, .uuid, .url:
-                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue)) as! \(rawValue)"
+                    .float, .float32, .float64, .double, .decimal, .nsdecimalnumber, .bool, .uuid, .url, .color, .image:
+                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue))" + lastPart
                 
             case .string, .character:
-                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue)) as! \(rawValue)"
+                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue))" + lastPart
                 
-            case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat, .image:
-                return firstPart + ".\(rawValue.lowercased()), generatorType: .\(generatorType.rawValue)) as! \(rawValue)"
+            case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat:
+                return firstPart + ".\(rawValue.lowercased()), generatorType: .\(generatorType.rawValue))" + lastPart
             }
         }
     }
     
-    //MARK: Methods
     public static func generate(
         elementType: MockBuilderSupportedType,
         generatorType: DataGeneratorType? = nil
@@ -192,25 +265,25 @@ public enum MockBuilderSupportedType: Equatable {
         let defaultMaxValue = 100000
         
         return switch elementType {
-        case .int(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int.zero, max: Int(defaultMaxValue)))
-        case .int8(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int8.zero, max: Int8.max))
-        case .int16(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int16.zero, max: Int16.max))
-        case .int32(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int32.zero, max: Int32.max))
-        case .int64(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int64.zero, max: Int64(defaultMaxValue)))
-        case .uint(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt.zero, max: UInt(defaultMaxValue)))
-        case .uint8(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt8.zero, max: UInt8.max))
-        case .uint16(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt16.zero, max: UInt16.max))
-        case .uint32(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt32.zero, max: UInt32(defaultMaxValue)))
-        case .uint64(let value): value ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt64.zero, max: UInt64(defaultMaxValue)))
-        case .float(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomFloat(min: Float.leastNonzeroMagnitude, max: Float(defaultMaxValue)))
-        case .float32(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomFloat(min: Float32.leastNonzeroMagnitude, max: Float32(defaultMaxValue)))
-        case .float64(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomFloat(min: Float64.leastNonzeroMagnitude, max: Float64(defaultMaxValue)))
-        case .double(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomDouble(min: Double.leastNonzeroMagnitude, max: Double(defaultMaxValue)))
-        case .decimal(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomDecimal(min: Decimal.leastNonzeroMagnitude, max: Decimal(defaultMaxValue)))
-        case .nsdecimalnumber(let value): value ?? (generatorType == .`default` ? 0.0 : Provider().randomNSDecimalNumber(min: NSDecimalNumber.zero, max: NSDecimalNumber(value: defaultMaxValue)))
+        case .int(let int): int ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int.zero, max: Int(defaultMaxValue)))
+        case .int8(let int): int ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int8.zero, max: Int8.max))
+        case .int16(let int): int ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int16.zero, max: Int16.max))
+        case .int32(let int): int ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int32.zero, max: Int32.max))
+        case .int64(let int): int ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int64.zero, max: Int64(defaultMaxValue)))
+        case .uint(let uint): uint ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt.zero, max: UInt(defaultMaxValue)))
+        case .uint8(let uint): uint ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt8.zero, max: UInt8.max))
+        case .uint16(let uint): uint ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt16.zero, max: UInt16.max))
+        case .uint32(let uint): uint ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt32.zero, max: UInt32(defaultMaxValue)))
+        case .uint64(let uint): uint ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt64.zero, max: UInt64(defaultMaxValue)))
+        case .float(let float): float ?? (generatorType == .`default` ? 0.0 : Provider().randomFloat(min: Float.leastNonzeroMagnitude, max: Float(defaultMaxValue)))
+        case .float32(let float): float ?? (generatorType == .`default` ? 0.0 : Provider().randomFloat(min: Float32.leastNonzeroMagnitude, max: Float32(defaultMaxValue)))
+        case .float64(let float): float ?? (generatorType == .`default` ? 0.0 : Provider().randomFloat(min: Float64.leastNonzeroMagnitude, max: Float64(defaultMaxValue)))
+        case .double(let double): double ?? (generatorType == .`default` ? 0.0 : Provider().randomDouble(min: Double.leastNonzeroMagnitude, max: Double(defaultMaxValue)))
+        case .decimal(let decimal): decimal ?? (generatorType == .`default` ? 0.0 : Provider().randomDecimal(min: Decimal.leastNonzeroMagnitude, max: Decimal(defaultMaxValue)))
+        case .nsdecimalnumber(let nsDecimalBumber): nsDecimalBumber ?? (generatorType == .`default` ? 0.0 : Provider().randomNSDecimalNumber(min: NSDecimalNumber.zero, max: NSDecimalNumber(value: defaultMaxValue)))
         case .character(let character): character ?? (Provider().randomString().first ?? "R")
-        case .string(let value): value ?? (generatorType == .`default` ? "Hello World" : Provider().randomString())
-        case .bool(let value): value ?? (generatorType == .`default` ? true : Provider().randomBool())
+        case .string(let string): string ?? (generatorType == .`default` ? "Hello World" : Provider().randomString())
+        case .bool(let bool): bool ?? (generatorType == .`default` ? true : Provider().randomBool())
         case .date: generatorType == .`default` ? Date(timeIntervalSinceReferenceDate: 0) : Provider().date()
         case .uuid: UUID()
         case .objectidentifier: ObjectIdentifier(DummyClass())
@@ -219,14 +292,16 @@ public enum MockBuilderSupportedType: Equatable {
         case .cgsize: CGSize()
         case .cgvector: CGVector()
         case .cgfloat: CGFloat()
-        case .url(let value): value ?? (generatorType == .`default` ? URL(string: "https://www.apple.com")! : Provider().url())
-        case .image: Image(systemName: "swift")
+        case .url(let url): url ?? (generatorType == .`default` ? URL(string: "https://www.apple.com")! : Provider().url())
+        case .image(let image): image ?? Provider().randomImage()
+        case .color(let color): color ?? Provider().randomColor()
         }
     }
 
     public func exprSyntax(
         elementType: MockBuilderSupportedType,
-        generatorType: DataGeneratorType
+        generatorType: DataGeneratorType,
+        typeIsOptional: Bool
     ) -> ExprSyntax {
         var associatedValue: String?
         
@@ -273,11 +348,21 @@ public enum MockBuilderSupportedType: Equatable {
             associatedValue = uuid != nil ? "\(uuid!)" : nil
         case .url(let urlString):
             associatedValue = urlString != nil ? "\(urlString!)" : nil
-        case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat, .image:
+        case .image(let image):
+            associatedValue = image != nil ? "\(image!)" : nil
+        case .color(let color):
+            associatedValue = color != nil ? "\(color!)" : nil
+        case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat:
             associatedValue = nil
         }
         
-        return ExprSyntax(stringLiteral: exprStringValue(with: associatedValue, generatorType: generatorType))
+        return ExprSyntax(
+            stringLiteral: exprStringLiteral(
+                with: associatedValue,
+                generatorType: generatorType,
+                typeIsOptional: typeIsOptional
+            )
+        )
     }
 }
 

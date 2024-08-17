@@ -55,27 +55,21 @@ extension MockBuilderMacro {
         
         
         if let structDecl = decl as? StructDeclSyntax {
-            storedPropertyMembers = decl.getStoredProperties(with: structDecl.memberBlock)
+            storedPropertyMembers = decl.getUninitializerStoredProperties(with: structDecl.memberBlock)
             initMembers = decl.getInitMembers(with: structDecl.memberBlock)
             
         } else if let classDecl = decl as? ClassDeclSyntax {
-            storedPropertyMembers = decl.getStoredProperties(with: classDecl.memberBlock)
+            storedPropertyMembers = decl.getUninitializerStoredProperties(with: classDecl.memberBlock)
             initMembers = decl.getInitMembers(with: classDecl.memberBlock)
         }
         
         // filtered properties which properties has `@MochBuilderProperty` Peer Macro
         let filteredProperties = getAllPropertiesWithMochBuilderPropertyIdentifier(from: decl)
-
+        
         if initMembers.isEmpty {
             // No custom init around. We use the memberwise initializer's properties:
             return configureProperties(storedPropertyMembers: storedPropertyMembers,
-                                       with: filteredProperties).map {
-                ParameterItem(
-                    identifierName: $0.0,
-                    identifierType: $0.1,
-                    initialValue: $0.2
-                )
-            }
+                                       with: filteredProperties).compactMap({ $0 })
         }
         
         let largestParameterList = initMembers.map {
@@ -112,7 +106,7 @@ extension MockBuilderMacro {
     private static func configureProperties(
         storedPropertyMembers: [VariableDeclSyntax],
         with filteredPropertiesWithMockBuilderMacroIdentifier: [MemberBlockItemSyntax]
-    ) -> [(String, TypeSyntax, AnyObject?)] {
+    ) -> [ParameterItem?] {
         return storedPropertyMembers.compactMap { storedProperty in
             guard let propertyName = storedProperty.variableName,
                   let propertyType = storedProperty.variableType else {
@@ -127,12 +121,21 @@ extension MockBuilderMacro {
                     // Found a match, update the propertyName and propertyType
                     let mockPropertyInitialValue =  variableDecl.variableValue as? AnyObject
                     
-                    return (mockPropertyName, mockPropertyType, mockPropertyInitialValue)
+                    return ParameterItem(
+                        identifierName: mockPropertyName,
+                        identifierType: mockPropertyType,
+                        initialValue: mockPropertyInitialValue
+                    )
                 }
             }
             
             // No match found, return the original propertyName and propertyType
-            return (propertyName, propertyType, nil)
+            return ParameterItem(
+                identifierName: propertyName,
+                identifierType: propertyType,
+                initialValue: nil
+            )
+
         }
     }
     

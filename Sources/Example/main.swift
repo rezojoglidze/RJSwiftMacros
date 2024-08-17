@@ -10,21 +10,48 @@ import RJSwiftMacros
 import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
+
+@CodingKeys()
+@MockBuilder(numberOfItems: 1, dataGeneratorType: .default)
+struct CarModel: Decodable {
+   @CodingKeyIgnored() var title: String?
+    
+    var closure: (() -> ())?
+
+    let print: String
+    let cars: [Car]
+    
+    @CodingKeys()
+    @MockBuilder(numberOfItems: 5, dataGeneratorType: .default)
+    struct Car: Decodable {
+       @MockBuilderProperty(value: 2) let title: String
+        let description: String
+    }
+}
+
+
 @CodingKeys(codingKeyType: .snakeCase)
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct Person {
-    let name: String
+    let name: String?
     
-    @MockBuilderProperty(value: "surname")
     @CodingKeyProperty("second_name")
-    let surname: String
+    let surname: [String?]?
+    
+    @MockBuilderProperty(value: Color.blue)
+    let color: Color?
+    
+    @MockBuilderProperty(value: Image(systemName: "swift"))
+    let image: Image?
     
     let closureVariable: () -> Void
     @MockBuilderProperty(value: "k") let character: Character
 }
 
+
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
-struct ExampleAllSupportedTypesd {
+struct ExampleAllSupportedTypesd: Equatable {
+    var uuid: UUID = .init()
     @MockBuilderProperty(value: "StringVariable") let mockVariable: String
     @MockBuilderProperty(value: "C") let characterVariable: Character
 }
@@ -32,7 +59,7 @@ struct ExampleAllSupportedTypesd {
 print(ExampleAllSupportedTypesd.mock.characterVariable)
 
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
-enum VehicleType: String {
+enum VehicleType: String, Decodable {
     case car
     case bus
     case motorcycle
@@ -44,7 +71,7 @@ struct University {
     @MockBuilderProperty(value: "TSU") let name: String
     let president: Person
     let students: [Person]
-    let privateVehicles: [VehicleType]
+    let privateVehicles: [VehicleType]?
     @MockBuilderProperty(value: false) let isFree: Bool
     let image: Image
     
