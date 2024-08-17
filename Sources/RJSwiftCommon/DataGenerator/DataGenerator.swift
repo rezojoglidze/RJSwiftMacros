@@ -55,42 +55,42 @@ public enum MockBuilderSupportedType: Equatable {
         rawValue: String,
         initialValue: AnyObject? = nil
     ) {
-        let unwrappedInitialValue = (initialValue as? String ?? .empty).replacingOccurrences(of: "\"", with: "")
+        let wrappedInitialValue = (initialValue as? String ?? .empty).replacingOccurrences(of: "\"", with: "")
         
         switch rawValue.lowercased() {
-        case "int": self = .int(Int(unwrappedInitialValue))
-        case "int8": self = .int8(Int8(unwrappedInitialValue))
-        case "int16": self = .int16(Int16(unwrappedInitialValue))
-        case "int32": self = .int32(Int32(unwrappedInitialValue))
-        case "int64": self = .int64(Int64(unwrappedInitialValue))
-        case "uint": self = .uint(UInt(unwrappedInitialValue))
-        case "uint8": self = .uint8(UInt8(unwrappedInitialValue))
-        case "uint16": self = .uint16(UInt16(unwrappedInitialValue))
-        case "uint32": self = .uint32(UInt32(unwrappedInitialValue))
-        case "uint64": self = .uint64(UInt64(unwrappedInitialValue))
-        case "float": self = .float(Float(unwrappedInitialValue))
-        case "float32": self = .float32(Float32(unwrappedInitialValue))
-        case "float64": self = .float64(Float64(unwrappedInitialValue))
-        case "double": self = .double(Double(unwrappedInitialValue))
-        case "decimal": self = .decimal(Decimal(string: unwrappedInitialValue))
+        case "int": self = .int(Int(wrappedInitialValue))
+        case "int8": self = .int8(Int8(wrappedInitialValue))
+        case "int16": self = .int16(Int16(wrappedInitialValue))
+        case "int32": self = .int32(Int32(wrappedInitialValue))
+        case "int64": self = .int64(Int64(wrappedInitialValue))
+        case "uint": self = .uint(UInt(wrappedInitialValue))
+        case "uint8": self = .uint8(UInt8(wrappedInitialValue))
+        case "uint16": self = .uint16(UInt16(wrappedInitialValue))
+        case "uint32": self = .uint32(UInt32(wrappedInitialValue))
+        case "uint64": self = .uint64(UInt64(wrappedInitialValue))
+        case "float": self = .float(Float(wrappedInitialValue))
+        case "float32": self = .float32(Float32(wrappedInitialValue))
+        case "float64": self = .float64(Float64(wrappedInitialValue))
+        case "double": self = .double(Double(wrappedInitialValue))
+        case "decimal": self = .decimal(Decimal(string: wrappedInitialValue))
         case "nsdecimalnumber":
-            if let decimalValue = Decimal(string: unwrappedInitialValue) {
+            if let decimalValue = Decimal(string: wrappedInitialValue) {
                 self = .nsdecimalnumber(NSDecimalNumber(decimal: decimalValue))
             } else {
                 self = .nsdecimalnumber(nil)
             }
-        case "character": self = .character(unwrappedInitialValue.first)
-        case "string": self = .string(unwrappedInitialValue)
-        case "bool": self = .bool(Bool(unwrappedInitialValue))
+        case "character": self = .character(wrappedInitialValue.first)
+        case "string": self = .string(wrappedInitialValue)
+        case "bool": self = .bool(Bool(wrappedInitialValue))
         case "date": self = .date
-        case "uuid": self = .uuid(UUID(uuidString: unwrappedInitialValue))
+        case "uuid": self = .uuid(UUID(uuidString: wrappedInitialValue))
         case "objectidentifier": self = .objectidentifier
         case "cgpoint": self = .cgpoint
         case "cgrect": self = .cgrect
         case "cgsize": self = .cgsize
         case "cgvector": self = .cgvector
         case "cgfloat": self = .cgfloat
-        case "url": self = .url(URL(string: unwrappedInitialValue))
+        case "url": self = .url(URL(string: wrappedInitialValue))
         case "image": self = .image(initialValue as? String)
         case "color" : self = .color(initialValue as? String)
         default: return nil
