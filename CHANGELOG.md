@@ -1,5 +1,8 @@
 # Change Log
 
+### [0.3.6(31)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.6) — *17 08 2024*
+- Update swift-syntax version to 510.0.0
+
 ### [0.3.5(30)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.5) — *17 08 2024*
 - Add `Color` and `Image` type support both from MockBuilder and MockBuilderProperty macros.
 
