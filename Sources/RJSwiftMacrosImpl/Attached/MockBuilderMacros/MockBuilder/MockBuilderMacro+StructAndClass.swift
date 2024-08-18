@@ -89,12 +89,11 @@ extension MockBuilderMacro {
             }
             
             return memberBlockItems.filter { member in
-                guard let variableDecl = member.decl.as(VariableDeclSyntax.self),
-                      let attributes = variableDecl.attributes.as(AttributeListSyntax.self) else {
+                guard let variableDecl = member.decl.as(VariableDeclSyntax.self) else {
                     return false
                 }
                 
-                return attributes.contains { attribute in
+                return variableDecl.attributes.contains { attribute in
                     attribute.as(AttributeSyntax.self)?
                         .attributeName.as(IdentifierTypeSyntax.self)?
                         .name.text == Constants.mockBuilderProperyIdentifier.rawValue

@@ -14,12 +14,14 @@ public enum MockBuilderDiagnostic: DiagnosticMessage {
     case argumentNotGreaterThanZero
     case enumWithEmptyCases
     case mockBuilderPropertyNotSupported(String)
+    case mockBuilderPropertyNotSupoortsNil
     
     var rawValue: String {
         switch self {
         case .argumentNotGreaterThanZero: "argumentNotGreaterThanZero"
         case .enumWithEmptyCases: "enumWithEmptyCases"
         case .mockBuilderPropertyNotSupported: "mockBuilderPropertyNotSupported"
+        case .mockBuilderPropertyNotSupoortsNil: "mockBuilderPropertyNotSupoortsNil"
         }
     }
     
@@ -29,6 +31,7 @@ public enum MockBuilderDiagnostic: DiagnosticMessage {
         case .argumentNotGreaterThanZero: .error
         case .enumWithEmptyCases: .error
         case .mockBuilderPropertyNotSupported: .warning
+        case .mockBuilderPropertyNotSupoortsNil: .error
         }
     }
     
@@ -37,6 +40,7 @@ public enum MockBuilderDiagnostic: DiagnosticMessage {
         case .argumentNotGreaterThanZero: "'numberOfitems' argument must be greater than zero"
         case .enumWithEmptyCases: "Enum must contain at least one case"
         case .mockBuilderPropertyNotSupported(let type): "Type \(type) isn't supported from `MockBuilderProperty` macro"
+        case .mockBuilderPropertyNotSupoortsNil: "Nil isnot supported user Optional<Any>.none instead"
         }
     }
     
@@ -99,7 +103,7 @@ public enum MockBuilderDiagnostic: DiagnosticMessage {
                     ]
                 )
             ]
-        case .argumentNotGreaterThanZero, .mockBuilderPropertyNotSupported:
+        case .argumentNotGreaterThanZero, .mockBuilderPropertyNotSupported, .mockBuilderPropertyNotSupoortsNil:
             return [] // No suggestion to provide
         }
     }

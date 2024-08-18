@@ -126,7 +126,10 @@ extension MockBuilderMacro {
         initialValue: AnyObject?,
         typeIsOptional: Bool
     ) -> ExprSyntax? {
-        if let simpleIdentifierType = simpleType.as(IdentifierTypeSyntax.self) {
+        // Investigate is in progress, trying to find better solution. TODO: Refactor it
+        if initialValue.debugDescription == Constants.nilTypeOptionalDebugDescription.rawValue {
+            return ExprSyntax(stringLiteral: "nil")
+        } else if let simpleIdentifierType = simpleType.as(IdentifierTypeSyntax.self) {
             if let supportedType = SupportedType(
                 rawValue: simpleIdentifierType.name.text,
                 initialValue: initialValue
@@ -138,8 +141,8 @@ extension MockBuilderMacro {
                 )
             }
             
+            // For example, if we pass enum case `VehicleType.car`, in this case we need string value of its.
             if let initialValue = initialValue as? String {
-                // For example, if we pass enum case `VehicleType.car`, in this case we need string value of its.
                 return ExprSyntax(stringLiteral: initialValue)
             } else {
                 // Custom type that attaches MockBuilder in its declaration:

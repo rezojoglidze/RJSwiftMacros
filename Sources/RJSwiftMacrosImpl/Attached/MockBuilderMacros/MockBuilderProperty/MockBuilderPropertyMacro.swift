@@ -24,7 +24,28 @@ public struct MockBuilderPropertyMacro: PeerMacro {
             context: context
         )
         
+        checkIfInitialValueIsNil(
+            of: node,
+            declaration: declaration,
+            context: context
+        )
+        
         return []
+    }
+    
+    private static func checkIfInitialValueIsNil(
+        of node: SwiftSyntax.AttributeSyntax,
+        declaration: some SwiftSyntax.DeclSyntaxProtocol,
+        context: some SwiftSyntaxMacros.MacroExpansionContext
+    ) {
+        if let _ = node.arguments?.as(LabeledExprListSyntax.self)?.first(where: {
+            $0.expression.is(NilLiteralExprSyntax.self)
+        }) {
+            MockBuilderDiagnostic.report(
+                diagnostic: .mockBuilderPropertyNotSupoortsNil,
+                node: Syntax(node),
+                context: context)
+        }
     }
     
     private static func checkIfMockBuilderPropertyIsSupported(
@@ -32,16 +53,26 @@ public struct MockBuilderPropertyMacro: PeerMacro {
         declaration: some SwiftSyntax.DeclSyntaxProtocol,
         context: some SwiftSyntaxMacros.MacroExpansionContext
     ) {
-        if let variableDecl = declaration.as(VariableDeclSyntax.self),
-           let variableType = variableDecl.variableType?.as(IdentifierTypeSyntax.self)?.name.text,
-           let mockSupportedType = MockBuilderSupportedType(rawValue: variableType) {
-            
-            if MockBuilderSupportedType.notSupportedFromMockBuilderPropertyMacro(type: mockSupportedType) {
-                MockBuilderDiagnostic.report(
-                    diagnostic: .mockBuilderPropertyNotSupported(mockSupportedType.rawValue),
-                    node: Syntax(node),
-                    context: context)
+        guard let variableDecl = declaration.as(VariableDeclSyntax.self) else { return }
+        
+        var mockSupportedTypeString: String {
+            if let variableType = variableDecl.variableType?.as(IdentifierTypeSyntax.self)?.name.text {
+                return variableType
+            } else if let wrappedType = variableDecl.variableType?.as(OptionalTypeSyntax.self)?.wrappedType,
+                      let variableTypeString = wrappedType.as(IdentifierTypeSyntax.self)?.name.text {
+                
+                return  variableTypeString
             }
+            
+            return .empty
+        }
+                
+        if let mockSupportedType = MockBuilderSupportedType(rawValue: mockSupportedTypeString),
+           MockBuilderSupportedType.notSupportedFromMockBuilderPropertyMacro(type: mockSupportedType) {
+            MockBuilderDiagnostic.report(
+                diagnostic: .mockBuilderPropertyNotSupported(mockSupportedType.rawValue),
+                node: Syntax(node),
+                context: context)
         }
     }
 }
