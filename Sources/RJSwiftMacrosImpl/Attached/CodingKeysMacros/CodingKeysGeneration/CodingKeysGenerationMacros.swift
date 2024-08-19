@@ -55,7 +55,7 @@ enum CodingKeys: String, CodingKey {
         return [casesDecl]
     }
     
-    static func variableTypeIsSuitable(with variableDecl: VariableDeclSyntax) -> Bool {
+   private static func variableTypeIsSuitable(with variableDecl: VariableDeclSyntax) -> Bool {
         var variableType: TypeSyntax? {
             if let decl = variableDecl.variableType?.as(OptionalTypeSyntax.self)?.wrappedType {
                 return decl
@@ -73,7 +73,7 @@ enum CodingKeys: String, CodingKey {
         return false
     }
     
-    static func needToSkipCodingKeyCase(variableDecl: VariableDeclSyntax) -> Bool {
+    private static func needToSkipCodingKeyCase(variableDecl: VariableDeclSyntax) -> Bool {
         if attributesElement(withIdentifier: Constants.codingKeyIgnoredIdentifier.rawValue, in: variableDecl.attributes) != nil ||
            variableDecl.isStatic ||
            !variableDecl.isStoredProperty {
@@ -83,7 +83,7 @@ enum CodingKeys: String, CodingKey {
         return true
     }
     
-    static func getCodingKeyType(from node: SwiftSyntax.AttributeSyntax) -> CodingKeyType {
+    private static func getCodingKeyType(from node: SwiftSyntax.AttributeSyntax) -> CodingKeyType {
         guard let argumentTuple = node.arguments?.as(LabeledExprListSyntax.self),
               let generatorArgument = argumentTuple.first(where: { $0.label?.text == Constants.codingKeyTypeIdentifier.rawValue }),
               let argumentValue = generatorArgument.expression.as(MemberAccessExprSyntax.self)?.declName.baseName,

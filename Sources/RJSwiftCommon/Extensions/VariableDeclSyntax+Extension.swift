@@ -70,7 +70,6 @@ public extension VariableDeclSyntax {
     }
     
     var variableValue: String? {
-        attributes.as(AttributeSyntax.self)?.arguments?
-            .as(LabeledExprListSyntax.self)?.first?.expression.description
+        attributes.as(LabeledExprListSyntax.self)?.first?.expression.description
     }
 }
