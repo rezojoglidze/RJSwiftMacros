@@ -55,11 +55,11 @@ extension MockBuilderMacro {
         
         
         if let structDecl = decl as? StructDeclSyntax {
-            storedPropertyMembers = decl.getUninitializerStoredProperties(with: structDecl.memberBlock)
+            storedPropertyMembers = decl.getUninitializedStoredProperties(with: structDecl.memberBlock)
             initMembers = decl.getInitMembers(with: structDecl.memberBlock)
             
         } else if let classDecl = decl as? ClassDeclSyntax {
-            storedPropertyMembers = decl.getUninitializerStoredProperties(with: classDecl.memberBlock)
+            storedPropertyMembers = decl.getUninitializedStoredProperties(with: classDecl.memberBlock)
             initMembers = decl.getInitMembers(with: classDecl.memberBlock)
         }
         
