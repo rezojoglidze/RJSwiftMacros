@@ -38,7 +38,7 @@ extension MockBuilderMacro {
                   type.as(OptionalTypeSyntax.self) != nil ||
                   type.as(FunctionTypeSyntax.self) != nil {
             return getSimpleExprSyntax(
-                simpleType: type,
+                simpleTypeSyntax: type,
                 generatorType: generatorType,
                 initialValue: initialValue, 
                 typeIsOptional: false
@@ -121,7 +121,7 @@ extension MockBuilderMacro {
     
     // MARK: Simple Expr Syntax Methods
     private static func getSimpleExprSyntax<T: TypeSyntaxProtocol>(
-        simpleType: T,
+        simpleTypeSyntax: T,
         generatorType: DataGeneratorType,
         initialValue: AnyObject?,
         typeIsOptional: Bool
@@ -129,10 +129,40 @@ extension MockBuilderMacro {
         // Investigate is in progress, trying to find better solution. TODO: Refactor it
         if initialValue.debugDescription == Constants.nilTypeOptionalDebugDescription.rawValue {
             return ExprSyntax(stringLiteral: "nil")
-        } else if let simpleIdentifierType = simpleType.as(IdentifierTypeSyntax.self) {
-            if let supportedType = SupportedType(
-                rawValue: simpleIdentifierType.name.text,
+        } else if let simpleIdentifierType = simpleTypeSyntax.as(IdentifierTypeSyntax.self) {
+            return getSimpleExprSyntaxForIdentifierType(
+                simpleIdentifierType: simpleIdentifierType,
+                generatorType: generatorType,
+                initialValue: initialValue,
+                typeIsOptional: typeIsOptional
+            )
+        } else if let simpleIOptionaldentifierType = simpleTypeSyntax.as(OptionalTypeSyntax.self) {
+            return getSimpleExprSyntaxForOptionalType(
+                simpleOptionalType: simpleIOptionaldentifierType,
+                generatorType: generatorType,
                 initialValue: initialValue
+            )
+        } else if let simleFunctionType = simpleTypeSyntax.as(FunctionTypeSyntax.self) {
+            return getSimpleExprSyntaxForClosure(
+                simpleType: simleFunctionType,
+                generatorType: generatorType,
+                initialValue: initialValue
+            )
+        } else {
+            return nil
+        }
+    }
+    
+    // MARK: Get Simple Expr Syntax For Identifier Type Syntax
+    private static func getSimpleExprSyntaxForIdentifierType(
+        simpleIdentifierType: IdentifierTypeSyntax,
+        generatorType: DataGeneratorType,
+        initialValue: AnyObject?,
+        typeIsOptional: Bool
+    ) -> ExprSyntax?  {
+        if let supportedType = SupportedType(
+            rawValue: simpleIdentifierType.name.text,
+            initialValue: initialValue
             ) {
                 return supportedType.exprSyntax(
                     elementType: supportedType,
@@ -156,24 +186,10 @@ extension MockBuilderMacro {
                     )
                 )
             }
-        } else if let simpleIOptionaldentifierType = simpleType.as(OptionalTypeSyntax.self) {
-            return getSimpleExprSyntaxForOptionalType(
-                simpleOptionalType: simpleIOptionaldentifierType,
-                generatorType: generatorType,
-                initialValue: initialValue
-            )
-        } else if let simleFunctionType = simpleType.as(FunctionTypeSyntax.self) {
-            return getSimpleExprSyntaxForClosure(
-                simpleType: simleFunctionType,
-                generatorType: generatorType,
-                initialValue: initialValue
-            )
-        } else {
-            return nil
-        }
+        
     }
     
-    // MARK: Get Simple Expr Syntax For Optional Type
+    // MARK: Get Simple Expr Syntax For Optional Type Syntax
     private static func getSimpleExprSyntaxForOptionalType(
         simpleOptionalType: OptionalTypeSyntax,
         generatorType: DataGeneratorType,
@@ -191,14 +207,14 @@ extension MockBuilderMacro {
         guard let type = simpleOptionalType.wrappedType.as(IdentifierTypeSyntax.self) else { return nil }
         
         return getSimpleExprSyntax(
-            simpleType: type,
+            simpleTypeSyntax: type,
             generatorType: generatorType,
             initialValue: initialValue,
             typeIsOptional: true
         )
     }
     
-    // MARK: Get Simple Expr Syntax For Closure
+    // MARK: Get Simple Expr Syntax For Function Type Syntax
     private static func getSimpleExprSyntaxForClosure(
         simpleType: FunctionTypeSyntax,
         generatorType: DataGeneratorType,
