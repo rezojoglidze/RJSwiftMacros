@@ -17,19 +17,17 @@ extension MockBuilderMacro {
         decl: T,
         identifierToken: TokenSyntax, //Class or Struct name
         numberOfItems: Int?,
-        generatorType: DataGeneratorType,
         context: MacroExpansionContext
     ) -> [SwiftSyntax.DeclSyntax] {
         let validParameters = getValidParameterList(
             from: decl,
-            generatorType: generatorType,
             context: context
         )
         
-        let singleMockItemData = generateSingleMockItemData(parameters: validParameters, generatorType: generatorType)
+        let singleMockItemData = generateSingleMockItemData(parameters: validParameters)
         var mockArrayData: ArrayElementListSyntax? {
             if let numberOfItems {
-                return generateMockArrayData(parameters: validParameters, numberOfItems: numberOfItems, generatorType: generatorType)
+                return generateMockArrayData(parameters: validParameters, numberOfItems: numberOfItems)
             } else {
                 return nil
             }
@@ -47,7 +45,6 @@ extension MockBuilderMacro {
     // MARK: Return the array of mock item each valid parameters
     private static func getValidParameterList<T: DeclSyntaxProtocol>(
         from decl: T,
-        generatorType: DataGeneratorType,
         context: MacroExpansionContext
     ) -> [ParameterItem] {
         var storedPropertyMembers: [VariableDeclSyntax] = []
@@ -172,13 +169,9 @@ extension MockBuilderMacro {
     }
     
     private static func generateSingleMockItemData(
-        parameters: [ParameterItem],
-        generatorType: DataGeneratorType
+        parameters: [ParameterItem]
     ) -> ExprSyntax {
-        let parameterList = getParameterListForMockElement(
-            parameters: parameters,
-            generatorType: generatorType
-        )
+        let parameterList = getParameterListForMockElement(parameters: parameters)
         
         let singleItem = FunctionCallExprSyntax(
             calledExpression: MemberAccessExprSyntax(
@@ -195,13 +188,9 @@ extension MockBuilderMacro {
     
     private static func generateMockArrayData(
         parameters: [ParameterItem],
-        numberOfItems: Int,
-        generatorType: DataGeneratorType
+        numberOfItems: Int
     ) -> ArrayElementListSyntax {
-        let parameterList = getParameterListForMockElement(
-            parameters: parameters,
-            generatorType: generatorType
-        )
+        let parameterList = getParameterListForMockElement(parameters: parameters)
         
         var arrayElementListSyntax = ArrayElementListSyntax()
         

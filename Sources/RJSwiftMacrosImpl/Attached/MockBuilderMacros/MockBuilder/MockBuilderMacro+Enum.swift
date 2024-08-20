@@ -17,7 +17,6 @@ extension MockBuilderMacro {
         enumDecl: EnumDeclSyntax,
         identifierToken: TokenSyntax, //enum name
         numberOfItems: Int?,
-        generatorType: DataGeneratorType,
         context: some SwiftSyntaxMacros.MacroExpansionContext
     ) -> [SwiftSyntax.DeclSyntax] {
         
@@ -38,15 +37,14 @@ extension MockBuilderMacro {
             if let numberOfItems {
                 return generateMockArrayCases(
                     cases: cases,
-                    numberOfItems: numberOfItems,
-                    generatorType: generatorType
+                    numberOfItems: numberOfItems
                 )
             } else {
                 return nil
             }
         }
         
-        let singleMockEnumCase = generateSingleMockEnumCase(cases: cases, generatorType: generatorType)
+        let singleMockEnumCase = generateSingleMockEnumCase(cases: cases)
 
         let mockCode = generateMockCodeSyntax(
             identifierToken: identifierToken,
@@ -58,8 +56,7 @@ extension MockBuilderMacro {
     }
     
     private static func generateSingleMockEnumCase(
-        cases: [EnumCaseDeclSyntax],
-        generatorType: DataGeneratorType
+        cases: [EnumCaseDeclSyntax]
     ) -> ExprSyntax {
         guard let caseItem = cases.randomElement() else {
             fatalError("Cases array must not be empty")
@@ -83,8 +80,7 @@ extension MockBuilderMacro {
                     ),
                     leftParen: .leftParenToken(),
                     arguments: getParameterListForMockElement(
-                        parameters: parameters,
-                        generatorType: generatorType
+                        parameters: parameters
                     ),
                     rightParen: .rightParenToken()
                 )
@@ -103,8 +99,7 @@ extension MockBuilderMacro {
     
     private static func generateMockArrayCases(
         cases: [EnumCaseDeclSyntax],
-        numberOfItems: Int,
-        generatorType: DataGeneratorType
+        numberOfItems: Int
     ) -> ArrayElementListSyntax {
         var arrayElementListSyntax = ArrayElementListSyntax()
         
@@ -132,8 +127,7 @@ extension MockBuilderMacro {
                         ),
                         leftParen: .leftParenToken(),
                         arguments: getParameterListForMockElement(
-                            parameters: parameters,
-                            generatorType: generatorType
+                            parameters: parameters
                         ),
                         rightParen: .rightParenToken()
                     )

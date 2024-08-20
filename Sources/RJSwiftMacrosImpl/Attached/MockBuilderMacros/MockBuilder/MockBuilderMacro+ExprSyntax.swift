@@ -17,21 +17,18 @@ extension MockBuilderMacro {
     // MARK: Methods
     static func getExpressionSyntax(
         from type: TypeSyntax,
-        generatorType: DataGeneratorType,
         initialValue: AnyObject?
     ) -> ExprSyntax? {
         if type.isArray,
            let type = type.as(ArrayTypeSyntax.self) {
             return getArrayExprSyntax(
                 arrayType: type,
-                generatorType: generatorType,
                 initialValue: initialValue
             )
         } else if type.isDictionary,
                   let type = type.as(DictionaryTypeSyntax.self) {
             return getDictionaryExprSyntax(
                 dictionaryType: type,
-                generatorType: generatorType,
                 initialValue: initialValue
             )
         } else if type.as(IdentifierTypeSyntax.self) != nil ||
@@ -39,7 +36,6 @@ extension MockBuilderMacro {
                   type.as(FunctionTypeSyntax.self) != nil {
             return getSimpleExprSyntax(
                 simpleTypeSyntax: type,
-                generatorType: generatorType,
                 initialValue: initialValue, 
                 typeIsOptional: false
             )
@@ -50,7 +46,6 @@ extension MockBuilderMacro {
     
     private static func getArrayExprSyntax(
         arrayType: ArrayTypeSyntax,
-        generatorType: DataGeneratorType,
         initialValue: AnyObject?
     ) -> ExprSyntax? {
         if let simpleType = arrayType.element.as(IdentifierTypeSyntax.self),
@@ -69,7 +64,6 @@ extension MockBuilderMacro {
         
         if let expresion = getExpressionSyntax(
             from: TypeSyntax(arrayType.element),
-            generatorType: generatorType,
             initialValue: initialValue
         ) {
             return ExprSyntax(
@@ -90,17 +84,14 @@ extension MockBuilderMacro {
     
     private static func getDictionaryExprSyntax(
         dictionaryType: DictionaryTypeSyntax,
-        generatorType: DataGeneratorType,
         initialValue: AnyObject?
     ) -> ExprSyntax? {
         if let key = getExpressionSyntax(
             from: dictionaryType.key,
-            generatorType: generatorType,
             initialValue: initialValue
         ),
            let value = getExpressionSyntax(
             from: dictionaryType.value,
-            generatorType: generatorType,
             initialValue: initialValue
            ) {
             
@@ -122,7 +113,6 @@ extension MockBuilderMacro {
     // MARK: Simple Expr Syntax Methods
     private static func getSimpleExprSyntax<T: TypeSyntaxProtocol>(
         simpleTypeSyntax: T,
-        generatorType: DataGeneratorType,
         initialValue: AnyObject?,
         typeIsOptional: Bool
     ) -> ExprSyntax? {
@@ -132,20 +122,17 @@ extension MockBuilderMacro {
         } else if let simpleIdentifierType = simpleTypeSyntax.as(IdentifierTypeSyntax.self) {
             return getSimpleExprSyntaxForIdentifierType(
                 simpleIdentifierType: simpleIdentifierType,
-                generatorType: generatorType,
                 initialValue: initialValue,
                 typeIsOptional: typeIsOptional
             )
         } else if let simpleIOptionaldentifierType = simpleTypeSyntax.as(OptionalTypeSyntax.self) {
             return getSimpleExprSyntaxForOptionalType(
                 simpleOptionalType: simpleIOptionaldentifierType,
-                generatorType: generatorType,
                 initialValue: initialValue
             )
         } else if let simleFunctionType = simpleTypeSyntax.as(FunctionTypeSyntax.self) {
             return getSimpleExprSyntaxForClosure(
                 simpleType: simleFunctionType,
-                generatorType: generatorType,
                 initialValue: initialValue
             )
         } else {
@@ -155,8 +142,7 @@ extension MockBuilderMacro {
     
     // MARK: Get Simple Expr Syntax For Identifier Type Syntax
     private static func getSimpleExprSyntaxForIdentifierType(
-        simpleIdentifierType: IdentifierTypeSyntax,
-        generatorType: DataGeneratorType,
+        simpleIdentifierType: IdentifierTypeSyntax,    
         initialValue: AnyObject?,
         typeIsOptional: Bool
     ) -> ExprSyntax?  {
@@ -166,7 +152,6 @@ extension MockBuilderMacro {
             ) {
                 return supportedType.exprSyntax(
                     elementType: supportedType,
-                    generatorType: generatorType,
                     typeIsOptional: typeIsOptional
                 )
             }
@@ -192,14 +177,12 @@ extension MockBuilderMacro {
     // MARK: Get Simple Expr Syntax For Optional Type Syntax
     private static func getSimpleExprSyntaxForOptionalType(
         simpleOptionalType: OptionalTypeSyntax,
-        generatorType: DataGeneratorType,
         initialValue: AnyObject?
     ) -> ExprSyntax? {
         // If unwrapped value is array type return ArrayExprSyntax
         if let arrayTypeSyntax = simpleOptionalType.wrappedType.as(ArrayTypeSyntax.self) {
            return getArrayExprSyntax(
                 arrayType: arrayTypeSyntax,
-                generatorType: generatorType,
                 initialValue: initialValue
            )
         }
@@ -208,7 +191,6 @@ extension MockBuilderMacro {
         
         return getSimpleExprSyntax(
             simpleTypeSyntax: type,
-            generatorType: generatorType,
             initialValue: initialValue,
             typeIsOptional: true
         )
@@ -217,7 +199,6 @@ extension MockBuilderMacro {
     // MARK: Get Simple Expr Syntax For Function Type Syntax
     private static func getSimpleExprSyntaxForClosure(
         simpleType: FunctionTypeSyntax,
-        generatorType: DataGeneratorType,
         initialValue: AnyObject?) -> ExprSyntax? {
             let closerParameters = simpleType.parameters.map { _ in "_" }.joined(separator: ", ")
             var closureString: String {

@@ -10,11 +10,6 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 fileprivate typealias Provider = MockDataProvider
-// MARK: - Data Generator Type
-public enum DataGeneratorType: String {
-    case `default`
-    case random
-}
 
 // MARK: - ❗⚠️❗Keep all cases names in lowercase.❗⚠️❗
 // MARK: ❗⚠️❗if type isn't supported from MockBuilderItem macro add it to `notSupportedTypesFromMockBuilderProperty`.❗⚠️❗
@@ -225,7 +220,6 @@ public enum MockBuilderSupportedType: Equatable {
     // MARK: Methods
     func exprStringLiteral(
         with associatedValue: String?,
-        generatorType: DataGeneratorType,
         typeIsOptional: Bool
     ) -> String {
         let firstPart = "MockBuilderSupportedType.generate(elementType: "
@@ -247,44 +241,43 @@ public enum MockBuilderSupportedType: Equatable {
             switch self {
             case .int, .int8, .int16, .int32, .int64, .uint, .uint8, .uint16, .uint32, .uint64,
                     .float, .float32, .float64, .double, .decimal, .nsdecimalnumber, .bool, .uuid, .url, .color, .image:
-                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue))" + lastPart
+                return firstPart + ".\(rawValue.lowercased())())" + lastPart
                 
             case .string, .character:
-                return firstPart + ".\(rawValue.lowercased())(), generatorType: .\(generatorType.rawValue))" + lastPart
+                return firstPart + ".\(rawValue.lowercased())())" + lastPart
                 
             case .date, .objectidentifier, .cgpoint, .cgrect, .cgsize, .cgvector, .cgfloat:
-                return firstPart + ".\(rawValue.lowercased()), generatorType: .\(generatorType.rawValue))" + lastPart
+                return firstPart + ".\(rawValue.lowercased()))" + lastPart
             }
         }
     }
     
     public static func generate(
-        elementType: MockBuilderSupportedType,
-        generatorType: DataGeneratorType? = nil
+        elementType: MockBuilderSupportedType
     ) -> Any {
         let defaultMaxValue = 100000
         
         return switch elementType {
-        case .int(let int): int ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int.zero, max: Int(defaultMaxValue)))
-        case .int8(let int): int ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int8.zero, max: Int8.max))
-        case .int16(let int): int ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int16.zero, max: Int16.max))
-        case .int32(let int): int ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int32.zero, max: Int32.max))
-        case .int64(let int): int ?? (generatorType == .`default` ? 0 : Provider().randomInt(min: Int64.zero, max: Int64(defaultMaxValue)))
-        case .uint(let uint): uint ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt.zero, max: UInt(defaultMaxValue)))
-        case .uint8(let uint): uint ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt8.zero, max: UInt8.max))
-        case .uint16(let uint): uint ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt16.zero, max: UInt16.max))
-        case .uint32(let uint): uint ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt32.zero, max: UInt32(defaultMaxValue)))
-        case .uint64(let uint): uint ?? (generatorType == .`default` ? 0 : Provider().randomUInt(min: UInt64.zero, max: UInt64(defaultMaxValue)))
-        case .float(let float): float ?? (generatorType == .`default` ? 0.0 : Provider().randomFloat(min: Float.leastNonzeroMagnitude, max: Float(defaultMaxValue)))
-        case .float32(let float): float ?? (generatorType == .`default` ? 0.0 : Provider().randomFloat(min: Float32.leastNonzeroMagnitude, max: Float32(defaultMaxValue)))
-        case .float64(let float): float ?? (generatorType == .`default` ? 0.0 : Provider().randomFloat(min: Float64.leastNonzeroMagnitude, max: Float64(defaultMaxValue)))
-        case .double(let double): double ?? (generatorType == .`default` ? 0.0 : Provider().randomDouble(min: Double.leastNonzeroMagnitude, max: Double(defaultMaxValue)))
-        case .decimal(let decimal): decimal ?? (generatorType == .`default` ? 0.0 : Provider().randomDecimal(min: Decimal.leastNonzeroMagnitude, max: Decimal(defaultMaxValue)))
-        case .nsdecimalnumber(let nsDecimalBumber): nsDecimalBumber ?? (generatorType == .`default` ? 0.0 : Provider().randomNSDecimalNumber(min: NSDecimalNumber.zero, max: NSDecimalNumber(value: defaultMaxValue)))
+        case .int(let int): int ?? Provider().randomInt(min: Int.zero, max: Int(defaultMaxValue))
+        case .int8(let int): int ?? Provider().randomInt(min: Int8.zero, max: Int8.max)
+        case .int16(let int): int ?? Provider().randomInt(min: Int16.zero, max: Int16.max)
+        case .int32(let int): int ?? Provider().randomInt(min: Int32.zero, max: Int32.max)
+        case .int64(let int): int ?? Provider().randomInt(min: Int64.zero, max: Int64(defaultMaxValue))
+        case .uint(let uint): uint ?? Provider().randomUInt(min: UInt.zero, max: UInt(defaultMaxValue))
+        case .uint8(let uint): uint ?? Provider().randomUInt(min: UInt8.zero, max: UInt8.max)
+        case .uint16(let uint): uint ?? Provider().randomUInt(min: UInt16.zero, max: UInt16.max)
+        case .uint32(let uint): uint ?? Provider().randomUInt(min: UInt32.zero, max: UInt32(defaultMaxValue))
+        case .uint64(let uint): uint ?? Provider().randomUInt(min: UInt64.zero, max: UInt64(defaultMaxValue))
+        case .float(let float): float ?? Provider().randomFloat(min: Float.leastNonzeroMagnitude, max: Float(defaultMaxValue))
+        case .float32(let float): float ?? Provider().randomFloat(min: Float32.leastNonzeroMagnitude, max: Float32(defaultMaxValue))
+        case .float64(let float): float ?? Provider().randomFloat(min: Float64.leastNonzeroMagnitude, max: Float64(defaultMaxValue))
+        case .double(let double): double ?? Provider().randomDouble(min: Double.leastNonzeroMagnitude, max: Double(defaultMaxValue))
+        case .decimal(let decimal): decimal ?? Provider().randomDecimal(min: Decimal.leastNonzeroMagnitude, max: Decimal(defaultMaxValue))
+        case .nsdecimalnumber(let nsDecimalBumber): nsDecimalBumber ?? Provider().randomNSDecimalNumber(min: NSDecimalNumber.zero, max: NSDecimalNumber(value: defaultMaxValue))
         case .character(let character): character ?? (Provider().randomString().first ?? "R")
-        case .string(let string): string ?? (generatorType == .`default` ? "Hello World" : Provider().randomString())
-        case .bool(let bool): bool ?? (generatorType == .`default` ? true : Provider().randomBool())
-        case .date: generatorType == .`default` ? Date(timeIntervalSinceReferenceDate: 0) : Provider().date()
+        case .string(let string): string ?? Provider().randomString()
+        case .bool(let bool): bool ?? Provider().randomBool()
+        case .date: Provider().date()
         case .uuid: UUID()
         case .objectidentifier: ObjectIdentifier(DummyClass())
         case .cgpoint: CGPoint()
@@ -292,7 +285,7 @@ public enum MockBuilderSupportedType: Equatable {
         case .cgsize: CGSize()
         case .cgvector: CGVector()
         case .cgfloat: CGFloat()
-        case .url(let url): url ?? (generatorType == .`default` ? URL(string: "https://www.apple.com")! : Provider().url())
+        case .url(let url): url ?? Provider().url()
         case .image(let image): image ?? Provider().randomImage()
         case .color(let color): color ?? Provider().randomColor()
         }
@@ -300,7 +293,6 @@ public enum MockBuilderSupportedType: Equatable {
 
     public func exprSyntax(
         elementType: MockBuilderSupportedType,
-        generatorType: DataGeneratorType,
         typeIsOptional: Bool
     ) -> ExprSyntax {
         var associatedValue: String?
@@ -359,7 +351,6 @@ public enum MockBuilderSupportedType: Equatable {
         return ExprSyntax(
             stringLiteral: exprStringLiteral(
                 with: associatedValue,
-                generatorType: generatorType,
                 typeIsOptional: typeIsOptional
             )
         )

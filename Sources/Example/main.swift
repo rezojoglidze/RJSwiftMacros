@@ -12,7 +12,7 @@ import RJSwiftMacrosImplDependencies
 
 
 @CodingKeys()
-@MockBuilder(numberOfItems: 1, dataGeneratorType: .default)
+@MockBuilder(numberOfItems: 1)
 struct CarModel: Decodable {
    @CodingKeyIgnored() var title: String?
     
@@ -22,7 +22,7 @@ struct CarModel: Decodable {
     let cars: [Car]
     
     @CodingKeys()
-    @MockBuilder(numberOfItems: 5, dataGeneratorType: .default)
+    @MockBuilder(numberOfItems: 5)
     struct Car: Decodable {
        @MockBuilderProperty(value: 2) let title: String
         let description: String
@@ -31,7 +31,7 @@ struct CarModel: Decodable {
 
 
 @CodingKeys(codingKeyType: .snakeCase)
-@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+@MockBuilder(numberOfItems: 2)
 struct Person {
     let name: String?
     
@@ -49,7 +49,7 @@ struct Person {
 }
 
 
-@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+@MockBuilder(numberOfItems: 2)
 struct ExampleAllSupportedTypesd: Equatable {
     var uuid: UUID = .init()
     @MockBuilderProperty(value: "StringVariable") let mockVariable: String
@@ -58,14 +58,14 @@ struct ExampleAllSupportedTypesd: Equatable {
 
 print(ExampleAllSupportedTypesd.mock.characterVariable)
 
-@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+@MockBuilder(numberOfItems: 2)
 enum VehicleType: String, Decodable {
     case car
     case bus
     case motorcycle
 }
 
-@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+@MockBuilder(numberOfItems: 2)
 struct University {
     @MockBuilderProperty(value: 4500) let price: Int
     @MockBuilderProperty(value: "TSU") let name: String
@@ -82,7 +82,7 @@ struct University {
 
 print("Universicty monthly price: ", University.mock.price)
 
-@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+@MockBuilder(numberOfItems: 2)
 struct ExampleAllSupportedTypes {
     let intVariable: Int
     let int8Variable: Int8
@@ -116,7 +116,7 @@ struct ExampleAllSupportedTypes {
 print("ExampleAllSupportedTypes.mock: ", ExampleAllSupportedTypes.mock.stringVariable)
 
 
-@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+@MockBuilder(numberOfItems: 2)
 struct ExampleAllSupportedTypesForMockBuilderProperty {
     @MockBuilderProperty(value: 12) let intVariable: Int
     @MockBuilderProperty(value: 38) let int8Variable: Int8

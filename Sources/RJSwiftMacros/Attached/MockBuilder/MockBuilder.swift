@@ -59,8 +59,7 @@ import RJSwiftMacrosImplDependencies
 ///```
 @attached(member, names: named(mock), named(mockArray))
 public macro MockBuilder(
-    numberOfItems: Int? = nil,
-    dataGeneratorType: DataGeneratorType = .random
+    numberOfItems: Int? = nil
 ) = #externalMacro(module: "RJSwiftMacrosImpl", type: "MockBuilderMacro")
 
 

@@ -32,15 +32,12 @@ public struct MockBuilderMacro: MemberMacro {
             )
             return []
         }
-        
-        let generatorType = getDataGeneratorType(from: node)
-        
+                
         if let enumDecl = declaration.as(EnumDeclSyntax.self) {
             return MockBuilderMacroForEnum(
                 enumDecl: enumDecl,
                 identifierToken: enumDecl.name,
                 numberOfItems: numberOfItems,
-                generatorType: generatorType,
                 context: context
             )
         }
@@ -50,7 +47,6 @@ public struct MockBuilderMacro: MemberMacro {
                 decl: structDecl,
                 identifierToken: structDecl.name,
                 numberOfItems: numberOfItems,
-                generatorType: generatorType,
                 context: context
             )
         }
@@ -60,7 +56,6 @@ public struct MockBuilderMacro: MemberMacro {
                 decl: classDecl,
                 identifierToken: classDecl.name,
                 numberOfItems: numberOfItems,
-                generatorType: generatorType,
                 context: context
             )
         }
@@ -182,21 +177,6 @@ extension MockBuilderMacro {
         )
     }
     
-    private static func getDataGeneratorType(from node: SwiftSyntax.AttributeSyntax) -> DataGeneratorType {
-        guard let argumentTuple = node.arguments?.as(LabeledExprListSyntax.self) else {
-            fatalError("Compiler bug: Argument must exist")
-        }
-
-        guard let generatorArgument = argumentTuple.first(where: { $0.label?.text == Constants.dataGeneratorTypeLabelIdentifier.rawValue }),
-              let argumentValue = generatorArgument.expression.as(MemberAccessExprSyntax.self)?.declName.baseName,
-              let generatorType = DataGeneratorType(rawValue: argumentValue.text) else {
-            // return random generator type
-            return .random
-        }
-        
-        return generatorType
-    }
-    
     private static func getNumberOfItems(from node: SwiftSyntax.AttributeSyntax) -> Int? {
         guard let arguments = node.arguments?.as(LabeledExprListSyntax.self),
               let argumentTuple = arguments.first(where: { $0.label?.text == Constants.numberOfItemsLabelIdentifier.rawValue }) else {
@@ -232,10 +212,7 @@ extension MockBuilderMacro {
     }
     
     //Used for both Structs and Enums
-    static func getParameterListForMockElement(
-        parameters: [ParameterItem],
-        generatorType: DataGeneratorType
-    ) -> LabeledExprListSyntax {
+    static func getParameterListForMockElement(parameters: [ParameterItem]) -> LabeledExprListSyntax {
         
         var parameterList = LabeledExprListSyntax()
         
@@ -243,7 +220,6 @@ extension MockBuilderMacro {
             
             if let expressionSyntax = getExpressionSyntax(
                 from: parameter.identifierType,
-                generatorType: generatorType,
                 initialValue: parameter.initialValue
             ) {
                 let isFirst = parameter.identifierName == parameters.first?.identifierName
