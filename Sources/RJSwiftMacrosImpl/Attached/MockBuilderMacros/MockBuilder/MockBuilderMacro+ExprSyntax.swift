@@ -1,6 +1,6 @@
 //
 //  MockBuilderMacro+ExprSyntax.swift
-//  
+//
 //
 //  Created by Rezo Joglidze on 28.07.24.
 //
@@ -17,7 +17,7 @@ extension MockBuilderMacro {
     // MARK: Methods
     static func getExpressionSyntax(
         from type: TypeSyntax,
-        initialValue: AnyObject?
+        initialValue: ExprSyntax?
     ) -> ExprSyntax? {
         if type.isArray,
            let type = type.as(ArrayTypeSyntax.self) {
@@ -32,11 +32,11 @@ extension MockBuilderMacro {
                 initialValue: initialValue
             )
         } else if type.as(IdentifierTypeSyntax.self) != nil ||
-                  type.as(OptionalTypeSyntax.self) != nil ||
-                  type.as(FunctionTypeSyntax.self) != nil {
+                    type.as(OptionalTypeSyntax.self) != nil ||
+                    type.as(FunctionTypeSyntax.self) != nil {
             return getSimpleExprSyntax(
                 simpleTypeSyntax: type,
-                initialValue: initialValue, 
+                initialValue: initialValue,
                 typeIsOptional: false
             )
         } else {
@@ -46,10 +46,10 @@ extension MockBuilderMacro {
     
     private static func getArrayExprSyntax(
         arrayType: ArrayTypeSyntax,
-        initialValue: AnyObject?
+        initialValue: ExprSyntax?
     ) -> ExprSyntax? {
         if let simpleType = arrayType.element.as(IdentifierTypeSyntax.self),
-           SupportedType(rawValue: simpleType.name.text, initialValue: initialValue) == nil {
+           SupportedType(rawValue: simpleType.name.text, exprSyntax: initialValue) == nil {
             // Custom array type that attaches MockBuilder in its declaration:
             return ExprSyntax(
                 MemberAccessExprSyntax(
@@ -84,7 +84,7 @@ extension MockBuilderMacro {
     
     private static func getDictionaryExprSyntax(
         dictionaryType: DictionaryTypeSyntax,
-        initialValue: AnyObject?
+        initialValue: ExprSyntax?
     ) -> ExprSyntax? {
         if let key = getExpressionSyntax(
             from: dictionaryType.key,
@@ -113,7 +113,7 @@ extension MockBuilderMacro {
     // MARK: Simple Expr Syntax Methods
     private static func getSimpleExprSyntax<T: TypeSyntaxProtocol>(
         simpleTypeSyntax: T,
-        initialValue: AnyObject?,
+        initialValue: ExprSyntax?,
         typeIsOptional: Bool
     ) -> ExprSyntax? {
         // Investigate is in progress, trying to find better solution. TODO: Refactor it
@@ -142,49 +142,45 @@ extension MockBuilderMacro {
     
     // MARK: Get Simple Expr Syntax For Identifier Type Syntax
     private static func getSimpleExprSyntaxForIdentifierType(
-        simpleIdentifierType: IdentifierTypeSyntax,    
-        initialValue: AnyObject?,
+        simpleIdentifierType: IdentifierTypeSyntax,
+        initialValue: ExprSyntax?,
         typeIsOptional: Bool
-    ) -> ExprSyntax?  {
+    ) -> ExprSyntax? {
         if let supportedType = SupportedType(
             rawValue: simpleIdentifierType.name.text,
-            initialValue: initialValue
-            ) {
-                return supportedType.exprSyntax(
-                    elementType: supportedType,
-                    typeIsOptional: typeIsOptional
-                )
-            }
-            
-            // For example, if we pass enum case `VehicleType.car`, in this case we need string value of its.
-            if let initialValue = initialValue as? String {
-                return ExprSyntax(stringLiteral: initialValue)
-            } else {
-                // Custom type that attaches MockBuilder in its declaration:
-                return ExprSyntax(
-                    MemberAccessExprSyntax(
-                        base: DeclReferenceExprSyntax(
-                            baseName: simpleIdentifierType.name
-                        ),
-                        period: .periodToken(),
-                        name: .identifier(Constants.mockIdentifier.rawValue)
-                    )
-                )
-            }
+            exprSyntax: initialValue
+        ) {
+            return supportedType.exprSyntax()
+        }
         
+        // For example, if we pass enum case `VehicleType.car`, in this case we need string value of its.
+        if let initialExprSyntax = initialValue {
+            return initialExprSyntax
+        } else {
+            // Custom type that attaches MockBuilder in its declaration:
+            return ExprSyntax(
+                MemberAccessExprSyntax(
+                    base: DeclReferenceExprSyntax(
+                        baseName: simpleIdentifierType.name
+                    ),
+                    period: .periodToken(),
+                    name: .identifier(Constants.mockIdentifier.rawValue)
+                )
+            )
+        }
     }
     
     // MARK: Get Simple Expr Syntax For Optional Type Syntax
     private static func getSimpleExprSyntaxForOptionalType(
         simpleOptionalType: OptionalTypeSyntax,
-        initialValue: AnyObject?
+        initialValue: ExprSyntax?
     ) -> ExprSyntax? {
         // If unwrapped value is array type return ArrayExprSyntax
         if let arrayTypeSyntax = simpleOptionalType.wrappedType.as(ArrayTypeSyntax.self) {
-           return getArrayExprSyntax(
+            return getArrayExprSyntax(
                 arrayType: arrayTypeSyntax,
                 initialValue: initialValue
-           )
+            )
         }
         
         guard let type = simpleOptionalType.wrappedType.as(IdentifierTypeSyntax.self) else { return nil }
@@ -199,7 +195,7 @@ extension MockBuilderMacro {
     // MARK: Get Simple Expr Syntax For Function Type Syntax
     private static func getSimpleExprSyntaxForClosure(
         simpleType: FunctionTypeSyntax,
-        initialValue: AnyObject?) -> ExprSyntax? {
+        initialValue: ExprSyntax?) -> ExprSyntax? {
             let closerParameters = simpleType.parameters.map { _ in "_" }.joined(separator: ", ")
             var closureString: String {
                 if closerParameters.isEmpty {

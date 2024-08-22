@@ -7,7 +7,6 @@
 
 import SwiftUI
 import RJSwiftMacros
-import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
 
@@ -24,7 +23,6 @@ struct CarModel: Decodable {
     @CodingKeys()
     @MockBuilder(numberOfItems: 5)
     struct Car: Decodable {
-       @MockBuilderProperty(value: 2) let title: String
         let description: String
     }
 }
@@ -111,6 +109,8 @@ struct ExampleAllSupportedTypes {
     let cgVectorVariable: CGVector
     let cgFloatVariable: CGFloat
     let urlVariable: URL
+    let imageVariable: Image
+    let colorVariable: Color
 }
 
 print("ExampleAllSupportedTypes.mock: ", ExampleAllSupportedTypes.mock.stringVariable)
@@ -136,7 +136,7 @@ struct ExampleAllSupportedTypesForMockBuilderProperty {
     @MockBuilderProperty(value: 8734.3154) let decimalVariable: Decimal
     @MockBuilderProperty(value: "Hello John") let stringVariable: String
     @MockBuilderProperty(value: false) let boolVariable: Bool
-    @MockBuilderProperty(value: "https://www.apple.com") let urlVariable: URL
+    @MockBuilderProperty(value: URL(string: "https://www.apple.com")) let urlVariable: URL?
+    @MockBuilderProperty(value: Image(systemName: "swift")) let imageVariable: Image
+    @MockBuilderProperty(value: Color.blue) let colorVariable: Color
 }
-
-print(ExampleAllSupportedTypesForMockBuilderProperty.mock.urlVariable.absoluteString)

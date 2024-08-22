@@ -11,12 +11,12 @@ import SwiftSyntax
 struct ParameterItem {
     let identifierName: String?
     let identifierType: TypeSyntax
-    var initialValue: AnyObject?
+    var initialValue: ExprSyntax?
     
     init(
         identifierName: String?,
         identifierType: TypeSyntax,
-        initialValue: AnyObject?
+        initialValue: ExprSyntax?
     ) {
         self.identifierName = identifierName
         self.identifierType = identifierType

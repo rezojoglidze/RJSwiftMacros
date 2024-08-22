@@ -70,10 +70,10 @@ extension MockBuilderMacro {
         }
         
         let largestParameterList = initMembers.map {
-                getParametersFromInit(initSyntax: $0, with: filteredProperties)
-            }.max {
-                $0.count < $1.count
-            } ?? []
+            getParametersFromInit(initSyntax: $0, with: filteredProperties)
+        }.max {
+            $0.count < $1.count
+        } ?? []
         
         return largestParameterList
     }
@@ -98,7 +98,7 @@ extension MockBuilderMacro {
             }
         }()
     }
-
+    
     private static func configureProperties(
         storedPropertyMembers: [VariableDeclSyntax],
         with filteredPropertiesWithMockBuilderMacroIdentifier: [MemberBlockItemSyntax]
@@ -114,13 +114,15 @@ extension MockBuilderMacro {
                    let mockPropertyName = variableDecl.variableName,
                    let mockPropertyType = variableDecl.variableType,
                    propertyName == mockPropertyName {
-                    // Found a match, update the propertyName and propertyType
-                    let mockPropertyInitialValue =  variableDecl.variableValue as? AnyObject
+                    
+                    let initialValue =  variableDecl.attributes.first?.as(AttributeSyntax.self)?
+                        .arguments?.as(LabeledExprListSyntax.self)?
+                        .first?.expression
                     
                     return ParameterItem(
                         identifierName: mockPropertyName,
                         identifierType: mockPropertyType,
-                        initialValue: mockPropertyInitialValue
+                        initialValue: initialValue
                     )
                 }
             }
@@ -131,7 +133,6 @@ extension MockBuilderMacro {
                 identifierType: propertyType,
                 initialValue: nil
             )
-
         }
     }
     
@@ -159,10 +160,9 @@ extension MockBuilderMacro {
                     let initialValue  = attribute?.as(AttributeSyntax.self)?.arguments?
                         .as(LabeledExprListSyntax.self)?.first?
                         .expression.as(StringLiteralExprSyntax.self)?
-                        .segments.first?.as(StringSegmentSyntax.self)?
-                        .content.text
+                        .segments.first?.as(StringSegmentSyntax.self)
                     
-                    return initialValue as AnyObject
+                    return ExprSyntax(initialValue)
                 }()
             )
         }
