@@ -31,16 +31,11 @@ extension MockBuilderMacro {
                 dictionaryType: type,
                 initialValue: initialValue
             )
-        } else if type.as(IdentifierTypeSyntax.self) != nil ||
-                    type.as(OptionalTypeSyntax.self) != nil ||
-                    type.as(FunctionTypeSyntax.self) != nil {
+        } else {
             return getSimpleExprSyntax(
                 simpleTypeSyntax: type,
-                initialValue: initialValue,
-                typeIsOptional: false
+                initialValue: initialValue
             )
-        } else {
-            return nil
         }
     }
     
@@ -113,8 +108,7 @@ extension MockBuilderMacro {
     // MARK: Simple Expr Syntax Methods
     private static func getSimpleExprSyntax<T: TypeSyntaxProtocol>(
         simpleTypeSyntax: T,
-        initialValue: ExprSyntax?,
-        typeIsOptional: Bool
+        initialValue: ExprSyntax?
     ) -> ExprSyntax? {
         // Investigate is in progress, trying to find better solution. TODO: Refactor it
         if initialValue.debugDescription == Constants.nilTypeOptionalDebugDescription.rawValue {
@@ -122,8 +116,7 @@ extension MockBuilderMacro {
         } else if let simpleIdentifierType = simpleTypeSyntax.as(IdentifierTypeSyntax.self) {
             return getSimpleExprSyntaxForIdentifierType(
                 simpleIdentifierType: simpleIdentifierType,
-                initialValue: initialValue,
-                typeIsOptional: typeIsOptional
+                initialValue: initialValue
             )
         } else if let simpleIOptionaldentifierType = simpleTypeSyntax.as(OptionalTypeSyntax.self) {
             return getSimpleExprSyntaxForOptionalType(
@@ -132,7 +125,11 @@ extension MockBuilderMacro {
             )
         } else if let simleFunctionType = simpleTypeSyntax.as(FunctionTypeSyntax.self) {
             return getSimpleExprSyntaxForClosure(
-                simpleType: simleFunctionType,
+                simpleType: simleFunctionType
+            )
+        } else if let tupleTypeSyntax = simpleTypeSyntax.as(TupleTypeSyntax.self) {
+            return getSimpleExprSyntaxForTupleTypeSyntax(
+                tupleTypeSyntax: tupleTypeSyntax,
                 initialValue: initialValue
             )
         } else {
@@ -140,11 +137,71 @@ extension MockBuilderMacro {
         }
     }
     
+    // MARK: Get Simple Expr Syntax For Tuple Type Syntax
+    private static func getSimpleExprSyntaxForTupleTypeSyntax(
+        tupleTypeSyntax: TupleTypeSyntax,
+        initialValue: ExprSyntax?
+    ) -> ExprSyntax? {
+        
+        var labeledExprItems: [LabeledExprSyntax] = []
+        getElements(tupleTypeSyntax: tupleTypeSyntax)
+        
+        func getElements(
+            tupleTypeSyntax: TupleTypeSyntax,
+            leftParen: TokenSyntax? = nil,
+            rightParen: TokenSyntax? = nil
+        ) {
+            for (index, item) in tupleTypeSyntax.elements.enumerated() {
+                if let type = item.type.as(TupleTypeSyntax.self) {
+                    getElements(
+                        tupleTypeSyntax: type,
+                        leftParen: type.leftParen,
+                        rightParen: type.rightParen
+                    )
+                } else if let expression = getSimpleExprSyntax(
+                    simpleTypeSyntax: item.type,
+                    initialValue: initialValue
+                ) {
+                    if let _ = leftParen, let _ = rightParen {
+                        let isFirst = index == .zero
+                        let isLast = index == tupleTypeSyntax.elements.count - 1
+                        
+                        labeledExprItems.append(
+                            contentsOf: LabeledExprListSyntax(
+                                arrayLiteral: LabeledExprSyntax(
+                                    leadingTrivia: isFirst ? .unexpectedText("((") : nil,
+                                    expression: expression,
+                                    trailingComma: isLast ? nil : .commaToken(),
+                                    trailingTrivia: isLast ? .unexpectedText("),") : nil
+                                )
+                            )
+                        )
+                    } else {
+                        labeledExprItems.append(contentsOf: LabeledExprListSyntax(
+                            arrayLiteral: LabeledExprSyntax(
+                                expression: expression,
+                                trailingComma: item.trailingComma
+                            )
+                        )
+                        )
+                    }
+                }
+            }
+        }
+        
+        return ExprSyntax(
+            TupleExprSyntax(
+                leftParen: .leftParenToken(),
+                elements: LabeledExprListSyntax(labeledExprItems),
+                rightParen: .rightParenToken()
+            )
+        )
+    }
+    
     // MARK: Get Simple Expr Syntax For Identifier Type Syntax
     private static func getSimpleExprSyntaxForIdentifierType(
         simpleIdentifierType: IdentifierTypeSyntax,
-        initialValue: ExprSyntax?,
-        typeIsOptional: Bool
+        initialValue: ExprSyntax?
     ) -> ExprSyntax? {
         if let supportedType = SupportedType(
             rawValue: simpleIdentifierType.name.text,
@@ -181,37 +238,34 @@ extension MockBuilderMacro {
                 arrayType: arrayTypeSyntax,
                 initialValue: initialValue
             )
+        } else {
+            return getSimpleExprSyntax(
+                simpleTypeSyntax:  simpleOptionalType.wrappedType,
+                initialValue: initialValue
+            )
         }
-        
-        guard let type = simpleOptionalType.wrappedType.as(IdentifierTypeSyntax.self) else { return nil }
-        
-        return getSimpleExprSyntax(
-            simpleTypeSyntax: type,
-            initialValue: initialValue,
-            typeIsOptional: true
-        )
     }
     
     // MARK: Get Simple Expr Syntax For Function Type Syntax
     private static func getSimpleExprSyntaxForClosure(
-        simpleType: FunctionTypeSyntax,
-        initialValue: ExprSyntax?) -> ExprSyntax? {
-            let closerParameters = simpleType.parameters.map { _ in "_" }.joined(separator: ", ")
-            var closureString: String {
-                if closerParameters.isEmpty {
-                    return " {}"
-                } else {
-                    return " { \(closerParameters) in }"
-                }
+        simpleType: FunctionTypeSyntax
+    ) -> ExprSyntax? {
+        let closerParameters = simpleType.parameters.map { _ in "_" }.joined(separator: ", ")
+        var closureString: String {
+            if closerParameters.isEmpty {
+                return " {}"
+            } else {
+                return " { \(closerParameters) in }"
             }
-            
-            let closureExpresion = ClosureExprSyntax(
-                leadingTrivia: .init(stringLiteral: closureString),
-                leftBrace: .endOfFileToken(),
-                statements: CodeBlockItemListSyntax(),
-                rightBrace: .endOfFileToken()
-            )
-            
-            return ExprSyntax( closureExpresion)
         }
+        
+        let closureExpresion = ClosureExprSyntax(
+            leadingTrivia: .init(stringLiteral: closureString),
+            leftBrace: .endOfFileToken(),
+            statements: CodeBlockItemListSyntax(),
+            rightBrace: .endOfFileToken()
+        )
+        
+        return ExprSyntax(closureExpresion)
+    }
 }

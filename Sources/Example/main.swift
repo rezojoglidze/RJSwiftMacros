@@ -9,29 +9,18 @@ import SwiftUI
 import RJSwiftMacros
 import RJSwiftMacrosImplDependencies
 
-
-@CodingKeys()
-@MockBuilder(numberOfItems: 1)
-struct CarModel: Decodable {
-   @CodingKeyIgnored() var title: String?
-    
-    var closure: (() -> ())?
-
-    let print: String
-    let cars: [Car]
-    
-    @CodingKeys()
-    @MockBuilder(numberOfItems: 5)
-    struct Car: Decodable {
-        let description: String
-    }
+@MockBuilder(numberOfItems: 2)
+enum VehicleType: String, Decodable {
+    case car
+    case bus
+    case motorcycle
 }
-
 
 @CodingKeys(codingKeyType: .snakeCase)
 @MockBuilder(numberOfItems: 2)
 struct Person {
     let name: String?
+    let tuples: (((String, String, Int), Bool?), String)?
     
     @CodingKeyProperty("second_name")
     let surname: [String?]?
@@ -44,23 +33,6 @@ struct Person {
     
     let closureVariable: () -> Void
     @MockBuilderProperty(value: "k") let character: Character
-}
-
-
-@MockBuilder(numberOfItems: 2)
-struct ExampleAllSupportedTypesd: Equatable {
-    var uuid: UUID = .init()
-    @MockBuilderProperty(value: "StringVariable") let mockVariable: String
-    @MockBuilderProperty(value: "C") let characterVariable: Character
-}
-
-print(ExampleAllSupportedTypesd.mock.characterVariable)
-
-@MockBuilder(numberOfItems: 2)
-enum VehicleType: String, Decodable {
-    case car
-    case bus
-    case motorcycle
 }
 
 @MockBuilder(numberOfItems: 2)
@@ -116,6 +88,7 @@ struct ExampleAllSupportedTypes {
 print("ExampleAllSupportedTypes.mock: ", ExampleAllSupportedTypes.mock.stringVariable)
 
 
+// MARK: All Supported Types With MockBuilderProperty
 @MockBuilder(numberOfItems: 2)
 struct ExampleAllSupportedTypesForMockBuilderProperty {
     @MockBuilderProperty(value: 12) let intVariable: Int
@@ -134,9 +107,11 @@ struct ExampleAllSupportedTypesForMockBuilderProperty {
     @MockBuilderProperty(value: 93213.23) let doubleVariable: Double
     @MockBuilderProperty(value: 2123.2313123123) let nsDecimalNumberVariable: NSDecimalNumber
     @MockBuilderProperty(value: 8734.3154) let decimalVariable: Decimal
+    @MockBuilderProperty(value: "C") let characterVariable: Character
     @MockBuilderProperty(value: "Hello John") let stringVariable: String
     @MockBuilderProperty(value: false) let boolVariable: Bool
-    @MockBuilderProperty(value: URL(string: "https://www.apple.com")) let urlVariable: URL?
-    @MockBuilderProperty(value: Image(systemName: "swift")) let imageVariable: Image
-    @MockBuilderProperty(value: Color.blue) let colorVariable: Color
+    @MockBuilderProperty(value: URL(string:"https://www.apple.com")!) let urlVariable: URL
+    @MockBuilderProperty(value: Color.blue) let color: Color
+    @MockBuilderProperty(value: Image(systemName: "swift")) let image: Image
+    @MockBuilderProperty(value: VehicleType.car) let vehicle: VehicleType
 }
