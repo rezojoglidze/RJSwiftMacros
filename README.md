@@ -8,12 +8,12 @@ RJSwiftMacros is a Swift package that provides macros.
 > `MockBuilder` macro doesn't work at `SwiftUI` `#Preview` macro. Here is a [solution](https://stackoverflow.com/questions/78856674/does-attached-macros-work-in-the-preview-body/78856731#78856731).
 
 ### MockBuilder
-- ``MockBuilder(numberOfItems: Int, dataGeneratorType: .random)``: Generates a mock instance and an array of mock data based on your model.
+- ``MockBuilder(numberOfItems: Int)``: Generates a mock instance and an array of mock data based on your model.
 - `MockBuilder` has `MockBuilderProperty` member macro, with which you can set the initial value to the desired property.
   
 ##### Key Features:
 - **Default Usage**: `@MockBuilder()` generates a one single mock instance.
-- **Customizable**: You can also specify parameters like `numberOfItems` and `dataGeneratorType` if you need to have array of mock items.
+- **Customizable**: You can also specify parameter like `numberOfItems` if you need to have array of mock items.
 
 #### MockBuilderProperty macro
 - ``MockBuilderProperty<T: Any>(value: T)``: Sets an initial value to a property within a struct or class. 
@@ -43,7 +43,7 @@ To add `RJSwiftMacros` as a dependency of your Xcode project, go to the Package 
 Import the RJSwiftMacros module and apply the macros to your structs and properties:
 
 Usage of `MockBuilder`: 
-Macro generates two `static` properties: `mock` and `mockArray`. `mockArray` count equals `numberOfItems` value. `dataGeneratorType` is `.random` default. If you want to set a custom value to the desired property, use `@MockBuilderProperty` macro. If the custom value granted is prohibited you will get a swift standard warning error. <img width="461" alt="image" src="https://github.com/user-attachments/assets/3a559982-d70b-4d91-a2a4-5b9f08cebdf4">
+Macro generates two `static` properties: `mock` and `mockArray`. `mockArray` count equals `numberOfItems` value. If you want to set a custom value to the desired property, use `@MockBuilderProperty` macro. If the custom value granted is prohibited you will get a swift standard warning error. <img width="461" alt="image" src="https://github.com/user-attachments/assets/3a559982-d70b-4d91-a2a4-5b9f08cebdf4">
 
 To generate only `.mock` value, you can use `@MockBuilder()` without any param passing.
 ```swift
@@ -59,10 +59,10 @@ struct Car {
     #if DEBUG
     static var mock: Car {
         .init(
-            name: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String,
-            ownerName: MockBuilderSupportedType.generate(elementType: .string("John")) as! String,
+            name: "John",
+            ownerName: "Nick",
             closureVariable: { _, _ in },
-            carColor: MockBuilderSupportedType.generate(elementType: .color(), generatorType: .random) as! Color
+            carColor: Color.red
             )
     }
     #endif
@@ -90,30 +90,30 @@ struct Person {
     #if DEBUG
     static var mock: Person {
         .init(
-            name: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as? String,
-            surname: [MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String],
-            color: MockBuilderSupportedType.generate(elementType: .color(Color.blue)) as! Color,
-            image: MockBuilderSupportedType.generate(elementType: .image(Image(systemName: "swift"))) as! Image,
-            character: MockBuilderSupportedType.generate(elementType: .character("k")) as! Character
+            name: "Lorna,
+            surname: ["Clare"],
+            color: Color.blue,
+            image: Image(systemName: "swift"),
+            character: "k"
             )
     }
 
     static var mockArray: [Person ] {
         [
-            .init(
-                name: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as? String,
-                surname: [MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String],
-                color: MockBuilderSupportedType.generate(elementType: .color(Color.blue)) as! Color,
-                image: MockBuilderSupportedType.generate(elementType: .image(Image(systemName: "swift"))) as! Image,
-                character: MockBuilderSupportedType.generate(elementType: .character("k")) as! Character
-                ),
-            .init(
-                name: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as? String,
-                surname: [MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String],
-                color: MockBuilderSupportedType.generate(elementType: .color(Color.blue)) as! Color,
-                image: MockBuilderSupportedType.generate(elementType: .image(Image(systemName: "swift"))) as! Image,
-                character: MockBuilderSupportedType.generate(elementType: .character("k")) as! Character
-                ),
+           .init(
+               name: "Valentina,
+               surname: ["Queenie"],
+               color: Color.blue,
+               image: Image(systemName: "swift"),
+               character: "k"
+               ),
+           .init(
+               name: "Lorna,
+               surname: ["Bettye"],
+               color: Color.blue,
+               image: Image(systemName: "swift"),
+               character: "k"
+               )
         ]
     }
     #endif
@@ -173,9 +173,7 @@ struct University {
 
 - Swift 5.10 or later
 - macOS 10.15 or later
-- iOS 13 or later
-- tvOS 13 or later
-- watchOS 6 or later
+- iOS 15 or later
   
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request on GitHub.
