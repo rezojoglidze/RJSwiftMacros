@@ -1,5 +1,8 @@
 # Change Log
 
+### [0.4.0(33)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.4.0) — *23 08 2024*
+-  Refactor `MockBuilderMacro` property generation flow. Make generated properties more readable and understandable for the user.
+  
 ### [0.3.7(32)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.3.7) — *17 08 2024*
 - Update iOS version to .v15
 

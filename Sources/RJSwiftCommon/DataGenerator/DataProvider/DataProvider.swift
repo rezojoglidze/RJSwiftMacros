@@ -38,11 +38,11 @@ protocol NumericDataProvider {
 }
 
 protocol ImageProvider {
-    func randomImage() -> Image
+    func randomImageStringName() -> String
 }
 
 protocol ColorProvider {
-    func randomColor() -> Color
+    func randomColorString() -> String
 }
 
 
@@ -244,40 +244,46 @@ extension MockDataProvider: NumericDataProvider {
 }
 
 extension MockDataProvider: ImageProvider {
-    func randomImage() -> Image {
-        [
-            Image(systemName: "swift"),
-            Image(systemName: "star"),
-            Image(systemName: "calendar"),
-            Image(systemName: "xmark.circle"),
-            Image(systemName: "airplane"),
-            Image(systemName: "house"),
-            Image(systemName: "keyboard"),
-            Image(systemName: "lock"),
-            Image(systemName: "wifi"),
-            Image(systemName: "car.fill"),
-        ].randomElement() ?? Image(systemName: "swift")
+    func randomImageStringName() -> String {
+        let name =  [
+            "swift",
+            "star",
+            "calendar",
+            "xmark.circle",
+            "airplane",
+            "house",
+            "keyboard",
+            "lock",
+            "wifi",
+            "car.fill"
+        ].randomElement() ?? .empty
+        
+        
+        return "Image(systemName: \"\(name)\")"
     }
 }
 
 extension MockDataProvider: ColorProvider {
-    func randomColor() -> Color {
-        [
-            Color.black,
-            Color.blue,
-            Color.brown,
-            Color.cyan,
-            Color.gray,
-            Color.indigo,
-            Color.mint,
-            Color.orange,
-            Color.pink,
-            Color.purple,
-            Color.yellow,
-            Color.accentColor,
-            Color.primary,
-            Color.gray,
-            Color.red
-        ].randomElement()?.opacity(0.6) ?? Color.black.opacity(0.6)
+    func randomColorString() -> String {
+        // Need To Create as [String] due to the minimum compile time.
+        let color = [
+            "Color.black",
+            "Color.blue",
+            "Color.brown",
+            "Color.cyan",
+            "Color.gray",
+            "Color.indigo",
+            "Color.mint",
+            "Color.orange",
+            "Color.pink",
+            "Color.purple",
+            "Color.yellow",
+            "Color.accentColor",
+            "Color.primary",
+            "Color.gray",
+            "Color.red"
+        ].randomElement() ?? "Color.black"
+        
+        return "\(color).opacity(0.6)"
     }
 }

@@ -9,31 +9,41 @@ import Foundation
 import RJSwiftCommon
 import RJSwiftMacrosImplDependencies
 
-/// - ``MockBuilder(numberOfItems: Int, dataGeneratorType: .random)``: This macro generates a mock instance and an array of mock data based on your model. It allows you to specify the number of items and the type of data generation strategy (`.random` in this case or `.default`), making it highly flexible for testing and development purposes.
+/// - ``MockBuilder(numberOfItems: Int)``: This macro generates a mock instance and an array of mock data based on your model. It allows you to specify the number of items. Making it highly flexible for testing and development purposes.
 /// > [!WARNING]
 /// >`MockBuilder` macro doesn't work at `SwiftUI` `#Preview` macro. Here is a [solution](https://stackoverflow.com/questions/78856674/does-attached-macros-work-in-the-preview-body/78856731#78856731)
 ///
 /// ## Key Features:
 /// - **Default Usage**: `@MockBuilder()` generates a one single mock instance.
-/// - **Customizable**: You can also specify parameters like `numberOfItems` and `dataGeneratorType` if you need to have array of mock items.
+/// - **Customizable**: You can also specify parameters like `numberOfItems`  if you need to have array of mock items.
 ///
-/// ## MockBuilder(numberOfItems: Int, dataGeneratorType: .random) usage:
+/// ## MockBuilder(numberOfItems: Int) usage:
 /// ```
 ///  import RJSwiftMacros
 ///
-///  @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+///  @MockBuilder(numberOfItems: 2)
 ///  struct Person {
 ///      let name: String
+///      let age: Int
 ///
 ///      #if DEBUG
 ///      static var mock: Person {
-///          .init(name: DataGenerator.random().string())
+///          .init(
+///             name: "John",
+///             age: 21
+///          )
 ///      }
 ///
 ///      static var mockArray: [Person ] {
 ///          [
-///              .init(name: DataGenerator.random().string()),
-///              .init(name: DataGenerator.random().string()),
+///          .init(
+///             name: "Tomas",
+///             age: 36
+///          ),
+///          .init(
+///             name: "John",
+///             age: 25
+///          )
 ///          ]
 ///      }
 ///      #endif
@@ -48,10 +58,14 @@ import RJSwiftMacrosImplDependencies
 ///  @MockBuilder()
 ///  struct Person {
 ///      let name: String
+///      let age: Int
 ///
 ///      #if DEBUG
 ///      static var mock: Person {
-///          .init(name: DataGenerator.random().string())
+///          .init(
+///              name: "John",
+///              age: 32
+///           )
 ///      }
 ///      #endif
 ///  }
@@ -59,8 +73,7 @@ import RJSwiftMacrosImplDependencies
 ///```
 @attached(member, names: named(mock), named(mockArray))
 public macro MockBuilder(
-    numberOfItems: Int? = nil,
-    dataGeneratorType: DataGeneratorType = .random
+    numberOfItems: Int? = nil
 ) = #externalMacro(module: "RJSwiftMacrosImpl", type: "MockBuilderMacro")
 
 
@@ -69,28 +82,28 @@ public macro MockBuilder(
 /// ```
 ///  import RJSwiftMacros
 ///
-///  @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+///  @MockBuilder(numberOfItems: 2)
 ///  struct Person {
-///      @MockBuilderProperty(value: "John") let name: String
+///      @MockBuilderProperty(value: "Luiz") let name: String
 ///      let surname: String
 ///
 ///      #if DEBUG
 ///      static var mock: Person {
 ///          .init(
-///              name: MockBuilderSupportedType.generate(elementType: .string("John")) as! String,
-///              surname: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String
+///              name: "Luiz",
+///              surname: "Doe"
 ///              )
 ///      }
 ///
 ///      static var mockArray: [Person ] {
 ///          [
 ///              .init(
-///                  name: MockBuilderSupportedType.generate(elementType: .string("John")) as! String,
-///                  surname: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String
+///                  name: "Jone",
+///                  surname: "Carter"
 ///                  ),
 ///              .init(
-///                  name: MockBuilderSupportedType.generate(elementType: .string("John")) as! String,
-///                  surname: MockBuilderSupportedType.generate(elementType: .string(), generatorType: .random) as! String
+///                  name: "Anderson",
+///                  surname: "Lopez"
 ///                  ),
 ///          ]
 ///      }

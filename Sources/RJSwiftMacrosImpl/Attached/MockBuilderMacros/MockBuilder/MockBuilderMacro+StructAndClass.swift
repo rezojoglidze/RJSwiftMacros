@@ -17,19 +17,17 @@ extension MockBuilderMacro {
         decl: T,
         identifierToken: TokenSyntax, //Class or Struct name
         numberOfItems: Int?,
-        generatorType: DataGeneratorType,
         context: MacroExpansionContext
     ) -> [SwiftSyntax.DeclSyntax] {
         let validParameters = getValidParameterList(
             from: decl,
-            generatorType: generatorType,
             context: context
         )
         
-        let singleMockItemData = generateSingleMockItemData(parameters: validParameters, generatorType: generatorType)
+        let singleMockItemData = generateSingleMockItemData(parameters: validParameters)
         var mockArrayData: ArrayElementListSyntax? {
             if let numberOfItems {
-                return generateMockArrayData(parameters: validParameters, numberOfItems: numberOfItems, generatorType: generatorType)
+                return generateMockArrayData(parameters: validParameters, numberOfItems: numberOfItems)
             } else {
                 return nil
             }
@@ -47,7 +45,6 @@ extension MockBuilderMacro {
     // MARK: Return the array of mock item each valid parameters
     private static func getValidParameterList<T: DeclSyntaxProtocol>(
         from decl: T,
-        generatorType: DataGeneratorType,
         context: MacroExpansionContext
     ) -> [ParameterItem] {
         var storedPropertyMembers: [VariableDeclSyntax] = []
@@ -55,11 +52,11 @@ extension MockBuilderMacro {
         
         
         if let structDecl = decl as? StructDeclSyntax {
-            storedPropertyMembers = decl.getUninitializerStoredProperties(with: structDecl.memberBlock)
+            storedPropertyMembers = decl.getUninitializedStoredProperties(with: structDecl.memberBlock)
             initMembers = decl.getInitMembers(with: structDecl.memberBlock)
             
         } else if let classDecl = decl as? ClassDeclSyntax {
-            storedPropertyMembers = decl.getUninitializerStoredProperties(with: classDecl.memberBlock)
+            storedPropertyMembers = decl.getUninitializedStoredProperties(with: classDecl.memberBlock)
             initMembers = decl.getInitMembers(with: classDecl.memberBlock)
         }
         
@@ -73,10 +70,10 @@ extension MockBuilderMacro {
         }
         
         let largestParameterList = initMembers.map {
-                getParametersFromInit(initSyntax: $0, with: filteredProperties)
-            }.max {
-                $0.count < $1.count
-            } ?? []
+            getParametersFromInit(initSyntax: $0, with: filteredProperties)
+        }.max {
+            $0.count < $1.count
+        } ?? []
         
         return largestParameterList
     }
@@ -89,12 +86,11 @@ extension MockBuilderMacro {
             }
             
             return memberBlockItems.filter { member in
-                guard let variableDecl = member.decl.as(VariableDeclSyntax.self),
-                      let attributes = variableDecl.attributes.as(AttributeListSyntax.self) else {
+                guard let variableDecl = member.decl.as(VariableDeclSyntax.self) else {
                     return false
                 }
                 
-                return attributes.contains { attribute in
+                return variableDecl.attributes.contains { attribute in
                     attribute.as(AttributeSyntax.self)?
                         .attributeName.as(IdentifierTypeSyntax.self)?
                         .name.text == Constants.mockBuilderProperyIdentifier.rawValue
@@ -102,7 +98,7 @@ extension MockBuilderMacro {
             }
         }()
     }
-
+    
     private static func configureProperties(
         storedPropertyMembers: [VariableDeclSyntax],
         with filteredPropertiesWithMockBuilderMacroIdentifier: [MemberBlockItemSyntax]
@@ -118,13 +114,15 @@ extension MockBuilderMacro {
                    let mockPropertyName = variableDecl.variableName,
                    let mockPropertyType = variableDecl.variableType,
                    propertyName == mockPropertyName {
-                    // Found a match, update the propertyName and propertyType
-                    let mockPropertyInitialValue =  variableDecl.variableValue as? AnyObject
+                    
+                    let initialValue =  variableDecl.attributes.first?.as(AttributeSyntax.self)?
+                        .arguments?.as(LabeledExprListSyntax.self)?
+                        .first?.expression
                     
                     return ParameterItem(
                         identifierName: mockPropertyName,
                         identifierType: mockPropertyType,
-                        initialValue: mockPropertyInitialValue
+                        initialValue: initialValue
                     )
                 }
             }
@@ -135,7 +133,6 @@ extension MockBuilderMacro {
                 identifierType: propertyType,
                 initialValue: nil
             )
-
         }
     }
     
@@ -163,23 +160,18 @@ extension MockBuilderMacro {
                     let initialValue  = attribute?.as(AttributeSyntax.self)?.arguments?
                         .as(LabeledExprListSyntax.self)?.first?
                         .expression.as(StringLiteralExprSyntax.self)?
-                        .segments.first?.as(StringSegmentSyntax.self)?
-                        .content.text
+                        .segments.first?.as(StringSegmentSyntax.self)
                     
-                    return initialValue as AnyObject
+                    return ExprSyntax(initialValue)
                 }()
             )
         }
     }
     
     private static func generateSingleMockItemData(
-        parameters: [ParameterItem],
-        generatorType: DataGeneratorType
+        parameters: [ParameterItem]
     ) -> ExprSyntax {
-        let parameterList = getParameterListForMockElement(
-            parameters: parameters,
-            generatorType: generatorType
-        )
+        let parameterList = getParameterListForMockElement(parameters: parameters)
         
         let singleItem = FunctionCallExprSyntax(
             calledExpression: MemberAccessExprSyntax(
@@ -196,13 +188,9 @@ extension MockBuilderMacro {
     
     private static func generateMockArrayData(
         parameters: [ParameterItem],
-        numberOfItems: Int,
-        generatorType: DataGeneratorType
+        numberOfItems: Int
     ) -> ArrayElementListSyntax {
-        let parameterList = getParameterListForMockElement(
-            parameters: parameters,
-            generatorType: generatorType
-        )
+        let parameterList = getParameterListForMockElement(parameters: parameters)
         
         var arrayElementListSyntax = ArrayElementListSyntax()
         

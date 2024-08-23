@@ -18,6 +18,7 @@ public enum Constants: String {
     // MARK: Mock Builder Property Macro
     case mockBuilderProperyIdentifier = "MockBuilderProperty"
     case mockBuilderPropertyMacroValueParamIdentifier = "value"
+    case nilTypeOptionalDebugDescription = "Optional(Optional<Any>.none)"
     
     // MARK: Coding Key Macros
     case codingKeyTypeIdentifier = "codingKeyType"
