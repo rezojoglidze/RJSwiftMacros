@@ -39,6 +39,7 @@ extension MockBuilderMacro {
         }
     }
     
+    // MARK: Get Array Expr Syntax
     private static func getArrayExprSyntax(
         arrayType: ArrayTypeSyntax,
         initialValue: ExprSyntax?
@@ -77,6 +78,7 @@ extension MockBuilderMacro {
         return nil
     }
     
+    // MARK: Get Dictionary Expr Syntax
     private static func getDictionaryExprSyntax(
         dictionaryType: DictionaryTypeSyntax,
         initialValue: ExprSyntax?
@@ -105,7 +107,7 @@ extension MockBuilderMacro {
         return nil
     }
     
-    // MARK: Simple Expr Syntax Methods
+    // MARK: Get Simple Expr Syntax
     private static func getSimpleExprSyntax<T: TypeSyntaxProtocol>(
         simpleTypeSyntax: T,
         initialValue: ExprSyntax?
