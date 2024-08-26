@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
@@ -13,37 +14,54 @@ fileprivate typealias Provider = MockDataProvider
 
 // MARK: - ❗⚠️❗Keep all cases names in lowercase.❗⚠️❗
 // MARK: ❗⚠️❗if type isn't supported from MockBuilderItem macro add it to `notSupportedTypesFromMockBuilderProperty`.❗⚠️❗
-public enum MockBuilderSupportedType: Equatable {    
+public enum MockBuilderSupportedType: Equatable {  
+    // Fundamental data types
     case int(ExprSyntax? = nil)
     case int8(ExprSyntax? = nil)
     case int16(ExprSyntax? = nil)
     case int32(ExprSyntax? = nil)
     case int64(ExprSyntax? = nil)
+    
     case uint(ExprSyntax? = nil)
     case uint8(ExprSyntax? = nil)
     case uint16(ExprSyntax? = nil)
     case uint32(ExprSyntax? = nil)
     case uint64(ExprSyntax? = nil)
+    
     case float(ExprSyntax? = nil)
     case float32(ExprSyntax? = nil)
     case float64(ExprSyntax? = nil)
+    
     case double(ExprSyntax? = nil)
+    
     case decimal(ExprSyntax? = nil)
     case nsdecimalnumber(ExprSyntax? = nil)
+    
     case character(ExprSyntax? = nil)
     case string(ExprSyntax? = nil)
+    
     case bool(ExprSyntax? = nil)
+    
+    // Other similar types
     case date
     case uuid(ExprSyntax? = nil)
     case objectidentifier
+    
     case cgpoint
     case cgrect
     case cgsize
     case cgvector
     case cgfloat
+    
     case url(ExprSyntax? = nil)
+    
+    // SwiftUI
     case image(ExprSyntax? = nil)
     case color(ExprSyntax? = nil)
+    
+    // Combine
+    case passthroughSubject(ExprSyntax? = nil)
+    case currentValueSubject(ExprSyntax? = nil)
     
     // MARK: Initialiazer
     public init?(
@@ -81,6 +99,8 @@ public enum MockBuilderSupportedType: Equatable {
         case "url": self = .url(exprSyntax)
         case "image": self = .image(exprSyntax)
         case "color" : self = .color(exprSyntax)
+        case "passthroughsubject": self = .passthroughSubject(exprSyntax)
+        case "currentvaluesubject": self = .currentValueSubject(exprSyntax)
         default: return nil
         }
     }
@@ -139,11 +159,13 @@ public enum MockBuilderSupportedType: Equatable {
         case .url: getName(of: URL.self)
         case .image: getName(of: Image.self)
         case .color: getName(of: Color.self)
+        case .passthroughSubject: "PassthroughSubject"
+        case .currentValueSubject: "CurrentValueSubject"
         }
     }
     
     // MARK: Expr Syntax
-    public func exprSyntax() -> ExprSyntax {
+    public func exprSyntax(with propertyInitializationExprSyntax: ExprSyntax? = nil) -> ExprSyntax {
         let defaultMaxValue = 100000
         
         return switch self {
@@ -188,6 +210,9 @@ public enum MockBuilderSupportedType: Equatable {
         case .url(let exprSyntax): exprSyntax ?? ExprSyntax(stringLiteral: "URL(string: \"\(Provider().url().absoluteString)\")!")
         case .image(let exprSyntax): exprSyntax ?? ExprSyntax(stringLiteral: Provider().randomImageStringName())
         case .color(let exprSyntax): exprSyntax ?? ExprSyntax(stringLiteral: Provider().randomColorString())
+            
+        case .passthroughSubject(let exprSyntax): exprSyntax ?? (propertyInitializationExprSyntax ?? ExprSyntax(stringLiteral: .empty))
+        case .currentValueSubject(let exprSyntax): exprSyntax ??  (propertyInitializationExprSyntax ?? ExprSyntax(stringLiteral: .empty))
         }
     }
 }

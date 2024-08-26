@@ -31,6 +31,11 @@ extension MockBuilderMacro {
                 dictionaryType: type,
                 initialValue: initialValue
             )
+        } else if type.isSet {
+            return getSetExprSyntax(
+                from: type,
+                initialValue: initialValue
+            )
         } else {
             return getSimpleExprSyntax(
                 simpleTypeSyntax: type,
@@ -39,6 +44,7 @@ extension MockBuilderMacro {
         }
     }
     
+    // MARK: Get Array Expr Syntax
     private static func getArrayExprSyntax(
         arrayType: ArrayTypeSyntax,
         initialValue: ExprSyntax?
@@ -77,6 +83,7 @@ extension MockBuilderMacro {
         return nil
     }
     
+    // MARK: Get Dictionary Expr Syntax
     private static func getDictionaryExprSyntax(
         dictionaryType: DictionaryTypeSyntax,
         initialValue: ExprSyntax?
@@ -105,14 +112,32 @@ extension MockBuilderMacro {
         return nil
     }
     
-    // MARK: Simple Expr Syntax Methods
+    // MARK: Get Set Expr Syntax
+    private static func getSetExprSyntax(
+        from type: TypeSyntax,
+        initialValue: ExprSyntax?
+    ) -> ExprSyntax {
+        let setExprSyntax = FunctionCallExprSyntax(
+            calledExpression: ExprSyntax(stringLiteral: type.description),
+            leftParen: .leftParenToken(),
+            arguments: [],
+            rightParen: .rightParenToken()
+        )
+     
+        return initialValue ?? ExprSyntax(setExprSyntax)
+    }
+    
+    // MARK: - Get Simple Expr Syntax
     private static func getSimpleExprSyntax<T: TypeSyntaxProtocol>(
         simpleTypeSyntax: T,
         initialValue: ExprSyntax?
     ) -> ExprSyntax? {
-        // Investigate is in progress, trying to find better solution. TODO: Refactor it
-        if initialValue.debugDescription == Constants.nilTypeOptionalDebugDescription.rawValue {
-            return ExprSyntax(stringLiteral: "nil")
+        if checkIfInitialValueIsNil(initialValue: initialValue) {
+            return ExprSyntax(
+                DeclReferenceExprSyntax(
+                    baseName: .init(stringLiteral: "nil")
+                )
+            )
         } else if let simpleIdentifierType = simpleTypeSyntax.as(IdentifierTypeSyntax.self) {
             return getSimpleExprSyntaxForIdentifierType(
                 simpleIdentifierType: simpleIdentifierType,
@@ -135,6 +160,29 @@ extension MockBuilderMacro {
         } else {
             return nil
         }
+    }
+    
+    // MARK: Check If Initial Value Is Nil
+    private static func checkIfInitialValueIsNil(
+        initialValue: ExprSyntax?
+    ) -> Bool {
+        guard let initialValue else { return false }
+        
+        if initialValue
+            .as(MemberAccessExprSyntax.self)?.base?
+            .as(GenericSpecializationExprSyntax.self)?.expression
+            .as(DeclReferenceExprSyntax.self)?.baseName.text == "Optional" &&
+            
+            initialValue
+            .as(MemberAccessExprSyntax.self)?.period.tokenKind == .period &&
+            
+            initialValue
+            .as(MemberAccessExprSyntax.self)?.declName.baseName.text == "none" {
+            
+            return true
+        }
+        
+        return false
     }
     
     // MARK: Get Simple Expr Syntax For Tuple Type Syntax
@@ -207,7 +255,12 @@ extension MockBuilderMacro {
             rawValue: simpleIdentifierType.name.text,
             exprSyntax: initialValue
         ) {
-            return supportedType.exprSyntax()
+            return supportedType.exprSyntax(
+                with: getPropertyInitializationForSimpleExprSyntax(
+                    supportedType: supportedType,
+                    propertyIdentifierType: simpleIdentifierType
+                )
+            )
         }
         
         // For example, if we pass enum case `VehicleType.car`, in this case we need string value of its.
@@ -225,6 +278,52 @@ extension MockBuilderMacro {
                 )
             )
         }
+    }
+    
+    // MARK: Get Property Initialization For Simple Expr Syntax
+    private static func getPropertyInitializationForSimpleExprSyntax(
+        supportedType: SupportedType,
+        propertyIdentifierType: IdentifierTypeSyntax
+    ) -> ExprSyntax? {
+        func addArgumentsExpSyntaxsToInitialization() {
+            argumentsExpSyntaxs?.forEach {
+                propertyInitializationExpSyntaxString += $0.description
+            }
+        }
+        
+        let argumentsExpSyntaxs = propertyIdentifierType.genericArgumentClause?.arguments.compactMap {
+            if let mockBuilderType = SupportedType(rawValue: $0.argument.as(IdentifierTypeSyntax.self)?.name.text ?? .empty) {
+                
+                return mockBuilderType.exprSyntax()
+            } else if let tupleTypeSyntax = $0.argument.as(TupleTypeSyntax.self) {
+                
+                return getSimpleExprSyntaxForTupleTypeSyntax(tupleTypeSyntax: tupleTypeSyntax, initialValue: nil)
+            }
+            
+            return nil
+        }
+        
+        var propertyInitializationExpSyntaxString: String = propertyIdentifierType.description
+        
+        switch supportedType {
+        case .passthroughSubject:
+            propertyInitializationExpSyntaxString += "()"
+            
+        case .currentValueSubject:
+            propertyInitializationExpSyntaxString += "("
+            
+            if argumentsExpSyntaxs?.isEmpty == true {
+                propertyInitializationExpSyntaxString += "()" // For Void
+            } else {
+                addArgumentsExpSyntaxsToInitialization()
+            }
+            
+            propertyInitializationExpSyntaxString += ")"
+            
+        default: return nil
+        }
+        
+        return ExprSyntax(stringLiteral: propertyInitializationExpSyntaxString)
     }
     
     // MARK: Get Simple Expr Syntax For Optional Type Syntax

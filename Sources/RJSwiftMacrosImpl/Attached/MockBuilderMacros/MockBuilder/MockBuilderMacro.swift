@@ -88,6 +88,9 @@ extension MockBuilderMacro {
         let singleMockItemCode = VariableDeclSyntax(
             modifiers: DeclModifierListSyntax {
                 DeclModifierSyntax(
+                    name: .keyword(.public)
+                )
+                DeclModifierSyntax(
                     name: .keyword(.static)
                 )
             },
@@ -120,6 +123,9 @@ extension MockBuilderMacro {
                     modifiers: DeclModifierListSyntax {
                         DeclModifierSyntax(
                             leadingTrivia: .newline,
+                            name: .keyword(.public)
+                        )
+                        DeclModifierSyntax(
                             name: .keyword(.static)
                         )
                     },

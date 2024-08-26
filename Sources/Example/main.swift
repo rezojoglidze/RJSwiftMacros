@@ -6,6 +6,7 @@
 //`
 
 import SwiftUI
+import Combine
 import RJSwiftMacros
 import RJSwiftMacrosImplDependencies
 
@@ -16,9 +17,18 @@ enum VehicleType: String, Decodable {
     case motorcycle
 }
 
+@MockBuilder()
+struct CombineExample {
+    let passthroughSubject: PassthroughSubject<Bool, Never>
+    let currentValueSubject: CurrentValueSubject<Void, Never>
+    let currentValueSubject2: CurrentValueSubject<String, Never>
+    let currentValueSubject3: CurrentValueSubject<(String, Bool), Never>
+}
+
 @CodingKeys(codingKeyType: .snakeCase)
 @MockBuilder(numberOfItems: 2)
 struct Person {
+    @MockBuilderProperty(value: Optional<String>.none)
     let name: String?
     let tuples: (((String, String, Int), Bool?), String)?
     
@@ -33,6 +43,8 @@ struct Person {
     
     let closureVariable: () -> Void
     @MockBuilderProperty(value: "k") let character: Character
+    
+    let availableTimeSlot: Set<String>
 }
 
 @MockBuilder(numberOfItems: 2)
