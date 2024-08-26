@@ -209,7 +209,12 @@ extension MockBuilderMacro {
             rawValue: simpleIdentifierType.name.text,
             exprSyntax: initialValue
         ) {
-            return supportedType.exprSyntax()
+            return supportedType.exprSyntax(
+                with: getPropertyInitializationForSimpleExprSyntax(
+                    supportedType: supportedType,
+                    propertyIdentifierType: simpleIdentifierType
+                )
+            )
         }
         
         // For example, if we pass enum case `VehicleType.car`, in this case we need string value of its.
@@ -227,6 +232,52 @@ extension MockBuilderMacro {
                 )
             )
         }
+    }
+    
+    // MARK: Get Property Initialization For Simple Expr Syntax
+    private static func getPropertyInitializationForSimpleExprSyntax(
+        supportedType: SupportedType,
+        propertyIdentifierType: IdentifierTypeSyntax
+    ) -> ExprSyntax? {
+        func addArgumentsExpSyntaxsToInitialization() {
+            argumentsExpSyntaxs?.forEach {
+                propertyInitializationExpSyntaxString += $0.description
+            }
+        }
+        
+        let argumentsExpSyntaxs = propertyIdentifierType.genericArgumentClause?.arguments.compactMap {
+            if let mockBuilderType = SupportedType(rawValue: $0.argument.as(IdentifierTypeSyntax.self)?.name.text ?? .empty) {
+                
+                return mockBuilderType.exprSyntax()
+            } else if let tupleTypeSyntax = $0.argument.as(TupleTypeSyntax.self) {
+                
+                return getSimpleExprSyntaxForTupleTypeSyntax(tupleTypeSyntax: tupleTypeSyntax, initialValue: nil)
+            }
+            
+            return nil
+        }
+        
+        var propertyInitializationExpSyntaxString: String = propertyIdentifierType.description
+        
+        switch supportedType {
+        case .passthroughSubject:
+            propertyInitializationExpSyntaxString += "()"
+            
+        case .currentValueSubject:
+            propertyInitializationExpSyntaxString += "("
+            
+            if argumentsExpSyntaxs?.isEmpty == true {
+                propertyInitializationExpSyntaxString += "()" // For Void
+            } else {
+                addArgumentsExpSyntaxsToInitialization()
+            }
+            
+            propertyInitializationExpSyntaxString += ")"
+            
+        default: return nil
+        }
+        
+        return ExprSyntax(stringLiteral: propertyInitializationExpSyntaxString)
     }
     
     // MARK: Get Simple Expr Syntax For Optional Type Syntax

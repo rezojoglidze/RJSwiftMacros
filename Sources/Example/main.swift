@@ -6,6 +6,7 @@
 //`
 
 import SwiftUI
+import Combine
 import RJSwiftMacros
 import RJSwiftMacrosImplDependencies
 
@@ -14,6 +15,14 @@ enum VehicleType: String, Decodable {
     case car
     case bus
     case motorcycle
+}
+
+@MockBuilder()
+struct CombineExample {
+    let passthroughSubject: PassthroughSubject<Bool, Never>
+    let currentValueSubject: CurrentValueSubject<Void, Never>
+    let currentValueSubject2: CurrentValueSubject<String, Never>
+    let currentValueSubject3: CurrentValueSubject<(String, Bool), Never>
 }
 
 @CodingKeys(codingKeyType: .snakeCase)
