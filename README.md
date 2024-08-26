@@ -46,7 +46,7 @@ To add `RJSwiftMacros` as a dependency of your Xcode project, go to the Package 
 Import the RJSwiftMacros module and apply the macros to your structs and properties:
 
 Usage of `MockBuilder`: 
-Macro generates two `static` properties: `mock` and `mockArray`. `mockArray` count equals `numberOfItems` value. If you want to set a custom value to the desired property, use `@MockBuilderProperty` macro. If the custom value granted is prohibited you will get a swift standard warning error. <img width="461" alt="image" src="https://github.com/user-attachments/assets/3a559982-d70b-4d91-a2a4-5b9f08cebdf4">
+Macro generates two `static` properties: `mock` and `mockArray`. `mockArray` count equals `numberOfItems` value. If you want to set a custom value to the desired property, use `@MockBuilderProperty` macro. If the custom value granted is prohibited you will get a swift standard warning error. <img width="470" alt="image" src="https://github.com/user-attachments/assets/5467a640-0923-4421-9680-f7ae8e743e59">
 
 To generate only `.mock` value, you can use `@MockBuilder()` without any param passing.
 ```swift
