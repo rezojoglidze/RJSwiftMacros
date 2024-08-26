@@ -28,6 +28,7 @@ struct CombineExample {
 @CodingKeys(codingKeyType: .snakeCase)
 @MockBuilder(numberOfItems: 2)
 struct Person {
+    @MockBuilderProperty(value: Optional<String>.none)
     let name: String?
     let tuples: (((String, String, Int), Bool?), String)?
     

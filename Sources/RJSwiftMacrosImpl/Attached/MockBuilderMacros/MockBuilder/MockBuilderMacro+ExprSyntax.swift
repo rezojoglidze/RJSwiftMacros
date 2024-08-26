@@ -112,9 +112,12 @@ extension MockBuilderMacro {
         simpleTypeSyntax: T,
         initialValue: ExprSyntax?
     ) -> ExprSyntax? {
-        // Investigate is in progress, trying to find better solution. TODO: Refactor it
-        if initialValue.debugDescription == Constants.nilTypeOptionalDebugDescription.rawValue {
-            return ExprSyntax(stringLiteral: "nil")
+        if checkIfInitialValueIsNil(initialValue: initialValue) {
+            return ExprSyntax(
+                DeclReferenceExprSyntax(
+                    baseName: .init(stringLiteral: "nil")
+                )
+            )
         } else if let simpleIdentifierType = simpleTypeSyntax.as(IdentifierTypeSyntax.self) {
             return getSimpleExprSyntaxForIdentifierType(
                 simpleIdentifierType: simpleIdentifierType,
@@ -137,6 +140,29 @@ extension MockBuilderMacro {
         } else {
             return nil
         }
+    }
+    
+    // MARK: Check If Initial Value Is Nil
+    private static func checkIfInitialValueIsNil(
+        initialValue: ExprSyntax?
+    ) -> Bool {
+        guard let initialValue else { return false }
+        
+        if initialValue
+            .as(MemberAccessExprSyntax.self)?.base?
+            .as(GenericSpecializationExprSyntax.self)?.expression
+            .as(DeclReferenceExprSyntax.self)?.baseName.text == "Optional" &&
+            
+            initialValue
+            .as(MemberAccessExprSyntax.self)?.period.tokenKind == .period &&
+            
+            initialValue
+            .as(MemberAccessExprSyntax.self)?.declName.baseName.text == "none" {
+            
+            return true
+        }
+        
+        return false
     }
     
     // MARK: Get Simple Expr Syntax For Tuple Type Syntax
