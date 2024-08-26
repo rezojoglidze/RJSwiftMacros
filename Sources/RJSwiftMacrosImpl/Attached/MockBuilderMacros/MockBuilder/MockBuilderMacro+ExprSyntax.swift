@@ -31,6 +31,11 @@ extension MockBuilderMacro {
                 dictionaryType: type,
                 initialValue: initialValue
             )
+        } else if type.isSet {
+            return getSetExprSyntax(
+                from: type,
+                initialValue: initialValue
+            )
         } else {
             return getSimpleExprSyntax(
                 simpleTypeSyntax: type,
@@ -107,7 +112,22 @@ extension MockBuilderMacro {
         return nil
     }
     
-    // MARK: Get Simple Expr Syntax
+    // MARK: Get Set Expr Syntax
+    private static func getSetExprSyntax(
+        from type: TypeSyntax,
+        initialValue: ExprSyntax?
+    ) -> ExprSyntax {
+        let setExprSyntax = FunctionCallExprSyntax(
+            calledExpression: ExprSyntax(stringLiteral: type.description),
+            leftParen: .leftParenToken(),
+            arguments: [],
+            rightParen: .rightParenToken()
+        )
+     
+        return initialValue ?? ExprSyntax(setExprSyntax)
+    }
+    
+    // MARK: - Get Simple Expr Syntax
     private static func getSimpleExprSyntax<T: TypeSyntaxProtocol>(
         simpleTypeSyntax: T,
         initialValue: ExprSyntax?

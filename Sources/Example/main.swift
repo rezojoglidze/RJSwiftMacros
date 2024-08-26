@@ -43,6 +43,8 @@ struct Person {
     
     let closureVariable: () -> Void
     @MockBuilderProperty(value: "k") let character: Character
+    
+    let availableTimeSlot: Set<String>
 }
 
 @MockBuilder(numberOfItems: 2)

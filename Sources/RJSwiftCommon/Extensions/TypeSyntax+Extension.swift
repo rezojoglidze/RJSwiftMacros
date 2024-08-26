@@ -26,6 +26,10 @@ public extension TypeSyntax {
         self.as(ClassRestrictionTypeSyntax.self) != nil
     }
     
+    var isSet: Bool {
+        self.as(IdentifierTypeSyntax.self)?.name.text == "Set" //TypeSyntax doesn't have SetTypeSyntax type.
+    }
+    
     var isOptional: Bool {
         self.as(OptionalTypeSyntax.self) != nil
     }
