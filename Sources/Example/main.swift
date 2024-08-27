@@ -3,7 +3,7 @@
 //
 //
 //  Created by Rezo Joglidze on 15.07.24.
-//`
+//
 
 import SwiftUI
 import Combine
