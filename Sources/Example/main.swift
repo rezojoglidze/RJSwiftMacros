@@ -3,7 +3,7 @@
 //
 //
 //  Created by Rezo Joglidze on 15.07.24.
-//`
+//
 
 import SwiftUI
 import Combine
@@ -59,6 +59,15 @@ struct University {
     
     var oldName: String {
         "Tbilisi"
+    }
+}
+
+@MockBuilder(numberOfItems: 2)
+actor User {
+    let name: String
+    
+    init(name: String) {
+        self.name = name
     }
 }
 
