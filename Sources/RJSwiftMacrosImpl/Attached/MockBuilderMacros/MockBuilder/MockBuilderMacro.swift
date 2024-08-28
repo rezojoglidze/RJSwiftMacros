@@ -43,7 +43,7 @@ public struct MockBuilderMacro: MemberMacro {
         }
         
         if let structDecl = declaration.as(StructDeclSyntax.self) {
-            return MockBuilderMacroForClassOrSturct(
+            return MockBuilderMacroForClassActorOrSturct(
                 decl: structDecl,
                 identifierToken: structDecl.name,
                 numberOfItems: numberOfItems,
@@ -52,9 +52,18 @@ public struct MockBuilderMacro: MemberMacro {
         }
         
         if let classDecl = declaration.as(ClassDeclSyntax.self) {
-            return MockBuilderMacroForClassOrSturct(
+            return MockBuilderMacroForClassActorOrSturct(
                 decl: classDecl,
                 identifierToken: classDecl.name,
+                numberOfItems: numberOfItems,
+                context: context
+            )
+        }
+        
+        if let actorDecl = declaration.as(ActorDeclSyntax.self) {
+            return MockBuilderMacroForClassActorOrSturct(
+                decl: actorDecl,
+                identifierToken: actorDecl.name,
                 numberOfItems: numberOfItems,
                 context: context
             )

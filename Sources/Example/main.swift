@@ -62,6 +62,15 @@ struct University {
     }
 }
 
+@MockBuilder(numberOfItems: 2)
+actor User {
+    let name: String
+    
+    init(name: String) {
+        self.name = name
+    }
+}
+
 print("Universicty monthly price: ", University.mock.price)
 
 @MockBuilder(numberOfItems: 2)

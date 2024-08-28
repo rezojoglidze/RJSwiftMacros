@@ -13,9 +13,9 @@ import RJSwiftCommon
 // MARK: - Mock Builder Macro Struct And Class
 extension MockBuilderMacro {
     //MARK: Methods
-    static func MockBuilderMacroForClassOrSturct<T: DeclSyntaxProtocol>(
+    static func MockBuilderMacroForClassActorOrSturct<T: DeclSyntaxProtocol>(
         decl: T,
-        identifierToken: TokenSyntax, //Class or Struct name
+        identifierToken: TokenSyntax, //Class, Actor or Struct name
         numberOfItems: Int?,
         context: MacroExpansionContext
     ) -> [SwiftSyntax.DeclSyntax] {
@@ -58,6 +58,10 @@ extension MockBuilderMacro {
         } else if let classDecl = decl as? ClassDeclSyntax {
             storedPropertyMembers = decl.getUninitializedStoredProperties(with: classDecl.memberBlock)
             initMembers = decl.getInitMembers(with: classDecl.memberBlock)
+            
+        } else if let actorDecl = decl as? ActorDeclSyntax {
+            storedPropertyMembers = decl.getUninitializedStoredProperties(with: actorDecl.memberBlock)
+            initMembers = decl.getInitMembers(with: actorDecl.memberBlock)
         }
         
         // filtered properties which properties has `@MochBuilderProperty` Peer Macro
