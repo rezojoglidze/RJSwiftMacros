@@ -1,7 +1,11 @@
 # Change Log
 
+
+### [0.4.2(35)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.4.2) — *29 08 2024*
+-  Add `Actor` data type supports from `MockBuilderMacro`
+
 ### [0.4.1(34)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.4.1) — *26 08 2024*
--  Add `Set` collection type, `passthroughSubject` and `currentValueSubject`  support to `MockBuilderMacro`.
+-  Add `Set` collection type, `passthroughSubject` and `currentValueSubject`  support from `MockBuilderMacro`.
 
 ### [0.4.0(33)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.4.0) — *23 08 2024*
 -  Refactor `MockBuilderMacro` property generation flow. Make generated properties more readable and understandable for the user.
