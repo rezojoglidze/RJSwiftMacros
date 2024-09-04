@@ -1,6 +1,9 @@
 # Change Log
 
 
+### [0.4.4(37)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.4.4) — *04 09 2024*
+- fix minor bug.
+  
 ### [0.4.3(36)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.4.3) — *04 09 2024*
 - Remove several targets and union them with another target.
 
