@@ -49,8 +49,17 @@ Usage of `MockBuilder`:
 Macro generates two `static` properties: `mock` and `mockArray`. `mockArray` count equals `numberOfItems` value. If you want to set a custom value to the desired property, use `@MockBuilderProperty` macro. If the custom value granted is prohibited you will get a swift standard warning error. <img width="470" alt="image" src="https://github.com/user-attachments/assets/5467a640-0923-4421-9680-f7ae8e743e59">
 
 To generate only `.mock` value, you can use `@MockBuilder()` without any param passing.
+> [!IMPORTANT]  
+> Type which participating in the mock building should have `@MockBuilder()` itself. Below example, we want to have `let type: VehicleType` mocked version, so `VehicleType` should have `@MockBuilder()`
 ```swift
 import RJSwiftMacros
+
+@MockBuilder(numberOfItems: 2)
+enum VehicleType: String, Decodable {
+    case car
+    case bus
+    case motorcycle
+}
 
 @MockBuilder()
 struct Car {
@@ -58,6 +67,7 @@ struct Car {
     @MockBuilderProperty(value: "John") let ownerName: String
     let closureVariable: (String, Double) -> Void
     let carColor: Color
+    @MockBuilderProperty(value: VehicleType.car) let type: VehicleType
 
     #if DEBUG
     static var mock: Car {
@@ -65,7 +75,8 @@ struct Car {
             name: "John",
             ownerName: "Nick",
             closureVariable: { _, _ in },
-            carColor: Color.red
+            carColor: Color.gray.opacity(0.6),
+            type: VehicleType.car
             )
     }
     #endif
@@ -79,15 +90,10 @@ import RJSwiftMacros
 @MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
 struct Person {
     let name: String?
-    
     let surname: [String]?
     
-    @MockBuilderProperty(value: Color.blue)
-    let color: Color?
-    
-    @MockBuilderProperty(value: Image(systemName: "swift"))
-    let image: Image?
-    
+    @MockBuilderProperty(value: Color.blue) let color: Color?
+    @MockBuilderProperty(value: Image(systemName: "swift")) let image: Image?
     @MockBuilderProperty(value: "k") let character: Character
 
     #if DEBUG
@@ -95,7 +101,7 @@ struct Person {
         .init(
             name: "Lorna,
             surname: ["Clare"],
-            color: Color.blue,
+            color: Color.blue.opacity(0.6),
             image: Image(systemName: "swift"),
             character: "k"
             )
@@ -106,14 +112,14 @@ struct Person {
            .init(
                name: "Valentina,
                surname: ["Queenie"],
-               color: Color.blue,
+               color: Color.blue.opacity(0.6),
                image: Image(systemName: "swift"),
                character: "k"
                ),
            .init(
                name: "Lorna,
                surname: ["Bettye"],
-               color: Color.blue,
+               color: Color.blue.opacity(0.6),
                image: Image(systemName: "swift"),
                character: "k"
                )
