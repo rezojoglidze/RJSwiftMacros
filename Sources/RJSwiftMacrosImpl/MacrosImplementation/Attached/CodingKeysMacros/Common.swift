@@ -9,7 +9,6 @@ import SwiftCompilerPlugin
 import SwiftSyntax
 import SwiftSyntaxMacros
 import SwiftDiagnostics
-import RJSwiftCommon
 
 // MARK: - Common Elements
 func attributesElement(
@@ -38,4 +37,10 @@ struct CodingKeysDiagnostic: DiagnosticMessage {
     let message: String = "Empty argument"
     let diagnosticID: SwiftDiagnostics.MessageID = .init(domain: "CodingKeysGeneration", id: "emptyArgument")
     let severity: SwiftDiagnostics.DiagnosticSeverity = .error
+}
+
+// MARK: Coding Key Type
+public enum CodingKeyType: String {
+    case camelCase
+    case snakeCase
 }

@@ -1,6 +1,9 @@
 # Change Log
 
 
+### [0.4.3(36)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.4.3) — *04 09 2024*
+- Remove several targets and union them with another target.
+
 ### [0.4.2(35)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.4.2) — *29 08 2024*
 -  Add `Actor` data type supports from `MockBuilderMacro`
 

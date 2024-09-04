@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import RJSwiftMacrosImplDependencies
+import RJSwiftMacrosImpl
 
 /// - The `CodingKeys(codingKeyType: CodingKeyType)`` macro automatically generates `CodingKeys` for a struct based on the specified `CodingKeyType`.
 /// - `CodingKeyType` has two options: `.camelCase` and `.snakeCase`.

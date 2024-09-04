@@ -7,8 +7,6 @@
 
 import SwiftSyntax
 import SwiftSyntaxBuilder
-import RJSwiftCommon
-import RJSwiftMacrosImplDependencies
 
 fileprivate typealias SupportedType = MockBuilderSupportedType
 

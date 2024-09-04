@@ -10,8 +10,6 @@ import SwiftCompilerPlugin
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 import SwiftDiagnostics
-import RJSwiftCommon
-import RJSwiftMacrosImplDependencies
 
 // MARK: - Mock Builder Macro
 public struct MockBuilderMacro: MemberMacro {
