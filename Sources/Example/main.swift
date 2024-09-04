@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 import RJSwiftMacros
-import RJSwiftMacrosImplDependencies
+import RJSwiftMacrosImpl
 
 @MockBuilder(numberOfItems: 2)
 enum VehicleType: String, Decodable {

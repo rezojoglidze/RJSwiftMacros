@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import RJSwiftCommon
-import RJSwiftMacrosImplDependencies
 
 /// - ``MockBuilder(numberOfItems: Int)``: This macro generates a mock instance and an array of mock data based on your model. It allows you to specify the number of items. Making it highly flexible for testing and development purposes.
 /// > [!WARNING]

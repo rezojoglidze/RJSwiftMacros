@@ -9,8 +9,6 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 import SwiftDiagnostics
-import RJSwiftCommon
-import RJSwiftMacrosImplDependencies
 
 // MARK: - Coding Keys Macro
 public struct CodingKeysMacro: MemberMacro {

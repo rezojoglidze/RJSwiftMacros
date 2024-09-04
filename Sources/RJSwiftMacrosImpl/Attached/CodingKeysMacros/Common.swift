@@ -9,7 +9,6 @@ import SwiftCompilerPlugin
 import SwiftSyntax
 import SwiftSyntaxMacros
 import SwiftDiagnostics
-import RJSwiftCommon
 
 // MARK: - Common Elements
 func attributesElement(

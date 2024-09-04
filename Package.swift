@@ -32,33 +32,14 @@ let package = Package(
             name: "RJSwiftMacrosImpl",
             dependencies: [
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
-                "RJSwiftCommon",
-                "RJSwiftMacrosImplDependencies"
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
             ]
         ),
         
             .target(
                 name: "RJSwiftMacros",
                 dependencies: [
-                    "RJSwiftMacrosImpl",
-                    "RJSwiftMacrosImplDependencies",
-                    "RJSwiftCommon"
-                ]
-            ),
-        
-            .target(
-                name: "RJSwiftCommon",
-                dependencies: [
-                    .product(name: "SwiftSyntaxMacros", package: "swift-syntax")
-                ]
-            ),
-        
-            .target(
-                name: "RJSwiftMacrosImplDependencies",
-                dependencies: [
-                    .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-                    "RJSwiftCommon",
+                    "RJSwiftMacrosImpl"
                 ]
             ),
         
@@ -66,9 +47,7 @@ let package = Package(
                 name: "Example",
                 dependencies: [
                     "RJSwiftMacros",
-                    "RJSwiftMacrosImpl",
-                    "RJSwiftCommon",
-                    "RJSwiftMacrosImplDependencies"
+                    "RJSwiftMacrosImpl"
                 ]
             ),
         
@@ -76,7 +55,7 @@ let package = Package(
                 name: "RJSwiftMacrosTests",
                 dependencies: [
                     "RJSwiftMacros",
-                    "RJSwiftMacrosImplDependencies",
+                    "RJSwiftMacrosImpl",
                     .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
                 ]
             ),

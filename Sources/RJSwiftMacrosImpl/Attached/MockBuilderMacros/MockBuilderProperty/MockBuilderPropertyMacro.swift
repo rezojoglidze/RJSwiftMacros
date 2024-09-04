@@ -7,8 +7,6 @@
 
 import SwiftSyntax
 import SwiftSyntaxMacros
-import RJSwiftCommon
-import RJSwiftMacrosImplDependencies
 
 // MARK: - Mock Builder Item Macro
 public struct MockBuilderPropertyMacro: PeerMacro {
