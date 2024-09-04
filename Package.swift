@@ -31,15 +31,21 @@ let package = Package(
         .macro(
             name: "RJSwiftMacrosImpl",
             dependencies: [
+                "RJSwiftMacrosShared",
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
             ]
         ),
         
             .target(
+                name: "RJSwiftMacrosShared"
+            ),
+        
+            .target(
                 name: "RJSwiftMacros",
                 dependencies: [
-                    "RJSwiftMacrosImpl"
+                    "RJSwiftMacrosImpl",
+                    "RJSwiftMacrosShared"
                 ]
             ),
         

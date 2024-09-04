@@ -38,9 +38,3 @@ struct CodingKeysDiagnostic: DiagnosticMessage {
     let diagnosticID: SwiftDiagnostics.MessageID = .init(domain: "CodingKeysGeneration", id: "emptyArgument")
     let severity: SwiftDiagnostics.DiagnosticSeverity = .error
 }
-
-// MARK: Coding Key Type
-public enum CodingKeyType: String {
-    case camelCase
-    case snakeCase
-}
