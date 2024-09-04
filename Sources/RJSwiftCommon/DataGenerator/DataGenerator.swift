@@ -12,7 +12,6 @@ import SwiftSyntaxBuilder
 
 fileprivate typealias Provider = MockDataProvider
 
-// MARK: - ❗⚠️❗Keep all cases names in lowercase.❗⚠️❗
 // MARK: ❗⚠️❗if type isn't supported from MockBuilderItem macro add it to `notSupportedTypesFromMockBuilderProperty`.❗⚠️❗
 public enum MockBuilderSupportedType: Equatable {  
     // Fundamental data types
