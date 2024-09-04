@@ -83,11 +83,11 @@ struct Car {
 }
 ```
 
-To generate both `.mock` and `.mockArray` properties user `@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)`. `numberOfItems` is equal to the count of mock array.
+To generate both `.mock` and `.mockArray` properties use `@MockBuilder(numberOfItems: 2)`. `numberOfItems` is equal to the count of mock array.
 ```swift
 import RJSwiftMacros
 
-@MockBuilder(numberOfItems: 2, dataGeneratorType: .random)
+@MockBuilder(numberOfItems: 2)
 struct Person {
     let name: String?
     let surname: [String]?
