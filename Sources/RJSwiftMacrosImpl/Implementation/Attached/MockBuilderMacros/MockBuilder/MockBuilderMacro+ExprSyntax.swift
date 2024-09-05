@@ -121,7 +121,7 @@ extension MockBuilderMacro {
             arguments: [],
             rightParen: .rightParenToken()
         )
-     
+        
         return initialValue ?? ExprSyntax(setExprSyntax)
     }
     
@@ -188,48 +188,46 @@ extension MockBuilderMacro {
         tupleTypeSyntax: TupleTypeSyntax,
         initialValue: ExprSyntax?
     ) -> ExprSyntax? {
-        
         var labeledExprItems: [LabeledExprSyntax] = []
-        getElements(tupleTypeSyntax: tupleTypeSyntax)
+        
+        getElements(
+            tupleTypeSyntax: tupleTypeSyntax
+        )
         
         func getElements(
             tupleTypeSyntax: TupleTypeSyntax,
-            leftParen: TokenSyntax? = nil,
-            rightParen: TokenSyntax? = nil
+            firstPartOfExprItems: [LabeledExprSyntax] = [],
+            lastPartOfExprItems: [LabeledExprSyntax] = []
         ) {
             for (index, item) in tupleTypeSyntax.elements.enumerated() {
                 if let type = item.type.as(TupleTypeSyntax.self) {
                     getElements(
                         tupleTypeSyntax: type,
-                        leftParen: type.leftParen,
-                        rightParen: type.rightParen
+                        firstPartOfExprItems: [LabeledExprSyntax(expression: ExprSyntax(stringLiteral: "("))],
+                        lastPartOfExprItems: [LabeledExprSyntax(expression: ExprSyntax(stringLiteral: "),"))]
                     )
                 } else if let expression = getSimpleExprSyntax(
                     simpleTypeSyntax: item.type,
                     initialValue: initialValue
                 ) {
-                    if let _ = leftParen, let _ = rightParen {
-                        let isFirst = index == .zero
-                        let isLast = index == tupleTypeSyntax.elements.count - 1
-                        
-                        labeledExprItems.append(
-                            contentsOf: LabeledExprListSyntax(
-                                arrayLiteral: LabeledExprSyntax(
-                                    leadingTrivia: isFirst ? .unexpectedText("((") : nil,
-                                    expression: expression,
-                                    trailingComma: isLast ? nil : .commaToken(),
-                                    trailingTrivia: isLast ? .unexpectedText("),") : nil
-                                )
-                            )
-                        )
-                    } else {
-                        labeledExprItems.append(contentsOf: LabeledExprListSyntax(
+                    let isFirst = index == .zero
+                    let isLast = index == tupleTypeSyntax.elements.count - 1
+                    
+                    if isFirst {
+                        labeledExprItems.append(contentsOf: firstPartOfExprItems)
+                    }
+                    
+                    labeledExprItems.append(
+                        contentsOf: LabeledExprListSyntax(
                             arrayLiteral: LabeledExprSyntax(
                                 expression: expression,
-                                trailingComma: item.trailingComma
+                                trailingComma: isLast ? nil : .commaToken()
                             )
                         )
-                        )
+                    )
+                    
+                    if isLast {
+                        labeledExprItems.append(contentsOf: lastPartOfExprItems)
                     }
                 }
             }
