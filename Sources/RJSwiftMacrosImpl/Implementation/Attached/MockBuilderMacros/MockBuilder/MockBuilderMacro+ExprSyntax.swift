@@ -61,24 +61,36 @@ extension MockBuilderMacro {
             )
         }
         
-        if let expresion = getExpressionSyntax(
-            from: TypeSyntax(arrayType.element),
-            initialValue: initialValue
-        ) {
-            return ExprSyntax(
-                ArrayExprSyntax(
-                    leftSquare: .leftSquareToken(),
-                    elements: ArrayElementListSyntax {
-                        ArrayElementSyntax(
-                            expression: expresion
-                        )
-                    },
-                    rightSquare: .rightSquareToken()
-                )
+        return ExprSyntax(
+            ArrayExprSyntax(
+                leftSquare: .leftSquareToken(),
+                elements: generateArrayElementList(arrayType: arrayType, initialValue: initialValue),
+                rightSquare: .rightSquareToken()
             )
+        )
+    }
+    
+    static func generateArrayElementList(
+        arrayType: ArrayTypeSyntax,
+        initialValue: ExprSyntax?
+    ) -> ArrayElementListSyntax {
+        var arrayElementListSyntax = ArrayElementListSyntax()
+       
+        let arrayLength = (2..<(Int(Constants.mockObjectArrayArrayMaxCount.rawValue) ?? 2)).randomElement() ?? 2
+        
+        (0..<arrayLength).forEach { _ in
+            if let expresion = getExpressionSyntax(
+                from: TypeSyntax(arrayType.element),
+                initialValue: initialValue
+            ) {
+                arrayElementListSyntax.append(ArrayElementSyntax(
+                    expression: expresion,
+                    trailingComma: .commaToken(trailingTrivia: .newline)
+                ))
+            }
         }
         
-        return nil
+        return arrayElementListSyntax
     }
     
     // MARK: Get Dictionary Expr Syntax
