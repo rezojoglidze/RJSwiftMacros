@@ -29,7 +29,7 @@ struct CombineExample {
 struct Person {
     @MockBuilderProperty(value: Optional<String>.none)
     let name: String?
-    let tuples: (((String, String, Int), Bool?), String)?
+    let tuples: ((String, String, Int), Bool?)
     
     @CodingKeyProperty("second_name")
     let surname: [String?]?
@@ -51,6 +51,7 @@ struct University {
     @MockBuilderProperty(value: 4500) let price: Int
     @MockBuilderProperty(value: "TSU") let name: String
     let president: Person
+    @MockBuilderProperty(value: VehicleType.bus) let vehicle: VehicleType
     let students: [Person]
     let privateVehicles: [VehicleType]?
     @MockBuilderProperty(value: false) let isFree: Bool
@@ -94,15 +95,28 @@ struct ExampleAllSupportedTypes {
     let boolVariable: Bool
     let dateVariable: Date
     let uuidVariable: UUID
-    let objectIndetifierVariable: ObjectIdentifier
     let cgPointVariable: CGPoint
     let cgRectVariable: CGRect
     let cgSizeVariable: CGSize
     let cgVectorVariable: CGVector
     let cgFloatVariable: CGFloat
     let urlVariable: URL
+    
     let imageVariable: Image
     let colorVariable: Color
+    
+    let vehicle: VehicleType
+    
+    let availableTimeSlot: Set<String>
+    
+    let arrayOfString: [String]
+    
+    let closureVariable: () -> Void
+    
+    let tuples: ((String, String, Int), Bool?)
+
+    let passthroughSubject: PassthroughSubject<Bool, Never>
+    let currentValueSubject: CurrentValueSubject<Void, Never>
 }
 
 print("ExampleAllSupportedTypes.mock: ", ExampleAllSupportedTypes.mock.stringVariable)

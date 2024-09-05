@@ -61,24 +61,36 @@ extension MockBuilderMacro {
             )
         }
         
-        if let expresion = getExpressionSyntax(
-            from: TypeSyntax(arrayType.element),
-            initialValue: initialValue
-        ) {
-            return ExprSyntax(
-                ArrayExprSyntax(
-                    leftSquare: .leftSquareToken(),
-                    elements: ArrayElementListSyntax {
-                        ArrayElementSyntax(
-                            expression: expresion
-                        )
-                    },
-                    rightSquare: .rightSquareToken()
-                )
+        return ExprSyntax(
+            ArrayExprSyntax(
+                leftSquare: .leftSquareToken(),
+                elements: generateArrayElementList(arrayType: arrayType, initialValue: initialValue),
+                rightSquare: .rightSquareToken()
             )
+        )
+    }
+    
+    static func generateArrayElementList(
+        arrayType: ArrayTypeSyntax,
+        initialValue: ExprSyntax?
+    ) -> ArrayElementListSyntax {
+        var arrayElementListSyntax = ArrayElementListSyntax()
+       
+        let arrayLength = (2..<(Int(Constants.mockObjectArrayArrayMaxCount.rawValue) ?? 2)).randomElement() ?? 2
+        
+        (0..<arrayLength).forEach { _ in
+            if let expresion = getExpressionSyntax(
+                from: TypeSyntax(arrayType.element),
+                initialValue: initialValue
+            ) {
+                arrayElementListSyntax.append(ArrayElementSyntax(
+                    expression: expresion,
+                    trailingComma: .commaToken(trailingTrivia: .newline)
+                ))
+            }
         }
         
-        return nil
+        return arrayElementListSyntax
     }
     
     // MARK: Get Dictionary Expr Syntax
@@ -121,7 +133,7 @@ extension MockBuilderMacro {
             arguments: [],
             rightParen: .rightParenToken()
         )
-     
+        
         return initialValue ?? ExprSyntax(setExprSyntax)
     }
     
@@ -188,48 +200,46 @@ extension MockBuilderMacro {
         tupleTypeSyntax: TupleTypeSyntax,
         initialValue: ExprSyntax?
     ) -> ExprSyntax? {
-        
         var labeledExprItems: [LabeledExprSyntax] = []
-        getElements(tupleTypeSyntax: tupleTypeSyntax)
+        
+        getElements(
+            tupleTypeSyntax: tupleTypeSyntax
+        )
         
         func getElements(
             tupleTypeSyntax: TupleTypeSyntax,
-            leftParen: TokenSyntax? = nil,
-            rightParen: TokenSyntax? = nil
+            firstPartOfExprItems: [LabeledExprSyntax] = [],
+            lastPartOfExprItems: [LabeledExprSyntax] = []
         ) {
             for (index, item) in tupleTypeSyntax.elements.enumerated() {
                 if let type = item.type.as(TupleTypeSyntax.self) {
                     getElements(
                         tupleTypeSyntax: type,
-                        leftParen: type.leftParen,
-                        rightParen: type.rightParen
+                        firstPartOfExprItems: [LabeledExprSyntax(expression: ExprSyntax(stringLiteral: "("))],
+                        lastPartOfExprItems: [LabeledExprSyntax(expression: ExprSyntax(stringLiteral: "),"))]
                     )
                 } else if let expression = getSimpleExprSyntax(
                     simpleTypeSyntax: item.type,
                     initialValue: initialValue
                 ) {
-                    if let _ = leftParen, let _ = rightParen {
-                        let isFirst = index == .zero
-                        let isLast = index == tupleTypeSyntax.elements.count - 1
-                        
-                        labeledExprItems.append(
-                            contentsOf: LabeledExprListSyntax(
-                                arrayLiteral: LabeledExprSyntax(
-                                    leadingTrivia: isFirst ? .unexpectedText("((") : nil,
-                                    expression: expression,
-                                    trailingComma: isLast ? nil : .commaToken(),
-                                    trailingTrivia: isLast ? .unexpectedText("),") : nil
-                                )
-                            )
-                        )
-                    } else {
-                        labeledExprItems.append(contentsOf: LabeledExprListSyntax(
+                    let isFirst = index == .zero
+                    let isLast = index == tupleTypeSyntax.elements.count - 1
+                    
+                    if isFirst {
+                        labeledExprItems.append(contentsOf: firstPartOfExprItems)
+                    }
+                    
+                    labeledExprItems.append(
+                        contentsOf: LabeledExprListSyntax(
                             arrayLiteral: LabeledExprSyntax(
                                 expression: expression,
-                                trailingComma: item.trailingComma
+                                trailingComma: isLast ? nil : .commaToken()
                             )
                         )
-                        )
+                    )
+                    
+                    if isLast {
+                        labeledExprItems.append(contentsOf: lastPartOfExprItems)
                     }
                 }
             }

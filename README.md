@@ -140,7 +140,11 @@ struct ExampleAllSupportedTypes {
            colorVariable: Color.primary.opacity(0.6),
            vehicle: VehicleType.mock,
            availableTimeSlot: Set<String>(),
-           arrayOfString: ["in voluptate velit esse cillum dolore"],
+           arrayOfString: ["in voluptate velit esse cillum dolore"]
+                    "Duis aute irure dolor in reprehenderit",
+                    "Excepteur sint occaecat cupidatat non proident",
+                    "sed do eiusmod tempor incididunt",
+                  ],
            closureVariable: {},
            tuples: (("Duis ac tellus et risus vulputate vehicula", "Duis aute irure dolor in reprehenderit", 42372),false),
            passthroughSubject: PassthroughSubject<Bool, Never>(),
