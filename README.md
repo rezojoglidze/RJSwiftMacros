@@ -62,22 +62,90 @@ enum VehicleType: String, Decodable {
 }
 
 @MockBuilder()
-struct Car {
-    let name: String
-    @MockBuilderProperty(value: "John") let ownerName: String
-    let closureVariable: (String, Double) -> Void
-    let carColor: Color
-    @MockBuilderProperty(value: VehicleType.car) let type: VehicleType
+struct ExampleAllSupportedTypes {
+    let intVariable: Int
+    let int8Variable: Int8
+    let int16Variable: Int16
+    let int32Variable: Int32
+    let int64Variable: Int64
+    let uintVariable: UInt
+    let uint8Variable: UInt8
+    let uint16Variable: UInt16
+    let uint32Variable: UInt32
+    let uint64Variable: UInt64
+    let floatVariable: Float
+    let float32Variable: Float32
+    let float64Variable: Float64
+    let doubleVariable: Double
+    let decimalVariable: Decimal
+    let nsDecimalNumberVariable: NSDecimalNumber
+    let stringVariable: String
+    let boolVariable: Bool
+    let dateVariable: Date
+    let uuidVariable: UUID
+    let cgPointVariable: CGPoint
+    let cgRectVariable: CGRect
+    let cgSizeVariable: CGSize
+    let cgVectorVariable: CGVector
+    let cgFloatVariable: CGFloat
+    let urlVariable: URL
+    
+    let imageVariable: Image
+    let colorVariable: Color
+    
+    let vehicle: VehicleType
+    
+    let availableTimeSlot: Set<String>
+    
+    let arrayOfString: [String]
+    
+    let closureVariable: () -> Void
+    
+    let tuples: ((String, String, Int), Bool?)
 
-    #if DEBUG
-    static var mock: Car {
-        .init(
-            name: "John",
-            ownerName: "Nick",
-            closureVariable: { _, _ in },
-            carColor: Color.gray.opacity(0.6),
-            type: VehicleType.car
-            )
+    let passthroughSubject: PassthroughSubject<Bool, Never>
+    let currentValueSubject: CurrentValueSubject<Void, Never>
+}
+
+   #if DEBUG
+   public static var mock: ExampleAllSupportedTypes {
+       .init(
+           intVariable: 54248,
+           int8Variable: 92,
+           int16Variable: 17693,
+           int32Variable: 1748550107,
+           int64Variable: 85105,
+           uintVariable: 75340,
+           uint8Variable: 221,
+           uint16Variable: 6060,
+           uint32Variable: 34678,
+           uint64Variable: 4145,
+           floatVariable: 38105.523,
+           float32Variable: 99252.86,
+           float64Variable: 57161.44399989151,
+           doubleVariable: 45860.372174783995,
+           decimalVariable: 80414.91669166147584,
+           nsDecimalNumberVariable: 57109.7344805794816,
+           stringVariable: "Lorem ipsum dolor sit amet",
+           boolVariable: false,
+           dateVariable: Date(timeInterval: 77349, since: Date()),
+           uuidVariable: UUID(),
+           cgPointVariable: CGPoint(),
+           cgRectVariable: CGRect(),
+           cgSizeVariable: CGSize(),
+           cgVectorVariable: CGVector(),
+           cgFloatVariable: CGFloat(),
+           urlVariable: URL(string: "https://www.tiktok.com")!,
+           imageVariable: Image(systemName: "swift"),
+           colorVariable: Color.primary.opacity(0.6),
+           vehicle: VehicleType.mock,
+           availableTimeSlot: Set<String>(),
+           arrayOfString: ["in voluptate velit esse cillum dolore"],
+           closureVariable: {},
+           tuples: (("Duis ac tellus et risus vulputate vehicula", "Duis aute irure dolor in reprehenderit", 42372),false),
+           passthroughSubject: PassthroughSubject<Bool, Never>(),
+           currentValueSubject: CurrentValueSubject<Void, Never>(())
+           )
     }
     #endif
 }
