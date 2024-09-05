@@ -192,8 +192,6 @@ extension MockBuilderMacro {
         parameters: [ParameterItem],
         numberOfItems: Int
     ) -> ArrayElementListSyntax {
-        let parameterList = getParameterListForMockElement(parameters: parameters)
-        
         var arrayElementListSyntax = ArrayElementListSyntax()
         
         for _ in 1...numberOfItems {
@@ -207,7 +205,7 @@ extension MockBuilderMacro {
                                 name: .keyword(.`init`)
                             ),
                             leftParen: .leftParenToken(),
-                            arguments: parameterList,
+                            arguments: getParameterListForMockElement(parameters: parameters),
                             rightParen: .rightParenToken()
                         ),
                         trailingComma: .commaToken()

@@ -140,7 +140,7 @@ extension MockBuilderMacro {
                     bindings: PatternBindingListSyntax {
                         PatternBindingSyntax(
                             pattern: IdentifierPatternSyntax(identifier: .identifier(Constants.mockArrayIdentifier.rawValue)),
-                            typeAnnotation: TypeAnnotationSyntax(colon: .colonToken(),type: mockArrayCodeReturnType),
+                            typeAnnotation: TypeAnnotationSyntax(colon: .colonToken(), type: mockArrayCodeReturnType),
                             accessorBlock: AccessorBlockSyntax(
                                 leftBrace: .leftBraceToken(),
                                 accessors: .getter(
