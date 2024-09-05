@@ -1,6 +1,8 @@
 # Change Log
 
-
+### [0.4.5(38)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.4.5) — *05 09 2024*
+- Add Array type param generation with a random count from 2 to 10.
+  
 ### [0.4.4(37)](https://github.com/rezojoglidze/RJSwiftMacros/releases/tag/0.4.4) — *04 09 2024*
 - fix minor bug.
   
