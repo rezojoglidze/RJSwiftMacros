@@ -11,8 +11,8 @@ import SwiftSyntaxMacros
 // MARK: - Mock Builder Macro Struct And Class
 extension MockBuilderMacro {
     //MARK: Methods
-    static func MockBuilderMacroForClassActorOrSturct<T: DeclSyntaxProtocol>(
-        decl: T,
+    static func MockBuilderMacroForClassActorOrSturct(
+        decl: some DeclSyntaxProtocol,
         identifierToken: TokenSyntax, //Class, Actor or Struct name
         numberOfItems: Int?,
         context: MacroExpansionContext
@@ -41,8 +41,8 @@ extension MockBuilderMacro {
     }
     
     // MARK: Return the array of mock item each valid parameters
-    private static func getValidParameterList<T: DeclSyntaxProtocol>(
-        from decl: T,
+    private static func getValidParameterList(
+        from decl: some DeclSyntaxProtocol,
         context: MacroExpansionContext
     ) -> [ParameterItem] {
         var storedPropertyMembers: [VariableDeclSyntax] = []
@@ -81,7 +81,7 @@ extension MockBuilderMacro {
     }
     
     // Func returns filtered properties which properties has `@MochBuilderProperty` Peer Macro
-    private static func getAllPropertiesWithMochBuilderPropertyIdentifier<T: DeclSyntaxProtocol>(from decl: T) -> [MemberBlockItemSyntax] {
+    private static func getAllPropertiesWithMochBuilderPropertyIdentifier(from decl: some DeclSyntaxProtocol) -> [MemberBlockItemSyntax] {
         return {
             guard let memberBlockItems = (decl as? StructDeclSyntax)?.memberBlock.members ?? (decl as? ClassDeclSyntax)?.memberBlock.members else {
                 return []

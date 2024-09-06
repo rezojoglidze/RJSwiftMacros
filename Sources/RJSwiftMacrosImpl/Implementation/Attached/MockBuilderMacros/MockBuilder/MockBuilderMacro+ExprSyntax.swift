@@ -138,8 +138,8 @@ extension MockBuilderMacro {
     }
     
     // MARK: - Get Simple Expr Syntax
-    private static func getSimpleExprSyntax<T: TypeSyntaxProtocol>(
-        simpleTypeSyntax: T,
+    private static func getSimpleExprSyntax(
+        simpleTypeSyntax: some TypeSyntaxProtocol,
         initialValue: ExprSyntax?
     ) -> ExprSyntax? {
         if checkIfInitialValueIsNil(initialValue: initialValue) {
