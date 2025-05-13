@@ -14,6 +14,7 @@ enum VehicleType: String, Decodable {
     case car
     case bus
     case motorcycle
+    case other
 }
 
 @MockBuilder()
