@@ -180,7 +180,7 @@ public enum MockBuilderSupportedType: Equatable {
         case .uint32(let exprSyntax): exprSyntax ?? ExprSyntax(stringLiteral: "\(Provider().randomUInt(min: UInt32.zero, max: UInt32(defaultMaxValue)))")
         case .uint64(let exprSyntax): exprSyntax ?? ExprSyntax(stringLiteral: "\(Provider().randomUInt(min: UInt64.zero, max: UInt64(defaultMaxValue)))")
             
-        case .float(let exprSyntax): exprSyntax ?? ExprSyntax(stringLiteral: "\( Provider().randomFloat(min: Float.leastNonzeroMagnitude, max: Float(defaultMaxValue)))")
+        case .float(let exprSyntax): exprSyntax ?? ExprSyntax(stringLiteral: "\(Provider().randomFloat(min: Float.leastNonzeroMagnitude, max: Float(defaultMaxValue)))")
         case .float32(let exprSyntax): exprSyntax ?? ExprSyntax(stringLiteral: "\(Provider().randomFloat(min: Float32.leastNonzeroMagnitude, max: Float32(defaultMaxValue)))")
         case .float64(let exprSyntax):exprSyntax ?? ExprSyntax(stringLiteral: "\(Provider().randomFloat(min: Float64.leastNonzeroMagnitude, max: Float64(defaultMaxValue)))")
             
