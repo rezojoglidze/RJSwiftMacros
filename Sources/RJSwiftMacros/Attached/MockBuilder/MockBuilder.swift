@@ -32,7 +32,7 @@ import Foundation
 ///          )
 ///      }
 ///
-///      static var mockArray: [Person ] {
+///      static var mockArray: [Person] {
 ///          [
 ///          .init(
 ///             name: "Tomas",
@@ -93,7 +93,7 @@ public macro MockBuilder(
 ///              )
 ///      }
 ///
-///      static var mockArray: [Person ] {
+///      static var mockArray: [Person] {
 ///          [
 ///              .init(
 ///                  name: "Jone",
